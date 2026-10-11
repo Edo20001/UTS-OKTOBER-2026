@@ -112,7 +112,9 @@ details.topic summary::after{content:"+";font:500 22px var(--f-mono);color:var(-
 details.topic[open] summary::after{content:"–"}
 details.topic .body{padding:0 20px 20px;display:flex;flex-direction:column;gap:16px}
 .gist{background:color-mix(in srgb,var(--c) 12%,var(--surface));border-radius:14px;padding:12px 14px;font-weight:600}
-details.topic ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+details.topic li{line-height:1.7}
+.ex{display:block;margin-top:4px;padding:6px 10px;border-radius:10px;background:var(--surface2);color:var(--muted);font-size:14px}
+details.topic ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:14px}
 details.topic li::marker{color:var(--c)}
 .done-ok{display:inline-flex;gap:10px;align-items:center;font-weight:600;font-size:14px;min-height:36px}
 .done-ok input{width:20px;height:20px;accent-color:var(--accent)}
@@ -251,124 +253,205 @@ const V={
 };
 
 /* ---------- materi (bahasa sederhana) ---------- */
+const e=x=>`<span class="ex">Contoh: ${x}</span>`;
 const MATERI={
 pkn:[
- {id:'pkn1',t:'Kenapa PKn penting?',gist:'PKn membentuk mahasiswa jadi warga negara yang baik, bukan cuma pintar.',pts:[
-  '<b>Dasar hukum:</b> UU No. 12 Tahun 2012 tentang Pendidikan Tinggi. PKn wajib bersama Agama, Pancasila, dan Bahasa Indonesia.',
-  '<b>Good citizen:</b> ahli di bidangnya, berkarakter, sadar hak dan kewajiban.',
-  '<b>Wawasan kebangsaan:</b> paham Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika.',
-  '<b>Demokratis dan kritis:</b> berpendapat santun, menghargai perbedaan.',
-  '<b>Tantangan global:</b> arus ideologi asing dan krisis identitas, jadi jati diri perlu dikuatkan.',
-  '<b>Era digital:</b> lawan hoaks dan ujaran kebencian (UU ITE), tolak radikalisme online, cegah cyberbullying (sila ke-2), sampaikan aspirasi lewat petisi atau kanal resmi.'
+ {id:'pkn1',t:'Kenapa PKn penting?',gist:'PKn bukan sekadar hafalan. Tujuannya supaya kamu lulus sebagai orang yang pintar sekaligus punya karakter dan paham perannya sebagai warga negara.',pts:[
+  `<b>Ada dasar hukumnya.</b> UU No. 12 Tahun 2012 tentang Pendidikan Tinggi mewajibkan PKn diajarkan di kampus, bersama Pendidikan Agama, Pancasila, dan Bahasa Indonesia. Jadi PKn memang mata kuliah wajib.`,
+  `<b>Membentuk good citizen (warga negara yang baik).</b> Mahasiswa nanti jadi pemimpin dan profesional. Keahlian saja tidak cukup, perlu karakter, tanggung jawab, dan sadar hak serta kewajiban. ${e('desainer yang jago tapi suka menjiplak karya orang tetap bermasalah')}`,
+  `<b>Menumbuhkan wawasan kebangsaan dan bela negara.</b> Artinya paham Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika, supaya bangsa tidak mudah terpecah hanya karena beda suku atau agama.`,
+  `<b>Melatih sikap demokratis dan kritis.</b> Berani berpendapat dengan sopan, menghargai pendapat yang berbeda, dan ikut berpartisipasi tanpa memaksakan kehendak.`,
+  `<b>Menjawab tantangan global.</b> Globalisasi membawa budaya dan ideologi asing, sikap individualistis, dan krisis identitas. PKn menguatkan jati diri bangsa.`,
+  `<b>Peran PKn di era digital (bisa dipakai sebagai contoh jawaban):</b>
+   <br>1. Hoaks dan ujaran kebencian: cek kebenaran info sebelum share, patuhi UU ITE.
+   <br>2. Radikalisme dan intoleransi online: nilai Pancasila jadi saringan konten yang memecah belah.
+   <br>3. Cyberbullying dan pelanggaran privasi: sila ke-2, hormati hak orang lain di dunia maya.
+   <br>4. Aspirasi: sampaikan lewat petisi online atau kanal pengaduan resmi, bukan provokasi.`
+ ],ingat:'Pola jawaban "mengapa PKn penting": hukum, karakter, kebangsaan, demokrasi, tantangan global.'},
+ {id:'pkn2',t:'Pancasila dan konflik',gist:'Konflik terjadi saat nilai Pancasila tidak dijalankan. Jadi setiap sila bisa dipakai untuk membaca penyebab sebuah konflik.',pts:[
+  `<b>Cara menjawab soal penyebab konflik:</b> ambil satu sila, lalu tulis perilaku yang melanggarnya. Itulah penyebab konfliknya (lihat tabel di bawah).`,
+  `<b>Sila pedoman penyelesaian konflik.</b> Pada dasarnya kelima sila, tapi yang paling utama adalah <b>sila ke-4 (musyawarah mufakat)</b>: selesaikan lewat dialog, bukan kekerasan.`,
+  `Sila lainnya membantu begini: sila ke-2 mengajarkan saling menghormati dan tidak main hakim sendiri; sila ke-3 mengingatkan kepentingan bangsa di atas golongan; sila ke-1 mendorong toleransi; sila ke-5 menjamin penyelesaian yang adil bagi semua pihak.`,
+  `<b>Contoh konflik terbaru:</b>
+   <br>1. Rempang Eco-City (Batam): sengketa lahan antara pembangunan dan masyarakat adat.
+   <br>2. Penolakan atau masalah izin rumah ibadah di beberapa daerah.
+   <br>3. Tawuran antarpelajar dan antarwarga.
+   <br>4. Demo besar Agustus 2025 karena kekecewaan pada kebijakan dan tunjangan anggota DPR.
+   <br>5. Hoaks dan ujaran kebencian di medsos saat politik memanas.`,
+  `<b>Tips:</b> pilih satu atau dua contoh yang paling kamu pahami, dan cek berita terbaru supaya contohmu tidak ketinggalan.`
+ ],vis:()=>[V.table('Penyebab konflik per sila',['Sila','Penyebab konflik'],[
+  ['1 Ketuhanan','Intoleransi, memaksakan keyakinan, menolak rumah ibadah, penistaan agama'],['2 Kemanusiaan','Diskriminasi, kekerasan, perundungan, pelanggaran HAM, kurang empati'],['3 Persatuan','Fanatik suku/golongan, sentimen SARA, separatisme'],['4 Kerakyatan','Abaikan musyawarah, memaksa kehendak, kebijakan tanpa melibatkan rakyat, politik uang'],['5 Keadilan sosial','Kesenjangan ekonomi, hukum tidak adil, sengketa lahan, korupsi']])]},
+ {id:'pkn3',t:'Perubahan UUD 1945',gist:'UUD 1945 diubah 4 kali pada 1999–2002 (era Reformasi). Jawabannya: ya, perubahan itu memperkuat demokrasi, tapi praktiknya masih punya masalah.',pts:[
+  `<b>Kenapa dibilang memperkuat demokrasi? Ada 5 alasan:</b>
+   <br>1. <b>Kekuasaan presiden dibatasi:</b> maksimal 2 periode (Pasal 7). Dulu tidak jelas, jadi bisa berkuasa sangat lama.
+   <br>2. <b>Rakyat memilih langsung</b> presiden dan wapres (Pasal 6A). Dulu dipilih MPR.
+   <br>3. <b>Saling mengawasi antar lembaga (checks and balances):</b> DPR memegang pembuatan UU (Pasal 20), dan ada lembaga baru seperti Mahkamah Konstitusi dan Komisi Yudisial.
+   <br>4. <b>HAM dijamin lebih lengkap</b> (Pasal 28A–28J).
+   <br>5. <b>Daerah lebih terwakili:</b> ada DPD dan otonomi daerah.`,
+  `<b>Kelemahannya:</b> politik uang, oligarki (kekuasaan dipegang segelintir orang kaya), dan korupsi masih terjadi. Artinya aturannya sudah bagus, tapi kualitas demokrasi tetap bergantung pada pelaksanaannya.`,
+  `<b>Pasal cadangan</b> kalau diminta lima pasal: Pasal 1 ayat (3) negara hukum, Pasal 22E pemilu, Pasal 22C DPD, Pasal 24B Komisi Yudisial.`
+ ],ingat:'Angka kunci: 4 kali diubah, tahun 1999–2002, maksimal 2 periode, Pasal 6A pemilihan langsung, Pasal 24C Mahkamah Konstitusi.',vis:()=>[V.table('5 pasal kunci',['Pasal','Isinya'],[
+  ['1 ayat (2)','Kedaulatan di tangan rakyat (dulu sepenuhnya dipegang MPR)'],['6A','Presiden dan Wapres dipilih langsung oleh rakyat'],['7','Masa jabatan 5 tahun, boleh dipilih lagi hanya satu kali'],['24C','Dibentuk Mahkamah Konstitusi (menguji UU terhadap UUD, dll.)'],['28A–28J','Jaminan hak asasi manusia yang rinci']])]},
+ {id:'pkn4',t:'Negara dan warga negara',gist:'Negara dan warga saling membutuhkan: negara melindungi dan menyejahterakan, warga menaati hukum dan ikut membela negara.',pts:[
+  `<b>Hak dan kewajiban timbal balik.</b> Negara wajib melindungi, menyejahterakan, dan menjamin hak warga. Warga wajib menaati hukum, membayar pajak, dan membela negara.`,
+  `<b>Kedaulatan rakyat.</b> Rakyat pemilik kekuasaan tertinggi, pemerintah hanya menjalankan mandat rakyat (Pasal 1 ayat 2). ${e('seperti pemilik rumah dan pengurus rumah: pengurus bekerja atas nama pemilik')}`,
+  `<b>Teori kontrak sosial</b> (Hobbes, Locke, Rousseau). Negara ada karena warga sepakat membentuknya demi melindungi kepentingan bersama.`,
+  `<b>Negara hukum</b> (Pasal 1 ayat 3). Hubungan negara dan warga diatur hukum, jadi negara tidak boleh bertindak sewenang-wenang.`,
+  `<b>Kekeluargaan dan gotong royong</b> sesuai Pancasila: negara dan warga satu kesatuan yang saling mendukung.`,
+  `<b>Status kewarganegaraan</b> diatur Pasal 26. Dari situ ditentukan siapa yang punya hak dan kewajiban sebagai warga negara.`,
+  `<b>Contoh negara kepada warga (hak warga):</b> pendidikan (Pasal 31, misalnya KIP), jaminan kesehatan (BPJS), layanan KTP dan paspor, perlindungan hukum, fasilitas umum.`,
+  `<b>Contoh warga kepada negara (kewajiban):</b> membayar pajak, ikut pemilu, menaati hukum, bela negara (Pasal 27 ayat 3 dan Pasal 30).`
  ]},
- {id:'pkn2',t:'Pancasila dan konflik',gist:'Konflik muncul ketika nilai Pancasila tidak dijalankan.',pts:[
-  '<b>Sila utama penyelesaian konflik:</b> sila ke-4, musyawarah mufakat (dialog, bukan kekerasan).',
-  'Sila 2: saling menghormati. Sila 3: kepentingan bangsa di atas golongan. Sila 1: toleransi. Sila 5: penyelesaian yang adil.',
-  '<b>Contoh konflik terbaru:</b> sengketa lahan Rempang Eco-City, penolakan izin rumah ibadah, tawuran, demo besar Agustus 2025, hoaks dan polarisasi di medsos.',
-  'Tips: pilih satu atau dua contoh yang kamu benar-benar paham, dan cek berita terbaru.'
- ],vis:()=>[V.table('Penyebab konflik per sila',['Sila','Penyebab'],[
-  ['1','Intoleransi, pemaksaan keyakinan, penolakan rumah ibadah'],['2','Diskriminasi, kekerasan, perundungan, pelanggaran HAM'],['3','Primordialisme, sentimen SARA, separatisme'],['4','Abaikan musyawarah, politik uang, kebijakan tanpa partisipasi'],['5','Kesenjangan ekonomi, hukum tidak adil, sengketa lahan, korupsi']])]},
- {id:'pkn3',t:'Perubahan UUD 1945',gist:'Diubah 4 kali (1999–2002). Hasilnya memperkuat demokrasi, tapi pelaksanaannya masih bermasalah.',pts:[
-  '<b>Kenapa memperkuat demokrasi:</b> kekuasaan presiden dibatasi, rakyat memilih langsung, antar lembaga saling mengawasi, HAM lebih lengkap.',
-  '<b>Kelemahan:</b> politik uang, oligarki, dan korupsi masih ada.',
-  '<b>Pasal lain yang bisa dipakai:</b> 1 ayat (3) negara hukum, 22E pemilu, 22C DPD, 24B Komisi Yudisial.'
- ],vis:()=>[V.table('5 pasal kunci',['Pasal','Isinya'],[
-  ['1 ayat (2)','Kedaulatan di tangan rakyat (dulu dipegang MPR)'],['6A','Presiden dan Wapres dipilih langsung'],['7','Masa jabatan 5 tahun, maksimal 2 periode'],['24C','Dibentuk Mahkamah Konstitusi'],['28A–28J','Jaminan HAM yang rinci']])]},
- {id:'pkn4',t:'Negara dan warga negara',gist:'Hubungannya timbal balik: negara melindungi warga, warga menaati dan membela negara.',pts:[
-  '<b>Kedaulatan rakyat:</b> rakyat pemegang kuasa tertinggi (Pasal 1 ayat 2).',
-  '<b>Kontrak sosial</b> (Hobbes, Locke, Rousseau): negara dibentuk dari kesepakatan warga.',
-  '<b>Negara hukum</b> (Pasal 1 ayat 3): negara tidak boleh sewenang-wenang.',
-  '<b>Status warga negara:</b> Pasal 26.',
-  '<b>Negara ke warga:</b> pendidikan (Pasal 31, misal KIP), BPJS, KTP dan paspor, perlindungan hukum.',
-  '<b>Warga ke negara:</b> bayar pajak, ikut pemilu, taat hukum, bela negara (Pasal 27 ayat 3 dan Pasal 30).'
- ]},
- {id:'pkn5',t:'Demokrasi Pancasila',gist:'Demokrasi dari, oleh, untuk rakyat, tapi dengan musyawarah dan nilai Pancasila.',pts:[
-  '<b>Lincoln (Gettysburg, 1863):</b> pemerintahan dari rakyat, oleh rakyat, untuk rakyat.',
-  '<b>Cocok dengan Indonesia:</b> dari (Pasal 1 ayat 2), oleh (pemilu langsung), untuk (sila ke-5 dan tujuan negara di Pembukaan UUD).',
-  '<b>Kekhasan:</b> bukan sekadar suara terbanyak, tapi hikmat kebijaksanaan dan musyawarah (sila ke-4).',
-  '<b>Tantangan:</b> politik uang, korupsi, oligarki. Mahasiswa perlu ikut mengawasi secara kritis.'
+ {id:'pkn5',t:'Demokrasi Pancasila',gist:'Demokrasi Pancasila adalah demokrasi "dari, oleh, untuk rakyat" ala Lincoln, ditambah musyawarah dan nilai-nilai Pancasila.',pts:[
+  `<b>Menurut Lincoln</b> (Pidato Gettysburg, 1863), demokrasi adalah pemerintahan dari rakyat, oleh rakyat, dan untuk rakyat.
+   <br>1. <b>Dari rakyat:</b> kekuasaan berasal dari rakyat, pemimpin adalah wakil rakyat.
+   <br>2. <b>Oleh rakyat:</b> rakyat ikut menjalankan pemerintahan, misalnya lewat pemilu.
+   <br>3. <b>Untuk rakyat:</b> tujuannya kesejahteraan rakyat, bukan segelintir elite.`,
+  `<b>Relevan dengan Indonesia:</b> "dari rakyat" sesuai Pasal 1 ayat (2); "oleh rakyat" karena kita memilih presiden, DPR, DPD, dan kepala daerah secara langsung; "untuk rakyat" sesuai sila ke-5 dan tujuan negara di Pembukaan UUD 1945 (memajukan kesejahteraan umum, mencerdaskan kehidupan bangsa).`,
+  `<b>Kekhasan Demokrasi Pancasila:</b> tidak hanya suara terbanyak, tapi juga hikmat kebijaksanaan dan musyawarah mufakat (sila ke-4). Kebebasan tidak boleh bertentangan dengan nilai Ketuhanan, kemanusiaan, persatuan, dan keadilan sosial.`,
+  `<b>Tantangan:</b> politik uang, korupsi, dan oligarki membuat prinsip "untuk rakyat" belum sepenuhnya terwujud. Karena itu warga, termasuk mahasiswa, perlu ikut mengawasi secara kritis.`
  ],vis:()=>[V.cols('Of, by, for the people',[['Dari rakyat','Kekuasaan bersumber dari rakyat'],['Oleh rakyat','Rakyat ikut menjalankan, misal lewat pemilu'],['Untuk rakyat','Tujuannya kesejahteraan rakyat']])]}
 ],
 pk:[
- {id:'pk1',t:'Pengantar perilaku konsumen',gist:'Perilaku konsumen = cara orang memilih, membeli, memakai, dan menilai produk. Bukan cuma saat bayar.',pts:[
-  '<b>Tiga tahap:</b> sebelum beli (sadar butuh, cari info), saat beli (pengalaman belanja), sesudah beli (puas, rekomendasi, atau kecewa).',
-  '<b>Evolusi konsep:</b> Produksi (1910-an, fokus pabrik), Produk (1930-an, fokus kualitas), Penjualan (1950-an, jual agresif), Pemasaran (fokus kebutuhan konsumen), Kemasyarakatan (peduli masyarakat).',
-  '<b>Web 2.0:</b> komunikasi jadi dua arah. Konsumen dapat info dan kustomisasi, pemasar dapat data. Harganya: privasi.',
-  '<b>UGC</b> (ulasan, unboxing) sering lebih dipercaya daripada iklan.'
- ],vis:()=>[V.flow('Alur keputusan konsumen',['Sadar butuh','Cari info','Bandingkan','Beli','Evaluasi']),V.cols('Empat ilmu di baliknya',[['Psikologi','Pikiran individu'],['Sosiologi','Kelompok, FOMO'],['Antropologi','Budaya, ritual'],['Komunikasi','Pesan dan bujukan']])]},
- {id:'pk2',t:'Motivasi: dasar',gist:'Motivasi muncul saat ada jarak antara kondisi sekarang dan kondisi yang diinginkan.',pts:[
-  '<b>Biogenik:</b> kebutuhan bawaan (lapar, haus). <b>Psikogenik:</b> dipelajari (gengsi, harga diri).',
-  '<b>Utilitarian:</b> beli karena fungsi. <b>Hedonik:</b> beli karena rasa dan emosi.',
-  '<b>Approach:</b> mendekati hal positif. <b>Avoidance:</b> menjauhi hal negatif.',
-  '<b>Konflik motivasi:</b> approach-approach (dua pilihan bagus), approach-avoidance (mau tapi takut, misal manis tapi takut gemuk), avoidance-avoidance (dua pilihan buruk).',
-  '<b>Disonansi kognitif:</b> ragu setelah beli barang mahal. Pemasar membantu meyakinkan.',
-  '<b>Defense saat frustrasi:</b> agresi, rasionalisasi, regresi, withdrawal, proyeksi, daydreaming, identifikasi.'
- ],vis:()=>[V.flow('Siklus motivasi',['Ada jarak','Tegang','Terdorong','Beli','Lega'])]},
- {id:'pk2b',t:'Motivasi: teori dan keterlibatan',gist:'Maslow, McClelland, dan Freud menjelaskan apa yang mendorong orang membeli.',pts:[
-  '<b>Maslow:</b> 5 tingkat kebutuhan, dari fisiologis sampai aktualisasi diri.',
-  '<b>McClelland:</b> butuh pencapaian, kekuasaan, afiliasi (diterima kelompok), dan keunikan.',
-  '<b>Freud:</b> Id (mau puas sekarang), Superego (rem moral), Ego (penengah). Produk = kompromi yang bisa diterima.',
-  '<b>Mood</b> = perasaan ringan sementara. <b>Emotion</b> = reaksi kuat karena pemicu jelas.',
-  '<b>Involvement:</b> seberapa peduli konsumen. Rendah = kebiasaan (inersia). Tertinggi = fanatik (produk kultus).'
+ {id:'pk1',t:'Pengantar perilaku konsumen',gist:'Perilaku konsumen adalah ilmu tentang bagaimana orang memutuskan membeli, memakai, dan menilai sesuatu, mulai dari sebelum beli sampai sesudahnya.',pts:[
+  `<b>Beda "pembeli" dan "konsumen".</b> Dulu yang dipelajari hanya saat bayar di kasir. Sekarang dilihat sebagai proses panjang: <b>sebelum beli</b> (sadar butuh, cari info, baca review), <b>saat beli</b> (pengalaman belanja, tampilan aplikasi, kemudahan checkout), <b>sesudah beli</b> (puas, kasih bintang 5, rekomendasi, atau kecewa dan komplain). ${e('kamu cari promo di e-commerce, checkout, lalu menulis review: itu satu rangkaian')}`,
+  `<b>Definisi:</b> studi tentang cara individu, kelompok, dan organisasi memilih, membeli, memakai, dan menilai produk, jasa, atau ide untuk memenuhi kebutuhan dan keinginan. Buat desainer: desain adalah stimulus (rangsangan) yang direspons konsumen.`,
+  `<b>Lima era cara pandang pemasaran:</b>
+   <br>1. <b>Produksi (1910-an):</b> fokus membuat murah dan banyak. Henry Ford: pilih warna apa saja asal hitam.
+   <br>2. <b>Produk (1930-an):</b> fokus membuat fitur terbaik, tapi lupa apa yang sebenarnya dibutuhkan orang (marketing myopia).
+   <br>3. <b>Penjualan (1950-an):</b> mendorong jual apa yang sudah dibuat, bukan membuat apa yang diinginkan pasar.
+   <br>4. <b>Pemasaran (1950-an sampai kini):</b> mulai dari kebutuhan konsumen yang belum terpenuhi.
+   <br>5. <b>Pemasaran kemasyarakatan (kini):</b> memuaskan konsumen sambil menjaga kesejahteraan masyarakat. ${e('merek yang transparan soal keberlanjutan lingkungan')}`,
+  `<b>Web 2.0 dan Big Data.</b> Dulu iklan satu arah (perusahaan ke audiens), sekarang dua arah. Konsumen dapat banyak info dan produk yang sesuai selera. Pemasar dapat data: klik, lokasi, preferensi. Harga yang dibayar konsumen adalah privasi.`,
+  `<b>UGC (User-Generated Content):</b> konten buatan konsumen, seperti review, video unboxing, dan keluhan viral. Sering lebih dipercaya daripada iklan yang mahal. Konsumen jadi ko-kreator dan menuntut merek yang jujur (brand authenticity).`,
+  `<b>Empat ilmu yang dipakai untuk memahami konsumen:</b> psikologi (isi kepala individu: persepsi, motivasi, kepribadian, memori), sosiologi (pengaruh kelompok, kelas sosial, FOMO), antropologi (budaya, ritual, subkultur), komunikasi (simbol, bujukan, penyampaian pesan).`
+ ],ingat:'Urutan evolusi: Produksi, Produk, Penjualan, Pemasaran, Kemasyarakatan.',vis:()=>[V.flow('Alur keputusan konsumen',['Sadar butuh','Cari info','Bandingkan','Beli','Evaluasi']),V.cols('Empat ilmu di baliknya',[['Psikologi','Pikiran individu'],['Sosiologi','Kelompok, FOMO'],['Antropologi','Budaya, ritual'],['Komunikasi','Pesan dan bujukan']])]},
+ {id:'pk2',t:'Motivasi: dasar',gist:'Orang membeli karena ada "jarak" antara keadaan sekarang dan keadaan yang diinginkan. Jarak itu bikin tidak nyaman, lalu mendorong kita bertindak.',pts:[
+  `<b>Alur motivasi:</b> ada kesenjangan, muncul ketegangan, terdorong bertindak, melakukan pembelian, lalu lega. ${e('HP lemot (kenyataan) padahal ingin lancar (harapan), jadi gelisah, cari HP baru, beli, lalu tenang')}`,
+  `<b>Kebutuhan biogenik</b> adalah kebutuhan bawaan untuk bertahan hidup (lapar, haus). <b>Kebutuhan psikogenik</b> dipelajari dari lingkungan (harga diri, gengsi, kasih sayang, kekuasaan, pencapaian).`,
+  `<b>Utilitarian</b> artinya membeli karena fungsi dan logika. <b>Hedonik</b> artinya membeli karena rasa dan emosi. ${e('beli motor karena irit (utilitarian) lawan karena suara dan gayanya keren (hedonik)')}`,
+  `<b>Approach</b> artinya terdorong mendekati sesuatu yang positif (olahraga supaya sehat). <b>Avoidance</b> artinya terdorong menghindari sesuatu yang negatif (olahraga supaya tidak sakit).`,
+  `<b>Tiga konflik motivasi:</b>
+   <br>1. <b>Approach-approach:</b> memilih dua hal yang sama-sama diinginkan. Pemasar menonjolkan keunggulan satu pilihan.
+   <br>2. <b>Approach-avoidance:</b> mau tapi takut akibatnya, misal ingin makanan manis tapi takut gemuk. Solusi pemasar: kompromi seperti pemanis rendah kalori.
+   <br>3. <b>Avoidance-avoidance:</b> terjebak di dua pilihan buruk, misal membiarkan mobil rusak atau mengambil kredit mahal. Pemasar meminimalkan rasa sakitnya.`,
+  `<b>Disonansi kognitif:</b> rasa ragu dan tidak nyaman setelah membeli barang mahal ("jangan-jangan salah beli"). Orang lalu mencari pembenaran. Pemasar membantu lewat panduan pemakaian, pesan yang meyakinkan, dan layanan pelanggan.`,
+  `<b>Tujuh cara orang menghadapi frustrasi</b> (saat gagal mencapai tujuan):
+   <br>1. <b>Agresi:</b> marah, misalnya memboikot merek.
+   <br>2. <b>Rasionalisasi:</b> mencari alasan ("aku kurang latihan" atau "skor tinggi tidak penting kok").
+   <br>3. <b>Regresi:</b> bertingkah kekanak-kanakan, misal rebutan barang diskon.
+   <br>4. <b>Withdrawal:</b> mundur dari situasi.
+   <br>5. <b>Proyeksi:</b> menyalahkan benda atau orang lain.
+   <br>6. <b>Daydreaming:</b> melamun tentang hidup yang lebih baik.
+   <br>7. <b>Identifikasi:</b> merasa diwakili orang atau iklan, lalu memakai solusi yang ditawarkan.`
+ ],ingat:'Tujuh defense: Agresi, Rasionalisasi, Regresi, Withdrawal, Proyeksi, Daydreaming, Identifikasi.',vis:()=>[V.flow('Siklus motivasi',['Ada jarak','Tegang','Terdorong','Beli','Lega'])]},
+ {id:'pk2b',t:'Motivasi: teori dan keterlibatan',gist:'Tiga teori terkenal yang menjelaskan apa sebenarnya yang kita cari saat membeli, plus soal seberapa peduli kita pada sebuah produk.',pts:[
+  `<b>Maslow:</b> kebutuhan manusia bertingkat. Pemenuhan dimulai dari bawah.
+   <br>1. Fisiologis: makan, minum, tidur.
+   <br>2. Keamanan: perlindungan, stabilitas (misal asuransi).
+   <br>3. Sosial: diterima, punya teman (misal nongkrong).
+   <br>4. Ego/esteem: status dan percaya diri (misal barang bermerek).
+   <br>5. Aktualisasi diri: sukses dan mewujudkan potensi.
+   <br>Satu produk bisa memuaskan kelimanya, contoh berkebun: dapat makanan, rasa aman, hasil panen untuk dibagi, keindahan, dan ketenangan batin.`,
+  `<b>McClelland (kebutuhan yang dipelajari):</b> kebutuhan akan <b>pencapaian</b> (ingin sukses), <b>kekuasaan</b> (mengendalikan lingkungan), <b>afiliasi</b> (ingin diterima kelompok dan takut ditolak), dan <b>keunikan</b> (ingin menunjukkan identitas pribadi).`,
+  `<b>Freud:</b> pikiran punya tiga bagian. <b>Id</b> ingin puas sekarang tanpa peduli akibat. <b>Superego</b> adalah hati nurani dan rem moral. <b>Ego</b> jadi wasit di antara keduanya. ${e('Id ingin dessert mahal sekarang, Superego bilang jangan boros, Ego memilih porsi kecil')} Produk dibeli sebagai kompromi yang bisa diterima secara sosial.`,
+  `<b>Mood dan emotion.</b> Mood adalah perasaan ringan dan sementara, iklan lebih dinilai positif saat kita sedang senang (mood congruency). Emotion adalah reaksi kuat karena pemicu yang jelas. Strategi: negative state relief (berdonasi supaya mood membaik) dan sadvertising (iklan sedih yang menguras air mata).`,
+  `<b>Involvement (keterlibatan)</b> adalah seberapa penting dan relevan sebuah produk bagi konsumen. Rendah: beli karena kebiasaan (inersia). Tertinggi: fanatik, produk jadi bagian identitas (produk kultus, misal kolektor sneakers).`,
+  `<b>Tiga cara pemasar menaikkan keterlibatan:</b> lewat <b>produk</b> (risiko yang dirasakan, boleh mendesain sendiri), lewat <b>pesan</b> (cerita yang menyedot perhatian, visual mengejutkan), dan lewat <b>situasi</b> (rekomendasi real-time, toko yang jadi pengalaman).`
  ],vis:()=>[
   V.pyr('Hierarki kebutuhan Maslow',[['Aktualisasi diri','Sukses, kuasa',44],['Ego (esteem)','Status, percaya diri',58],['Sosial','Dihormati, berteman',72],['Keamanan','Perlindungan, stabilitas',86],['Fisiologis','Air, tidur, makanan',100]]),
   V.g2('Matriks motivasi dan keterlibatan',{x:['Motivasi rendah','Motivasi tinggi'],y:['Peduli tinggi','Peduli rendah'],c:[
-   ['Pencari nilai','Teliti banding harga, cari diskon'],['Evangelis merek','Loyal, rela bayar lebih'],['Inersia','Beli yang itu-itu saja'],['Impulsif','Beli cepat demi kepuasan sesaat']]})]},
- {id:'pk3',t:'Persepsi: dari stimulus ke ingatan',gist:'Konsumen hanya menangkap sebagian kecil dari ribuan stimulus. Pesan harus lolos dari saringan.',pts:[
-  '<b>5 tahap:</b> paparan, perhatian, pemahaman, penerimaan, retensi.',
-  '<b>5 indra:</b> visual, audio, aroma, rasa, sentuhan (produk yang dipegang bikin lebih yakin).',
-  '<b>Hukum Weber dan JND:</b> perubahan kecil tidak terasa. Di bawah JND = diam-diam (kemasan dikecilkan). Di atas JND = menarik perhatian (diskon minimal sekitar 20%).',
-  '<b>Vigilance:</b> otak fokus pada yang relevan. <b>Defense:</b> otak menolak yang mengancam (perokok dan peringatan kesehatan).',
-  '<b>Cara menembus:</b> kontras ukuran, warna, posisi, atau kebaruan.'
- ],vis:()=>[V.flow('Perjalanan stimulus',['Paparan','Perhatian','Pemahaman','Penerimaan','Retensi'])]},
- {id:'pk3b',t:'Persepsi: makna dan risiko',gist:'Otak menyusun makna sendiri, sering lewat jalan pintas.',pts:[
-  '<b>Gestalt:</b> figure-ground (fokus lawan latar), closure (otak melengkapi yang kosong), grouping (yang berdekatan dianggap satu).',
-  '<b>Semiotika:</b> tanda, produk, makna (koboi, Marlboro, maskulin).',
-  '<b>Bias:</b> kesan pertama sulit diubah, stereotip, halo effect (satu hal bagus, semua dianggap bagus).',
-  '<b>Isyarat intrinsik</b> (rasa, tekstur) lawan <b>ekstrinsik</b> (harga, merek, kemasan). Kemasan adalah billboard mini.',
-  '<b>Risiko dirasakan:</b> fungsional/fisik (solusi: garansi, sampel), finansial (harga dan reputasi toko), sosial/psikologis (endorsement, loyalitas).',
-  '<b>Positioning:</b> posisi merek di pikiran konsumen (perceptual mapping).'
- ]},
- {id:'pk4',t:'Konsep diri',gist:'Orang membeli barang untuk membentuk dan menunjukkan siapa dirinya.',pts:[
-  '<b>Tiga sisi:</b> isi (atribut), positif (self-esteem), akurat (sesuai realita).',
-  '<b>Looking-glass self:</b> konsep diri dibentuk dari penilaian orang lain.',
-  '<b>Dramaturgical:</b> kita aktor dengan banyak peran, produk jadi properti.',
-  '<b>Extended self:</b> barang jadi bagian diri (baju, HP, rumah, almamater).',
-  '<b>Gender:</b> bergeser dari pink lawan biru ke unisex dan fluid.',
-  '<b>Body image:</b> standar cantik dibentuk budaya. Vanity sizing dan social comparison memanfaatkan rasa tidak puas.'
- ],vis:()=>[V.g2('Empat versi diri',{x:['Realita','Aspirasi'],y:['Mata saya','Mata orang'],c:[['Actual self','Diri saya sebenarnya'],['Ideal self','Diri yang saya inginkan'],['Social self','Kata saya, orang melihat saya begini'],['Ideal social self','Ingin orang melihat saya begini']]})]},
- {id:'pk5',t:'Personality, lifestyle, value',gist:'Demografi menjawab SIAPA yang beli. Personality, lifestyle, dan value menjawab MENGAPA.',pts:[
-  '<b>Freud:</b> motif bawah sadar. Riset motivasi dipopulerkan Dichter (1950-an).',
-  '<b>Horney (CAD):</b> Compliant, Aggressive, Detached.',
-  '<b>Brand personality:</b> Jung (Rebel, Creator, Hero, Jester) dan Aaker (Sincerity, Excitement, Competence, Sophistication, Ruggedness).',
-  '<b>Big Five (OCEAN):</b> Openness, Conscientiousness, Extroversion, Agreeableness, Neuroticism (retail therapy).',
-  '<b>Lifestyle:</b> product constellation (starter pack) dan co-branding.',
-  '<b>Psikografis:</b> AIO (Activities, Interests, Opinions). VALS: Thinkers, Achievers, Makers, Experiencers (Gen Z).',
-  '<b>Means-end chain:</b> produk, atribut, manfaat, nilai inti. Tren: dari materialisme ke minimalisme dan pengalaman.'
- ],vis:()=>[V.cols('Horney: model CAD',[['Compliant','Ingin dicintai dan diterima'],['Aggressive','Ingin menang dan berstatus'],['Detached','Ingin mandiri dan bebas']])]},
- {id:'pk6',t:'Consumer learning',gist:'Konsumen belajar dari pengalaman. Merek melatih kebiasaan beli kita.',pts:[
-  '<b>4 elemen:</b> motives, cues, responses, reinforcement.',
-  '<b>Classical:</b> asosiasi lewat repetisi (Pavlov, alpukat sama dengan sehat).',
-  '<b>Instrumental:</b> belajar dari hadiah (diskon, poin). Shaping = bonus di awal.',
-  '<b>Observational:</b> meniru orang lain (review, endorser).',
-  '<b>Generalization:</b> peniru menyerupai kemasan leader. <b>Discrimination:</b> leader tampil beda (Apple).',
-  '<b>Involvement tinggi</b> = berpikir (otak kiri). <b>Rendah</b> = kebiasaan (otak kanan). Hasil akhir: brand loyalty dan brand equity.',
-  '<b>Febreze:</b> laris setelah dijual sebagai hadiah wangi setelah bersih-bersih.'
- ],vis:()=>[V.flow('Mesin pembelajaran',['Motive','Cue','Response','Reinforcement']),V.cols('Tiga jenis belajar',[['Classical','Asosiasi (jingle, Pavlov)'],['Instrumental','Hadiah (diskon, poin)'],['Observational','Meniru (review)']])]}
+   ['Pencari nilai','Butuh rendah, tapi teliti banding harga dan cari diskon'],['Evangelis merek','Butuh tinggi dan peduli: loyal, rela bayar lebih'],['Inersia','Beli yang itu-itu saja, autopilot'],['Impulsif','Beli cepat demi kepuasan sesaat']]})]},
+ {id:'pk3',t:'Persepsi: dari stimulus ke ingatan',gist:'Persepsi adalah cara otak memilih dan memaknai rangsangan. Konsumen melihat versinya sendiri, bukan kenyataan apa adanya.',pts:[
+  `<b>Banjir rangsangan.</b> Di swalayan modern ada lebih dari 30.000 produk yang bersaing mencari perhatian. Otak menyaring sebagian besar supaya tidak kelelahan. Tugas pemasar: bagaimana pesan bisa lolos dari saringan itu.`,
+  `<b>Lima tahap persepsi:</b>
+   <br>1. <b>Paparan:</b> stimulus mulai terdeteksi.
+   <br>2. <b>Perhatian:</b> lolos dari saringan, mulai diperhatikan.
+   <br>3. <b>Pemahaman:</b> konsumen menafsirkan maknanya.
+   <br>4. <b>Penerimaan:</b> pesan berhasil memengaruhi.
+   <br>5. <b>Retensi:</b> tersimpan di ingatan.`,
+  `<b>Pemasaran lewat lima indra:</b> <b>penglihatan</b> (warna cerah membangkitkan gairah, warna dingin menenangkan), <b>pendengaran</b> (tempo musik lambat membuat orang betah lama di toko), <b>penciuman</b> (aroma terhubung dengan emosi dan memori, misal aroma kopi), <b>pengecapan</b> (rasa), <b>sentuhan</b> (pembeli yang boleh menyentuh produk jadi lebih yakin menilai).`,
+  `<b>Hukum Weber dan JND (just noticeable difference).</b> JND adalah perubahan terkecil yang bisa disadari. Semakin besar nilai awal, semakin besar perubahan yang dibutuhkan agar terasa. ${e('turun Rp 600 dari harga Rp 6.000 (10%) terasa, tapi turun Rp 600 dari Rp 60.000 (1%) tidak terasa')}
+   <br><b>Di bawah JND</b> = sengaja tidak terasa: kemasan dikecilkan diam-diam, atau logo diperbarui sedikit demi sedikit supaya pelanggan tidak kaget.
+   <br><b>Di atas JND</b> = sengaja terasa: diskon cukup besar (minimal sekitar 20%) atau fitur baru yang jelas terlihat.`,
+  `<b>Perceptual vigilance:</b> otak memperhatikan hal yang relevan dengan kebutuhan kita saat ini (lapar, jadi mudah melihat iklan makanan). <b>Perceptual defense:</b> otak menolak hal yang mengancam (perokok mengabaikan gambar peringatan di bungkus rokok).`,
+  `<b>Cara menembus saringan lewat kontras:</b> <b>ukuran</b> (jauh lebih besar dari sekitar), <b>warna</b> (berbeda dari lingkungan), <b>posisi</b> (di tempat tak terduga, misal ambient media di jalan), <b>kebaruan</b> (menyimpang dari yang diharapkan, ada kejutan).`
+ ],ingat:'Mau diam-diam, tetap di bawah JND. Mau ketahuan, lewati JND.',vis:()=>[V.flow('Perjalanan stimulus',['Paparan','Perhatian','Pemahaman','Penerimaan','Retensi'])]},
+ {id:'pk3b',t:'Persepsi: makna dan risiko',gist:'Setelah stimulus ditangkap, otak menyusun maknanya sendiri, sering lewat jalan pintas. Ini yang membentuk penilaian konsumen terhadap sebuah merek.',pts:[
+  `<b>Psikologi Gestalt:</b> otak menyatukan potongan menjadi pola yang bermakna.
+   <br>1. <b>Figure-ground:</b> yang menonjol (figure) jadi fokus, sisanya jadi latar. ${e('iklan yang dibuat jelas fokusnya supaya tidak diabaikan')}
+   <br>2. <b>Closure:</b> otak otomatis melengkapi gambar atau pesan yang tidak utuh. ${e('teaser poster yang sengaja dibuat setengah')}
+   <br>3. <b>Grouping:</b> benda yang berdekatan atau mirip dianggap satu kelompok. ${e('produk ditata dengan gaya target pasarnya')}`,
+  `<b>Semiotika:</b> ilmu tentang tanda dan makna. Ada tiga bagian: tanda atau simbol, objek (produk), dan makna di benak konsumen (interpretant). ${e('karakter koboi (tanda) dipasang pada rokok Marlboro (objek) menghasilkan kesan maskulin dan tangguh (makna)')} Merek kuat menjual maknanya, bukan hanya fiturnya.`,
+  `<b>Tiga bias penilaian:</b>
+   <br>1. <b>Kesan pertama</b> bersifat awet. Meluncurkan produk yang belum matang bisa fatal.
+   <br>2. <b>Stereotyping:</b> menilai dari isyarat sederhana seperti penampilan, istilah, atau negara asal produk.
+   <br>3. <b>Halo effect:</b> satu hal bagus membuat keseluruhan dinilai bagus. Ini dasar brand extension dan licensing.`,
+  `<b>Isyarat intrinsik</b> adalah atribut fisik produk (rasa, tekstur, warna, ukuran), sulit dinilai sebelum membeli. <b>Isyarat ekstrinsik</b> adalah hal di luar produk (harga, citra merek, reputasi toko, kemasan), dipakai sebagai jalan pintas saat orang tidak punya waktu atau keahlian. Kemasan ibarat billboard mini di rak toko. ${e('isi pemanis yang sama bisa terasa beda kalau kemasannya diubah dari minimalis menenangkan menjadi vibran dan ceria')}`,
+  `<b>Risiko yang dirasakan (perceived risk)</b> dan solusi pemasar:
+   <br>1. <b>Fungsional/fisik</b> ("bekerja dan aman tidak?"): edukasi, garansi uang kembali, sampel gratis.
+   <br>2. <b>Finansial</b> ("sepadan dengan harganya?"): harga yang menandakan kualitas dan reputasi toko.
+   <br>3. <b>Psikologis/sosial</b> ("kata orang gimana?"): brand loyalty, endorsement, merek yang cocok dengan identitas target.`,
+  `<b>Positioning</b> adalah posisi merek di pikiran konsumen, bukan apa yang dilakukan pada produk. Dipetakan lewat perceptual mapping, misal sumbu ekonomis lawan premium dan tradisional lawan trendi.`
+ ],vis:()=>[V.cols('Tiga risiko dan solusinya',[['Fungsional/fisik','Garansi, sampel gratis'],['Finansial','Harga sinyal kualitas, toko terpercaya'],['Sosial/psikologis','Endorser, loyalitas merek']])]},
+ {id:'pk4',t:'Konsep diri',gist:'Konsep diri adalah gambaran tentang "aku ini siapa". Banyak pembelian dilakukan untuk membentuk atau menunjukkan gambaran itu.',pts:[
+  `<b>Tiga sisi konsep diri:</b> <b>isi</b> (atribut yang dimiliki, misal pintar atau menarik secara fisik), <b>positivitas</b> (seberapa tinggi menilai diri, atau self-esteem), <b>akurasi</b> (seberapa sesuai dengan kenyataan, sering terdistorsi filter media sosial).`,
+  `<b>Empat teori pembentukan konsep diri:</b> self-appraisal (diterima atau ditolak masyarakat), reflected appraisal atau looking-glass self (terbentuk dari penghargaan orang lain), social comparison (membandingkan diri dengan orang lain), biased scanning (cara pandang terhadap lingkungan).`,
+  `<b>Looking-glass self:</b> kita menampilkan diri (outfit, gaya hidup, opini), masyarakat merespons (perhatian, pujian, like), lalu kita menyesuaikan diri. Orang yang self-monitoring-nya tinggi lebih mungkin membeli sesuatu demi menghindari malu di depan umum.`,
+  `<b>Perspektif dramaturgical:</b> hidup seperti teater, kita aktor dengan banyak peran dan produk adalah propertinya. ${e('peran mahasiswa rajin (kacamata anti-radiasi, MacBook, kopi), peran eco-warrior (tote bag, tumbler, transportasi umum)')}`,
+  `<b>Extended self:</b> barang yang kita miliki dianggap bagian dari diri, di empat level: individu (pakaian, ponsel), keluarga (rumah, furnitur), komunitas (lingkungan, kota asal), grup (fandom, almamater, tim olahraga). <b>Enclothed cognition:</b> makna pakaian memengaruhi perilaku pemakainya. <b>Posing power:</b> postur tubuh memengaruhi perasaan.`,
+  `<b>Pergeseran gender:</b> dari sex-typed marketing (pink lawan biru, label "for men" dan "for women") ke androgyny dan fluiditas (palet unisex, kosmetik pria, label gender dihapus). Ada juga produk gender-bending, misalnya kosmetik pria atau senjata dengan warna pink untuk wanita.`,
+  `<b>Body image:</b> standar cantik dibentuk budaya dan berbeda di tiap negara (Global Photoshop Project membuktikan itu). Pemasar memanfaatkan celahnya lewat <b>vanity sizing</b> (label ukuran dibuat lebih kecil dari aslinya supaya pembeli senang) dan <b>social comparison trap</b> (melihat model dan influencer terus-menerus menurunkan kepuasan pada tubuh sendiri lalu memicu belanja). Sisi gelapnya: obsesi berlebihan sampai bedah plastik.`
+ ],ingat:'Empat versi diri: actual, ideal, social, ideal social. Ditambah avoidance self (diri yang tidak diinginkan).',vis:()=>[V.g2('Empat versi diri',{x:['Realita','Aspirasi'],y:['Mata saya','Mata orang'],c:[['Actual self','Diri saya yang sebenarnya'],['Ideal self','Diri yang ingin saya jadi'],['Social self','Saya merasa orang melihat saya begini'],['Ideal social self','Saya ingin orang melihat saya begini']]}),`<p class="note"><b>Avoidance self:</b> siapa yang tidak kamu inginkan. Contoh: sengaja makan junk food untuk memberontak dari identitas sehat.</p>`]},
+ {id:'pk5',t:'Personality, lifestyle, value',gist:'Demografi hanya menjawab SIAPA yang membeli. Personality, lifestyle, dan value menjawab MENGAPA mereka membeli.',pts:[
+  `<b>Contoh kenapa perlu:</b> dua mahasiswa sama-sama umur 20 dan uang jajan Rp 2 juta bisa memilih barang yang sangat berbeda. Perbedaannya ada di nilai hidup (values), cara memakai waktu dan uang (lifestyle), dan cara berpikir (personality).`,
+  `<b>Teori Freud untuk pemasaran:</b> motif bawah sadar (konsumen sering tidak bisa menjelaskan alasan asli belinya), simbolisasi produk (kompromi Id dan Superego), dan riset motivasi yang dipopulerkan Dr. Ernest Dichter pada 1950-an.`,
+  `<b>Neo-Freudian, Karen Horney (model CAD):</b> <b>Compliant</b> ingin dicintai dan diterima. <b>Aggressive</b> ingin menang, berprestasi, berstatus. <b>Detached</b> ingin mandiri dan bebas dari aturan kelompok.`,
+  `<b>Carl Jung dan brand personality:</b> kita memilih merek yang mencerminkan diri kita. Rebel (Harley-Davidson, Vans), Creator (Apple, Lego), Hero (Nike), Jester (Old Spice, M&amp;Ms, Skittles), Lover (Chanel, Godiva).`,
+  `<b>Trait theory, Big Five (OCEAN):</b>
+   <br>1. <b>Openness:</b> suka hal baru, misal edisi terbatas.
+   <br>2. <b>Conscientiousness:</b> teliti, riset berhari-hari, beli yang awet.
+   <br>3. <b>Extroversion:</b> belanja untuk nongkrong, rentan FOMO.
+   <br>4. <b>Agreeableness:</b> loyal pada merek ramah lingkungan atau punya misi sosial.
+   <br>5. <b>Neuroticism:</b> retail therapy, belanja impulsif saat stres.`,
+  `<b>Kerangka Aaker (5 dimensi kepribadian merek):</b> Sincerity (tulus), Excitement (energik), Competence (andal), Sophistication (elegan), Ruggedness (tangguh).`,
+  `<b>Lifestyle:</b> orang jarang membeli barang terpisah, melainkan satu paket pelengkap (product constellation), misalnya starter pack "anak senja": tote bag, kopi slow bar, kamera analog, musik folk. Co-branding menggabungkan dua merek agar maknanya saling menular.`,
+  `<b>Psikografis</b> (mengapa mereka membeli) melengkapi demografi (siapa mereka). Alatnya <b>AIO</b>: Activities (apa yang dilakukan), Interests (apa yang menarik perhatian), Opinions (pandangan tentang dunia). Hasilnya dipakai menyusun buyer persona.`,
+  `<b>VALS:</b> Thinkers (fokus ide dan fungsi), Achievers (karier dan status), Makers (praktis, DIY), Experiencers (impulsif, suka pengalaman, target pasar Gen Z).`,
+  `<b>Nilai inti dan means-end chain:</b> kita sebenarnya membeli tujuan akhir. ${e('sepatu lari ultralight (produk), sol empuk (atribut), kaki tidak sakit dan bisa lari jauh (manfaat), kesehatan dan kebebasan (nilai inti)')}`,
+  `<b>Tren nilai:</b> bergeser dari materialisme (status = banyak barang mewah, fast fashion) ke minimalisme dan pengalaman (decluttering, konser dan traveling, thrifting, produk ramah lingkungan).`
+ ],ingat:'Singkatan: CAD (Horney), OCEAN (Big Five), AIO (psikografis).',vis:()=>[V.cols('Horney: model CAD',[['Compliant','Ingin dicintai dan diterima'],['Aggressive','Ingin menang dan berstatus'],['Detached','Ingin mandiri dan bebas']]),V.cols('Aaker: 5 dimensi merek',[['Sincerity','Tulus, hangat, jujur'],['Excitement','Energik, berani'],['Competence','Andal, cerdas'],['Sophistication','Elegan, berkelas'],['Ruggedness','Tangguh, outdoorsy']])]},
+ {id:'pk6',t:'Consumer learning',gist:'Konsumen belajar dari pengalaman, sering tanpa sadar. Merek memanfaatkannya untuk melatih kebiasaan beli kita.',pts:[
+  `<b>Apa itu consumer learning?</b> Proses mendapat pengetahuan dan pengalaman belanja, lalu memakainya untuk membentuk perilaku di masa depan. Bisa sengaja (riset berhari-hari sebelum beli laptop) atau tidak sengaja (hafal jingle iklan mi instan karena sering lewat di timeline).`,
+  `<b>Empat elemen utama:</b>
+   <br>1. <b>Motives:</b> kebutuhan atau masalah yang belum terpenuhi.
+   <br>2. <b>Cues:</b> petunjuk dari luar (iklan, kemasan, harga) yang mengarahkan dorongan.
+   <br>3. <b>Responses:</b> reaksi kita (klik add to cart, beli, atau mengabaikan).
+   <br>4. <b>Reinforcement:</b> hadiah atau kepuasan. Kalau puas, kita mengulang siklusnya.`,
+  `<b>Kasus Febreze.</b> Awalnya gagal karena dijual sebagai penghilang bau (orang jarang sadar rumahnya bau). Setelah diposisikan sebagai hadiah wangi setelah selesai bersih-bersih, penjualannya meledak.`,
+  `<b>Dua mazhab:</b> <b>behavioral</b> (insting, merespons stimulus secara otomatis, cocok untuk sabun, camilan) dan <b>cognitive</b> (berpikir, memproses informasi, cocok untuk laptop, mobil, asuransi).`,
+  `<b>Classical conditioning:</b> belajar lewat asosiasi dan pengulangan, seperti anjing Pavlov yang mengeluarkan air liur saat mendengar bel. ${e('iklan Avocados from Mexico terus mengaitkan alpukat dengan lemak baik dan gaya hidup sehat, sampai otak otomatis menganggap makan alpukat sama dengan sehat')}`,
+  `<b>Stimulus generalization dan discrimination.</b> Generalization (strategi me-too): pesaing sengaja meniru kemasan brand leader supaya konsumen menyamakan kualitasnya. Discrimination: leader tampil beda supaya tidak tertukar, misal Apple dengan kampanye "Think Different".`,
+  `<b>Instrumental conditioning:</b> belajar dari konsekuensi (coba-coba lalu dapat hadiah). Positive reinforcement berupa diskon, poin loyalitas, atau pujian teman. <b>Shaping:</b> memberi hadiah sebelum perilaku utama terjadi. ${e('bonus saldo Rp 50.000 saat pertama kali mengunduh aplikasi e-commerce, supaya kamu mau mencoba belanja')}`,
+  `<b>Observational learning:</b> belajar dengan mengamati orang lain (modeling). ${e('anak-anak melihat atlet makan sereal Wheaties lalu ikut makan; kamu menonton review skincare beauty vlogger lalu langsung checkout')}`,
+  `<b>Involvement dan otak:</b> high involvement/thinking (mobil, laptop): riset dan baca review. High involvement/feeling (gaun pengantin, parfum mewah): emosi dan ego terlibat. Low involvement (tisu, sampo): kebiasaan, pilih merek yang paling sering dilihat. <b>Otak kiri</b> memproses teks, angka, logika. <b>Otak kanan</b> memproses gambar, warna, musik (passive learning seperti menonton TV).`,
+  `<b>Hasil akhir:</b> brand loyalty (pelanggan setia yang menolak pindah meski pesaing kasih diskon) dan brand equity (nilai merek di otak konsumen, alasan orang rela bayar lebih mahal untuk iPhone).`
+ ],ingat:'Empat elemen: Motives, Cues, Responses, Reinforcement. Tiga jenis belajar: Classical, Instrumental, Observational.',vis:()=>[V.flow('Mesin pembelajaran',['Motive','Cue','Response','Reinforcement']),V.cols('Tiga jenis belajar',[['Classical','Asosiasi (jingle, Pavlov)'],['Instrumental','Hadiah (diskon, poin)'],['Observational','Meniru (review, endorser)']])]}
 ],
 idn:[
- {id:'idn1',t:'Budaya visual prasejarah',gist:'Seni prasejarah adalah sumber motif dan makna desain Nusantara.',pts:[
-  '<b>Catatan:</b> file slide (.ppt) belum terbaca. Ini ringkasan umum dari judul file, samakan dengan slide dosen. Tempel teks slide di menu Catatan agar AI memakai materi aslimu.',
-  '<b>Lukisan gua:</b> contoh di Leang-Leang (Maros-Pangkep, Sulawesi Selatan): cap tangan dan gambar hewan.',
-  '<b>Megalitik:</b> menhir, dolmen, punden berundak, sarkofagus, arca batu (pemujaan leluhur).',
-  '<b>Zaman logam:</b> nekara perunggu dan moko dengan motif spiral, pilin, meander, tumpal.'
+ {id:'idn1',t:'Budaya visual prasejarah',gist:'Seni zaman prasejarah adalah akar dari banyak motif dan makna desain Nusantara.',pts:[
+  `<b>Catatan penting:</b> file slide (.ppt) belum bisa kubaca. Ini ringkasan umum dari judul file, jadi samakan dengan slide dosen. Tempel teks slide di menu Catatan supaya AI memakai materi aslimu.`,
+  `<b>Lukisan gua:</b> manusia purba menggambar di dinding gua. Contohnya di Leang-Leang (Maros-Pangkep, Sulawesi Selatan): cap tangan dan gambar hewan buruan. Fungsinya diduga untuk ritual dan komunikasi.`,
+  `<b>Tradisi megalitik (batu besar):</b> menhir (batu tegak), dolmen (meja batu), punden berundak (bangunan berundak), sarkofagus (peti batu), dan arca batu. Terkait pemujaan leluhur.`,
+  `<b>Zaman logam:</b> nekara perunggu dan moko dihiasi motif geometris seperti spiral, pilin, meander, dan tumpal.`,
+  `<b>Kenapa penting untuk desainer:</b> visual prasejarah berfungsi sebagai simbol kepercayaan dan penanda identitas kelompok, dan jadi sumber inspirasi motif desain Nusantara masa kini.`
  ]},
  {id:'idn2',t:'IDN Project',gist:'Materi dari file 01_IDN_Project belum terbaca.',pts:[
-  'Upload ulang sebagai PDF di chat Claude, atau tempel teksnya di menu <b>Catatan</b> (pilih Inovasi Design Nusantara). Setelah itu AI bisa merangkum dan membuat soal dari isinya.'
+  `Upload ulang sebagai PDF di chat Claude, atau tempel teksnya di menu <b>Catatan</b> (pilih Inovasi Design Nusantara). Setelah itu AI bisa merangkum dan membuat soal dari isinya.`
  ]}
 ]};
 const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn];
-const strip=h=>h.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
+const strip=h=>h.replace(/<br>/g,' ').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
 function builtinCtx(keys){return keys.map(k=>'## '+SUBJ[k].name+'\n'+MATERI[k].map(t=>'### '+t.t+'\n'+t.gist+'\n'+t.pts.map(p=>'- '+strip(p)).join('\n')).join('\n')).join('\n\n')}
 
 /* ---------- bank soal ---------- */
@@ -525,7 +608,7 @@ function renderMateri(){
     <div><h3>${s.name}</h3><div class="muted" style="font-size:14px">Senin 12 Okt · ${s.jam} · ${s.ruang}</div></div>
     ${MATERI[curSubj].map((t,i)=>`<details class="topic" ${i===0?'open':''}><summary>${t.t}</summary><div class="body">
       <div class="gist">${t.gist}</div>
-      <ul>${t.pts.map(p=>`<li>${p}</li>`).join('')}</ul>${(t.vis?t.vis():[]).join('')}
+      <ul>${t.pts.map(p=>`<li>${p}</li>`).join('')}</ul>${t.ingat?`<p class="note"><b>Cara ingat:</b> ${t.ingat}</p>`:''}${(t.vis?t.vis():[]).join('')}
       <div class="row" style="justify-content:space-between"><label class="done-ok"><input type="checkbox" data-d="${t.id}" ${done[t.id]?'checked':''}>Sudah paham</label>
       <button class="btn sm" type="button" data-ask="${t.id}">Tanya AI</button></div></div></details>`).join('')}
     ${myN.length?`<h3 style="margin-top:8px">Catatanmu</h3>`+myN.map(n=>`<div class="card mat"><b>${esc(n.title)}</b>${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px">${esc(n.sum)}</div>`:`<pre>${esc(n.text.slice(0,600))}</pre>`}</div>`).join(''):''}
