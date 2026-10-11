@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>UTS Mode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: header + jam WIB, tab bawah di HP (tab atas di desktop), satu kolom lalu grid. */
+:root{
+  --bg:#F3F4F7; --surface:#FFFFFF; --surface2:#EAECF1; --line:#DFE2E8;
+  --fg:#12141A; --muted:#5A6373; --accent:#D9430F; --accent-ink:#FFFFFF;
+  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B;
+  --good:#15803D; --bad:#C62828;
+  --f-display:'Poppins',system-ui,sans-serif; --f-body:'Poppins',system-ui,sans-serif; --f-mono:'Poppins',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
+  --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6;
+  --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
+  --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6;
+  --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--f-body);-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--f-display);line-height:1.12;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:980px;margin-inline:auto;padding-inline:16px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:10px;padding-block:10px}
+.brand{font:800 20px var(--f-display);display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.clock{font:500 13px var(--f-mono);font-variant-numeric:tabular-nums;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.tbtn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--surface);border-radius:999px;width:36px;height:36px}
+.tbtn svg{width:17px;height:17px}
+.top{display:flex;gap:4px;padding-bottom:10px}
+.top button{border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:999px;font-weight:600;font-size:14px}
+.top button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.bottom{display:none}
+@media(max-width:720px){
+  .top{display:none}
+  .clock{font-size:12px;padding:5px 10px}
+  .bottom{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;left:0;right:0;bottom:0;z-index:6;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+  .bottom button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:600;padding:4px 0;min-width:0}
+  .bottom svg{width:22px;height:22px}
+  .bottom button[aria-selected="true"]{color:var(--accent)}
+  main{padding-bottom:88px!important}
+}
+
+main{padding-block:24px 56px}
+.panel{display:flex;flex-direction:column;gap:20px}
+.eyebrow{font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h2{font-size:clamp(28px,6vw,40px)}
+h3{font-size:19px}
+.lead{color:var(--muted);max-width:60ch}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;min-width:0}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;font-weight:600;font-size:14px;min-height:42px}
+.btn:hover{border-color:var(--fg)}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.sm{padding:6px 12px;font-size:13px;min-height:36px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.tag{display:inline-flex;align-items:center;font:500 12px var(--f-mono);color:var(--c);border-radius:999px;padding:3px 10px;background:color-mix(in srgb,var(--c) 14%,transparent)}
+.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-idn{--c:var(--c-idn)}.s-ai{--c:var(--c-ai)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cd div{background:var(--surface2);border-radius:16px;padding:14px 4px 10px;text-align:center;min-width:0}
+.cd b{display:block;font:800 clamp(30px,9vw,52px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.cd span{font:500 11px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.nx{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.nx h3{font-size:20px}
+.bar-p{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.bar-p>span{display:block;height:100%;background:var(--c,var(--accent));border-radius:99px;transition:width .3s}
+.subjcard{background:color-mix(in srgb,var(--c) 7%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 22%,var(--line));border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px}
+
+/* jadwal */
+.day{display:flex;flex-direction:column;gap:8px}
+.day h3{font:500 13px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.exam{display:grid;grid-template-columns:92px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.exam.now,.exam.nxt{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.exam.done{opacity:.5}
+.exam .t{font:500 14px/1.3 var(--f-mono);font-variant-numeric:tabular-nums}
+.exam .t small{display:block;color:var(--muted);font-size:12px}
+.exam .n{font-weight:700;min-width:0}
+.exam .k{font-size:13px;color:var(--muted)}
+.pill{font:500 11px var(--f-mono);background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:2px 9px;margin-left:6px;vertical-align:middle}
+@media(max-width:520px){.exam{grid-template-columns:1fr auto;gap:6px 12px}.exam .t{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}.exam .t small{display:inline}}
+
+/* materi */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font-weight:600;font-size:14px;min-height:40px}
+.chip[aria-pressed="true"]{background:var(--c,var(--fg));border-color:var(--c,var(--fg));color:var(--bg)}
+details.topic{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+details.topic summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between;font-weight:700;font-size:17px}
+details.topic summary::-webkit-details-marker{display:none}
+details.topic summary::after{content:"+";font:500 22px var(--f-mono);color:var(--muted);flex:none}
+details.topic[open] summary::after{content:"–"}
+details.topic .body{padding:0 20px 20px;display:flex;flex-direction:column;gap:16px}
+.gist{background:color-mix(in srgb,var(--c) 12%,var(--surface));border-radius:14px;padding:12px 14px;font-weight:600}
+details.topic ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+details.topic li::marker{color:var(--c)}
+.done-ok{display:inline-flex;gap:10px;align-items:center;font-weight:600;font-size:14px;min-height:36px}
+.done-ok input{width:20px;height:20px;accent-color:var(--accent)}
+.note{border:1px dashed var(--line);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--muted)}
+
+/* visual */
+.vis{margin:0;background:var(--surface2);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.vis figcaption{font:500 11px var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border-radius:10px;padding:7px 12px;font-weight:600;font-size:14px}
+.step i{font:500 11px var(--f-mono);color:var(--accent);font-style:normal}
+.arr{color:var(--muted);font-weight:400}
+.pyr{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pyr div{background:var(--surface);border-radius:10px;padding:7px 10px;text-align:center;font-size:13px;line-height:1.3;width:max(var(--w),150px);max-width:100%}
+.pyr b{display:block;font-size:14px}
+.pyr div:first-child{box-shadow:0 0 0 1.5px var(--accent) inset}
+.g2{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px}
+.g2 .cell{background:var(--surface);border-radius:12px;padding:10px;font-size:13px;line-height:1.4;min-width:0}
+.g2 .cell b{display:block;font-size:14px;margin-bottom:2px}
+.g2 .ax{font:500 10px var(--f-mono);color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;text-transform:uppercase;letter-spacing:.05em}
+.g2 .ay{writing-mode:vertical-rl;transform:rotate(180deg)}
+.cols3{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
+.cols3>div{background:var(--surface);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45}
+.cols3 b{display:block;font-size:14px;margin-bottom:2px;color:var(--c,var(--accent))}
+.twrap{overflow-x:auto}
+table.tb{border-collapse:collapse;width:100%;font-size:13.5px;min-width:380px}
+table.tb th,table.tb td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.tb th{font:500 11px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+
+/* quiz */
+.qbox{display:flex;flex-direction:column;gap:16px;max-width:720px}
+.qtext{font:700 clamp(19px,4vw,23px)/1.35 var(--f-body)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:14px 16px;display:flex;gap:12px;min-height:52px}
+.opt:hover:not([disabled]){border-color:var(--fg)}
+.opt .l{font:500 13px var(--f-mono);color:var(--muted);flex:none;padding-top:2px}
+.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--surface))}
+.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--surface))}
+.opt[disabled]{cursor:default}
+.expl{background:var(--surface2);border-radius:14px;padding:12px 14px;font-size:14.5px}
+.score{font:800 clamp(64px,16vw,104px)/1 var(--f-display)}
+select,textarea,input[type=text]{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 13px;width:100%}
+textarea{resize:vertical;min-height:150px}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:12px}
+.log{display:flex;flex-direction:column;gap:10px;min-height:240px;max-height:56vh;overflow-y:auto;padding:2px}
+.msg{max-width:88%;padding:11px 15px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
+.msg.u{align-self:flex-end;background:var(--fg);color:var(--bg);border-bottom-right-radius:5px}
+.msg.a{align-self:flex-start;background:var(--surface2);border-bottom-left-radius:5px}
+.msg.e{align-self:flex-start;color:var(--bad);border:1px solid var(--bad)}
+.compose{display:flex;gap:8px;align-items:flex-end}
+.compose textarea{min-height:48px;max-height:140px}
+.sugs{display:flex;gap:8px;flex-wrap:wrap}
+.sugs button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 13px;font-size:13px}
+.sugs button:hover{border-color:var(--accent)}
+.mat{display:flex;flex-direction:column;gap:8px}
+.mat .head{display:flex;gap:8px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.mat pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:400 13px/1.55 var(--f-body);color:var(--muted);max-height:100px;overflow:auto}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:600;font-size:14px;z-index:9;max-width:90vw}
+@media(min-width:721px){.toast{bottom:24px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar-p>span{transition:none}}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand"><i></i>UTS Mode</div>
+      <div class="clock" id="clock" aria-label="Jam sekarang WIB">--:--:-- WIB</div>
+      <button class="tbtn" id="theme" type="button" aria-label="Ganti tema"></button>
+    </div>
+    <nav class="top" id="nav-top" role="tablist" aria-label="Menu"></nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="panel" id="p-home"></section>
+  <section class="panel" id="p-jadwal" hidden></section>
+  <section class="panel" id="p-materi" hidden></section>
+  <section class="panel" id="p-quiz" hidden></section>
+  <section class="panel" id="p-ai" hidden></section>
+  <section class="panel" id="p-saya" hidden></section>
+</main>
+<nav class="bottom" id="nav-bot" aria-label="Menu bawah"></nav>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+
+/* ---------- tema ---------- */
+const sv=store.get('uts.theme',null); if(sv) document.documentElement.dataset.theme=sv;
+const effTheme=()=>document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+function paintTheme(){const d=effTheme()==='dark';$('#theme').innerHTML=d?SUN:MOON;$('#theme').setAttribute('aria-label',d?'Ganti ke mode terang':'Ganti ke mode gelap')}
+$('#theme').onclick=()=>{const n=effTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;store.set('uts.theme',n);paintTheme()};
+paintTheme();
+
+/* ---------- waktu (semua dihitung dalam WIB, UTC+7) ---------- */
+const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const wib=d=>new Date(d.getTime()+7*3600e3);
+const p2=n=>String(n).padStart(2,'0');
+const hhmm=d=>{const w=wib(d);return p2(w.getUTCHours())+':'+p2(w.getUTCMinutes())};
+const hhmmss=d=>{const w=wib(d);return p2(w.getUTCHours())+':'+p2(w.getUTCMinutes())+':'+p2(w.getUTCSeconds())};
+const dayLabel=d=>{const w=wib(d);return HARI[w.getUTCDay()]+', '+w.getUTCDate()+' '+BLN[w.getUTCMonth()]+' '+w.getUTCFullYear()};
+const parts=ms=>{const s=Math.max(0,Math.floor(ms/1000));return [Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
+
+/* ---------- data ---------- */
+const SUBJ={
+  pkn:{name:'Pendidikan Kewarganegaraan',short:'PKn',kode:'VC547',jam:'08:00 – 09:40',ruang:'E-301'},
+  pk:{name:'Perilaku Konsumen',short:'Perilaku Konsumen',kode:'VC546',jam:'10:30 – 12:10',ruang:'E-301'},
+  idn:{name:'Inovasi Design Nusantara',short:'Inovasi Design',kode:'VC545',jam:'13:00 – 15:30',ruang:'N-201'},
+  ai:{name:'Soal AI',short:'Soal AI'}
+};
+const EXAMS=[
+ ['VC547','Pendidikan Kewarganegaraan','2026-10-12T08:00','2026-10-12T09:40','E-301','pkn'],
+ ['VC546','Perilaku Konsumen','2026-10-12T10:30','2026-10-12T12:10','E-301','pk'],
+ ['VC545','Inovasi Design Nusantara','2026-10-12T13:00','2026-10-12T15:30','N-201','idn'],
+ ['VC544','Packaging Design','2026-10-13T08:00','2026-10-13T10:30','E-305'],
+ ['CP501','Sinematografi','2026-10-13T13:00','2026-10-13T15:30','N-110'],
+ ['VC024','Agama Kristen','2026-10-14T08:00','2026-10-14T09:40','E-301'],
+ ['VC548','Pemasaran Terpadu','2026-10-15T08:00','2026-10-15T10:30','E-305'],
+ ['VC549','UMKM Branding','2026-10-15T10:30','2026-10-15T13:00','E-301']
+].map(([kode,nama,a,b,ruang,s])=>({kode,nama,start:new Date(a+':00+07:00'),end:new Date(b+':00+07:00'),ruang,s}));
+
+/* ---------- visual helpers ---------- */
+const V={
+ flow:(t,steps)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="flow">${steps.map((s,i)=>`<span class="step"><i>${i+1}</i>${s}</span>`).join('<b class="arr" aria-hidden="true">→</b>')}</div></figure>`,
+ pyr:(t,lv)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="pyr">${lv.map(([a,b,w])=>`<div style="--w:${w}%"><b>${a}</b>${b}</div>`).join('')}</div></figure>`,
+ g2:(t,o)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="g2"><span></span><span class="ax">${o.x[0]}</span><span class="ax">${o.x[1]}</span><span class="ax ay">${o.y[0]}</span>${o.c.slice(0,2).map(c=>`<div class="cell"><b>${c[0]}</b>${c[1]}</div>`).join('')}<span class="ax ay">${o.y[1]}</span>${o.c.slice(2).map(c=>`<div class="cell"><b>${c[0]}</b>${c[1]}</div>`).join('')}</div></figure>`,
+ cols:(t,items)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="cols3">${items.map(i=>`<div><b>${i[0]}</b>${i[1]}</div>`).join('')}</div></figure>`,
+ table:(t,head,rows)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="twrap"><table class="tb"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div></figure>`
+};
+
+/* ---------- materi (bahasa sederhana) ---------- */
+const MATERI={
+pkn:[
+ {id:'pkn1',t:'Kenapa PKn penting?',gist:'PKn membentuk mahasiswa jadi warga negara yang baik, bukan cuma pintar.',pts:[
+  '<b>Dasar hukum:</b> UU No. 12 Tahun 2012 tentang Pendidikan Tinggi. PKn wajib bersama Agama, Pancasila, dan Bahasa Indonesia.',
+  '<b>Good citizen:</b> ahli di bidangnya, berkarakter, sadar hak dan kewajiban.',
+  '<b>Wawasan kebangsaan:</b> paham Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika.',
+  '<b>Demokratis dan kritis:</b> berpendapat santun, menghargai perbedaan.',
+  '<b>Tantangan global:</b> arus ideologi asing dan krisis identitas, jadi jati diri perlu dikuatkan.',
+  '<b>Era digital:</b> lawan hoaks dan ujaran kebencian (UU ITE), tolak radikalisme online, cegah cyberbullying (sila ke-2), sampaikan aspirasi lewat petisi atau kanal resmi.'
+ ]},
+ {id:'pkn2',t:'Pancasila dan konflik',gist:'Konflik muncul ketika nilai Pancasila tidak dijalankan.',pts:[
+  '<b>Sila utama penyelesaian konflik:</b> sila ke-4, musyawarah mufakat (dialog, bukan kekerasan).',
+  'Sila 2: saling menghormati. Sila 3: kepentingan bangsa di atas golongan. Sila 1: toleransi. Sila 5: penyelesaian yang adil.',
+  '<b>Contoh konflik terbaru:</b> sengketa lahan Rempang Eco-City, penolakan izin rumah ibadah, tawuran, demo besar Agustus 2025, hoaks dan polarisasi di medsos.',
+  'Tips: pilih satu atau dua contoh yang kamu benar-benar paham, dan cek berita terbaru.'
+ ],vis:()=>[V.table('Penyebab konflik per sila',['Sila','Penyebab'],[
+  ['1','Intoleransi, pemaksaan keyakinan, penolakan rumah ibadah'],['2','Diskriminasi, kekerasan, perundungan, pelanggaran HAM'],['3','Primordialisme, sentimen SARA, separatisme'],['4','Abaikan musyawarah, politik uang, kebijakan tanpa partisipasi'],['5','Kesenjangan ekonomi, hukum tidak adil, sengketa lahan, korupsi']])]},
+ {id:'pkn3',t:'Perubahan UUD 1945',gist:'Diubah 4 kali (1999–2002). Hasilnya memperkuat demokrasi, tapi pelaksanaannya masih bermasalah.',pts:[
+  '<b>Kenapa memperkuat demokrasi:</b> kekuasaan presiden dibatasi, rakyat memilih langsung, antar lembaga saling mengawasi, HAM lebih lengkap.',
+  '<b>Kelemahan:</b> politik uang, oligarki, dan korupsi masih ada.',
+  '<b>Pasal lain yang bisa dipakai:</b> 1 ayat (3) negara hukum, 22E pemilu, 22C DPD, 24B Komisi Yudisial.'
+ ],vis:()=>[V.table('5 pasal kunci',['Pasal','Isinya'],[
+  ['1 ayat (2)','Kedaulatan di tangan rakyat (dulu dipegang MPR)'],['6A','Presiden dan Wapres dipilih langsung'],['7','Masa jabatan 5 tahun, maksimal 2 periode'],['24C','Dibentuk Mahkamah Konstitusi'],['28A–28J','Jaminan HAM yang rinci']])]},
+ {id:'pkn4',t:'Negara dan warga negara',gist:'Hubungannya timbal balik: negara melindungi warga, warga menaati dan membela negara.',pts:[
+  '<b>Kedaulatan rakyat:</b> rakyat pemegang kuasa tertinggi (Pasal 1 ayat 2).',
+  '<b>Kontrak sosial</b> (Hobbes, Locke, Rousseau): negara dibentuk dari kesepakatan warga.',
+  '<b>Negara hukum</b> (Pasal 1 ayat 3): negara tidak boleh sewenang-wenang.',
+  '<b>Status warga negara:</b> Pasal 26.',
+  '<b>Negara ke warga:</b> pendidikan (Pasal 31, misal KIP), BPJS, KTP dan paspor, perlindungan hukum.',
+  '<b>Warga ke negara:</b> bayar pajak, ikut pemilu, taat hukum, bela negara (Pasal 27 ayat 3 dan Pasal 30).'
+ ]},
+ {id:'pkn5',t:'Demokrasi Pancasila',gist:'Demokrasi dari, oleh, untuk rakyat, tapi dengan musyawarah dan nilai Pancasila.',pts:[
+  '<b>Lincoln (Gettysburg, 1863):</b> pemerintahan dari rakyat, oleh rakyat, untuk rakyat.',
+  '<b>Cocok dengan Indonesia:</b> dari (Pasal 1 ayat 2), oleh (pemilu langsung), untuk (sila ke-5 dan tujuan negara di Pembukaan UUD).',
+  '<b>Kekhasan:</b> bukan sekadar suara terbanyak, tapi hikmat kebijaksanaan dan musyawarah (sila ke-4).',
+  '<b>Tantangan:</b> politik uang, korupsi, oligarki. Mahasiswa perlu ikut mengawasi secara kritis.'
+ ],vis:()=>[V.cols('Of, by, for the people',[['Dari rakyat','Kekuasaan bersumber dari rakyat'],['Oleh rakyat','Rakyat ikut menjalankan, misal lewat pemilu'],['Untuk rakyat','Tujuannya kesejahteraan rakyat']])]}
+],
+pk:[
+ {id:'pk1',t:'Pengantar perilaku konsumen',gist:'Perilaku konsumen = cara orang memilih, membeli, memakai, dan menilai produk. Bukan cuma saat bayar.',pts:[
+  '<b>Tiga tahap:</b> sebelum beli (sadar butuh, cari info), saat beli (pengalaman belanja), sesudah beli (puas, rekomendasi, atau kecewa).',
+  '<b>Evolusi konsep:</b> Produksi (1910-an, fokus pabrik), Produk (1930-an, fokus kualitas), Penjualan (1950-an, jual agresif), Pemasaran (fokus kebutuhan konsumen), Kemasyarakatan (peduli masyarakat).',
+  '<b>Web 2.0:</b> komunikasi jadi dua arah. Konsumen dapat info dan kustomisasi, pemasar dapat data. Harganya: privasi.',
+  '<b>UGC</b> (ulasan, unboxing) sering lebih dipercaya daripada iklan.'
+ ],vis:()=>[V.flow('Alur keputusan konsumen',['Sadar butuh','Cari info','Bandingkan','Beli','Evaluasi']),V.cols('Empat ilmu di baliknya',[['Psikologi','Pikiran individu'],['Sosiologi','Kelompok, FOMO'],['Antropologi','Budaya, ritual'],['Komunikasi','Pesan dan bujukan']])]},
+ {id:'pk2',t:'Motivasi: dasar',gist:'Motivasi muncul saat ada jarak antara kondisi sekarang dan kondisi yang diinginkan.',pts:[
+  '<b>Biogenik:</b> kebutuhan bawaan (lapar, haus). <b>Psikogenik:</b> dipelajari (gengsi, harga diri).',
+  '<b>Utilitarian:</b> beli karena fungsi. <b>Hedonik:</b> beli karena rasa dan emosi.',
+  '<b>Approach:</b> mendekati hal positif. <b>Avoidance:</b> menjauhi hal negatif.',
+  '<b>Konflik motivasi:</b> approach-approach (dua pilihan bagus), approach-avoidance (mau tapi takut, misal manis tapi takut gemuk), avoidance-avoidance (dua pilihan buruk).',
+  '<b>Disonansi kognitif:</b> ragu setelah beli barang mahal. Pemasar membantu meyakinkan.',
+  '<b>Defense saat frustrasi:</b> agresi, rasionalisasi, regresi, withdrawal, proyeksi, daydreaming, identifikasi.'
+ ],vis:()=>[V.flow('Siklus motivasi',['Ada jarak','Tegang','Terdorong','Beli','Lega'])]},
+ {id:'pk2b',t:'Motivasi: teori dan keterlibatan',gist:'Maslow, McClelland, dan Freud menjelaskan apa yang mendorong orang membeli.',pts:[
+  '<b>Maslow:</b> 5 tingkat kebutuhan, dari fisiologis sampai aktualisasi diri.',
+  '<b>McClelland:</b> butuh pencapaian, kekuasaan, afiliasi (diterima kelompok), dan keunikan.',
+  '<b>Freud:</b> Id (mau puas sekarang), Superego (rem moral), Ego (penengah). Produk = kompromi yang bisa diterima.',
+  '<b>Mood</b> = perasaan ringan sementara. <b>Emotion</b> = reaksi kuat karena pemicu jelas.',
+  '<b>Involvement:</b> seberapa peduli konsumen. Rendah = kebiasaan (inersia). Tertinggi = fanatik (produk kultus).'
+ ],vis:()=>[
+  V.pyr('Hierarki kebutuhan Maslow',[['Aktualisasi diri','Sukses, kuasa',44],['Ego (esteem)','Status, percaya diri',58],['Sosial','Dihormati, berteman',72],['Keamanan','Perlindungan, stabilitas',86],['Fisiologis','Air, tidur, makanan',100]]),
+  V.g2('Matriks motivasi dan keterlibatan',{x:['Motivasi rendah','Motivasi tinggi'],y:['Peduli tinggi','Peduli rendah'],c:[
+   ['Pencari nilai','Teliti banding harga, cari diskon'],['Evangelis merek','Loyal, rela bayar lebih'],['Inersia','Beli yang itu-itu saja'],['Impulsif','Beli cepat demi kepuasan sesaat']]})]},
+ {id:'pk3',t:'Persepsi: dari stimulus ke ingatan',gist:'Konsumen hanya menangkap sebagian kecil dari ribuan stimulus. Pesan harus lolos dari saringan.',pts:[
+  '<b>5 tahap:</b> paparan, perhatian, pemahaman, penerimaan, retensi.',
+  '<b>5 indra:</b> visual, audio, aroma, rasa, sentuhan (produk yang dipegang bikin lebih yakin).',
+  '<b>Hukum Weber dan JND:</b> perubahan kecil tidak terasa. Di bawah JND = diam-diam (kemasan dikecilkan). Di atas JND = menarik perhatian (diskon minimal sekitar 20%).',
+  '<b>Vigilance:</b> otak fokus pada yang relevan. <b>Defense:</b> otak menolak yang mengancam (perokok dan peringatan kesehatan).',
+  '<b>Cara menembus:</b> kontras ukuran, warna, posisi, atau kebaruan.'
+ ],vis:()=>[V.flow('Perjalanan stimulus',['Paparan','Perhatian','Pemahaman','Penerimaan','Retensi'])]},
+ {id:'pk3b',t:'Persepsi: makna dan risiko',gist:'Otak menyusun makna sendiri, sering lewat jalan pintas.',pts:[
+  '<b>Gestalt:</b> figure-ground (fokus lawan latar), closure (otak melengkapi yang kosong), grouping (yang berdekatan dianggap satu).',
+  '<b>Semiotika:</b> tanda, produk, makna (koboi, Marlboro, maskulin).',
+  '<b>Bias:</b> kesan pertama sulit diubah, stereotip, halo effect (satu hal bagus, semua dianggap bagus).',
+  '<b>Isyarat intrinsik</b> (rasa, tekstur) lawan <b>ekstrinsik</b> (harga, merek, kemasan). Kemasan adalah billboard mini.',
+  '<b>Risiko dirasakan:</b> fungsional/fisik (solusi: garansi, sampel), finansial (harga dan reputasi toko), sosial/psikologis (endorsement, loyalitas).',
+  '<b>Positioning:</b> posisi merek di pikiran konsumen (perceptual mapping).'
+ ]},
+ {id:'pk4',t:'Konsep diri',gist:'Orang membeli barang untuk membentuk dan menunjukkan siapa dirinya.',pts:[
+  '<b>Tiga sisi:</b> isi (atribut), positif (self-esteem), akurat (sesuai realita).',
+  '<b>Looking-glass self:</b> konsep diri dibentuk dari penilaian orang lain.',
+  '<b>Dramaturgical:</b> kita aktor dengan banyak peran, produk jadi properti.',
+  '<b>Extended self:</b> barang jadi bagian diri (baju, HP, rumah, almamater).',
+  '<b>Gender:</b> bergeser dari pink lawan biru ke unisex dan fluid.',
+  '<b>Body image:</b> standar cantik dibentuk budaya. Vanity sizing dan social comparison memanfaatkan rasa tidak puas.'
+ ],vis:()=>[V.g2('Empat versi diri',{x:['Realita','Aspirasi'],y:['Mata saya','Mata orang'],c:[['Actual self','Diri saya sebenarnya'],['Ideal self','Diri yang saya inginkan'],['Social self','Kata saya, orang melihat saya begini'],['Ideal social self','Ingin orang melihat saya begini']]})]},
+ {id:'pk5',t:'Personality, lifestyle, value',gist:'Demografi menjawab SIAPA yang beli. Personality, lifestyle, dan value menjawab MENGAPA.',pts:[
+  '<b>Freud:</b> motif bawah sadar. Riset motivasi dipopulerkan Dichter (1950-an).',
+  '<b>Horney (CAD):</b> Compliant, Aggressive, Detached.',
+  '<b>Brand personality:</b> Jung (Rebel, Creator, Hero, Jester) dan Aaker (Sincerity, Excitement, Competence, Sophistication, Ruggedness).',
+  '<b>Big Five (OCEAN):</b> Openness, Conscientiousness, Extroversion, Agreeableness, Neuroticism (retail therapy).',
+  '<b>Lifestyle:</b> product constellation (starter pack) dan co-branding.',
+  '<b>Psikografis:</b> AIO (Activities, Interests, Opinions). VALS: Thinkers, Achievers, Makers, Experiencers (Gen Z).',
+  '<b>Means-end chain:</b> produk, atribut, manfaat, nilai inti. Tren: dari materialisme ke minimalisme dan pengalaman.'
+ ],vis:()=>[V.cols('Horney: model CAD',[['Compliant','Ingin dicintai dan diterima'],['Aggressive','Ingin menang dan berstatus'],['Detached','Ingin mandiri dan bebas']])]},
+ {id:'pk6',t:'Consumer learning',gist:'Konsumen belajar dari pengalaman. Merek melatih kebiasaan beli kita.',pts:[
+  '<b>4 elemen:</b> motives, cues, responses, reinforcement.',
+  '<b>Classical:</b> asosiasi lewat repetisi (Pavlov, alpukat sama dengan sehat).',
+  '<b>Instrumental:</b> belajar dari hadiah (diskon, poin). Shaping = bonus di awal.',
+  '<b>Observational:</b> meniru orang lain (review, endorser).',
+  '<b>Generalization:</b> peniru menyerupai kemasan leader. <b>Discrimination:</b> leader tampil beda (Apple).',
+  '<b>Involvement tinggi</b> = berpikir (otak kiri). <b>Rendah</b> = kebiasaan (otak kanan). Hasil akhir: brand loyalty dan brand equity.',
+  '<b>Febreze:</b> laris setelah dijual sebagai hadiah wangi setelah bersih-bersih.'
+ ],vis:()=>[V.flow('Mesin pembelajaran',['Motive','Cue','Response','Reinforcement']),V.cols('Tiga jenis belajar',[['Classical','Asosiasi (jingle, Pavlov)'],['Instrumental','Hadiah (diskon, poin)'],['Observational','Meniru (review)']])]}
+],
+idn:[
+ {id:'idn1',t:'Budaya visual prasejarah',gist:'Seni prasejarah adalah sumber motif dan makna desain Nusantara.',pts:[
+  '<b>Catatan:</b> file slide (.ppt) belum terbaca. Ini ringkasan umum dari judul file, samakan dengan slide dosen. Tempel teks slide di menu Catatan agar AI memakai materi aslimu.',
+  '<b>Lukisan gua:</b> contoh di Leang-Leang (Maros-Pangkep, Sulawesi Selatan): cap tangan dan gambar hewan.',
+  '<b>Megalitik:</b> menhir, dolmen, punden berundak, sarkofagus, arca batu (pemujaan leluhur).',
+  '<b>Zaman logam:</b> nekara perunggu dan moko dengan motif spiral, pilin, meander, tumpal.'
+ ]},
+ {id:'idn2',t:'IDN Project',gist:'Materi dari file 01_IDN_Project belum terbaca.',pts:[
+  'Upload ulang sebagai PDF di chat Claude, atau tempel teksnya di menu <b>Catatan</b> (pilih Inovasi Design Nusantara). Setelah itu AI bisa merangkum dan membuat soal dari isinya.'
+ ]}
+]};
+const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn];
+const strip=h=>h.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
+function builtinCtx(keys){return keys.map(k=>'## '+SUBJ[k].name+'\n'+MATERI[k].map(t=>'### '+t.t+'\n'+t.gist+'\n'+t.pts.map(p=>'- '+strip(p)).join('\n')).join('\n')).join('\n\n')}
+
+/* ---------- bank soal ---------- */
+// [mapel, soal, jawaban benar, salah1, salah2, salah3, penjelasan]
+const QB=[
+['pkn','UU yang mewajibkan Pendidikan Kewarganegaraan di perguruan tinggi adalah...','UU No. 12 Tahun 2012 tentang Pendidikan Tinggi','UU No. 20 Tahun 2003 tentang Sisdiknas','UU No. 11 Tahun 2008 tentang ITE','UU No. 14 Tahun 2005 tentang Guru dan Dosen','PKn wajib bersama Agama, Pancasila, dan Bahasa Indonesia sesuai UU 12/2012.'],
+['pkn','Pasal UUD 1945 yang mengatur presiden dan wakil presiden dipilih langsung oleh rakyat adalah...','Pasal 6A','Pasal 7','Pasal 24C','Pasal 28A','Sebelum perubahan, presiden dipilih oleh MPR.'],
+['pkn','Masa jabatan presiden dan wakil presiden menurut UUD 1945 hasil perubahan diatur dalam...','Pasal 7','Pasal 6A','Pasal 20','Pasal 26','Lima tahun, dapat dipilih kembali hanya untuk satu kali masa jabatan.'],
+['pkn','Mahkamah Konstitusi dibentuk berdasarkan pasal...','Pasal 24C','Pasal 24B','Pasal 22C','Pasal 22E','MK menguji UU terhadap UUD, antara lain. Komisi Yudisial ada di Pasal 24B.'],
+['pkn','UUD 1945 diubah sebanyak empat kali pada tahun...','1999–2002','1945–1949','1966–1969','2004–2007','Perubahan terjadi pada era Reformasi.'],
+['pkn','Jaminan hak asasi manusia yang rinci ditambahkan dalam pasal...','Pasal 28A–28J','Pasal 27–30','Pasal 31–34','Pasal 1–3','Perubahan kedua UUD 1945 memperkuat jaminan HAM.'],
+['pkn','Sila yang menjadi cara utama menyelesaikan konflik lewat dialog adalah...','Sila ke-4 (musyawarah mufakat)','Sila ke-1','Sila ke-2','Sila ke-5','Sila ke-4 menekankan musyawarah, bukan kekerasan.'],
+['pkn','Kesenjangan ekonomi, ketidakadilan hukum, dan korupsi sebagai penyebab konflik berkaitan dengan...','Sila ke-5','Sila ke-1','Sila ke-3','Sila ke-4','Keadilan sosial bagi seluruh rakyat tidak terwujud.'],
+['pkn','Primordialisme, fanatisme golongan, dan sentimen SARA melanggar nilai sila...','Sila ke-3','Sila ke-1','Sila ke-2','Sila ke-5','Persatuan Indonesia.'],
+['pkn','Menurut Lincoln, “by the people” berarti...','Pemerintahan dijalankan dengan partisipasi rakyat, misalnya lewat pemilu','Kekuasaan bersumber dari rakyat','Tujuan pemerintah adalah kesejahteraan rakyat','Rakyat tidak perlu berpartisipasi','“Of” = sumber kekuasaan, “by” = partisipasi, “for” = tujuan.'],
+['pkn','Pasal 1 ayat (3) UUD 1945 menyatakan bahwa Indonesia adalah...','Negara hukum','Negara kesatuan','Negara demokrasi','Negara kepulauan','Ayat (2) mengatur kedaulatan rakyat.'],
+['pkn','Tokoh teori kontrak sosial berikut, kecuali...','Montesquieu','Hobbes','Locke','Rousseau','Montesquieu terkenal dengan pemisahan kekuasaan (trias politica).'],
+['pkn','Kekhasan Demokrasi Pancasila dibanding demokrasi sekadar suara terbanyak adalah...','Hikmat kebijaksanaan dan musyawarah mufakat','Kebebasan tanpa batas','Hanya mayoritas yang menentukan','Tanpa nilai ketuhanan','Dijiwai nilai Ketuhanan, kemanusiaan, persatuan, keadilan sosial.'],
+['pkn','Contoh kewajiban warga negara terhadap negara menurut jawaban UTS adalah...','Membayar pajak dan bela negara (Pasal 27 ayat 3, Pasal 30)','Menerima KIP','Memperoleh BPJS','Mendapat layanan KTP','Tiga lainnya adalah hak warga yang dipenuhi negara.'],
+['pk','Konsep pemasaran yang fokus pada efisiensi pabrik dan biaya rendah (1910-an) adalah...','Konsep Produksi','Konsep Penjualan','Konsep Pemasaran','Pemasaran Kemasyarakatan','Kutipan Henry Ford: warna apa saja asalkan hitam.'],
+['pk','Konsep Pemasaran Kemasyarakatan menekankan...','Keseimbangan kebutuhan konsumen dan kesejahteraan masyarakat jangka panjang','Dorongan penjualan agresif','Kualitas fitur tertinggi','Biaya produksi serendah mungkin','Merek dituntut punya tanggung jawab sosial.'],
+['pk','Empat disiplin ilmu yang dipinjam Perilaku Konsumen adalah...','Psikologi, sosiologi, antropologi, komunikasi','Psikologi, ekonomi, hukum, desain','Sosiologi, politik, sejarah, seni','Antropologi, biologi, fisika, komunikasi','Komunikasi fokus pada simbol, persuasi, dan transmisi pesan.'],
+['pk','Tiga tahap perilaku konsumen sebagai proses berkelanjutan adalah...','Pra-pembelian, pembelian, pasca-pembelian','Paparan, perhatian, retensi','Input, proses, output saja','Kenal, coba, setia','Bukan hanya titik transaksi di kasir.'],
+['pk','Motivasi dimulai dari...','Kesenjangan antara kondisi aktual dan ideal','Iklan di media sosial','Diskon besar','Kebiasaan keluarga','Lalu muncul ketegangan, dorongan, tindakan, ekuilibrium.'],
+['pk','Kebutuhan psikogenik adalah kebutuhan yang...','Dipelajari dari lingkungan sosial (harga diri, prestise)','Dibawa sejak lahir','Hanya untuk bertahan hidup','Selalu rasional','Kebalikannya biogenik (innate).'],
+['pk','Ingin makanan manis tapi takut gemuk adalah contoh konflik...','Approach-avoidance','Approach-approach','Avoidance-avoidance','Dissonance-approach','Solusi pemasar: kompromi seperti pemanis rendah kalori.'],
+['pk','Ketegangan setelah pembelian besar karena ragu dengan pilihan disebut...','Disonansi kognitif','Perceptual defense','Halo effect','Stimulus generalization','Pemasar membantu lewat validasi pasca-beli.'],
+['pk','Orang yang membuat alasan masuk akal untuk gagal (“aku tidak sempat latihan”) memakai pertahanan...','Rasionalisasi','Regresi','Proyeksi','Withdrawal','Rasionalisasi = menciptakan alasan yang tampak masuk akal.'],
+['pk','Level tertinggi hierarki Maslow adalah...','Aktualisasi diri','Ego (esteem)','Sosial','Keamanan','Urutan dari bawah: fisiologis, keamanan, sosial, ego, aktualisasi.'],
+['pk','Dalam teori Freud, bagian yang berperan sebagai wasit antara Id dan Superego adalah...','Ego','Id','Superego','Libido','Pemasar beroperasi di ruang Ego.'],
+['pk','Motivasi hedonik tinggi sesaat tanpa membandingkan informasi mendalam menghasilkan...','Pembelian impulsif','Value seeking','Inersia','Brand evangelist','Diambil cepat di kasir atau dari iklan pop-up.'],
+['pk','Urutan proses persepsi yang benar adalah...','Paparan, perhatian, pemahaman, penerimaan, retensi','Perhatian, paparan, retensi, pemahaman','Pemahaman, paparan, penerimaan, perhatian','Retensi, paparan, perhatian, penerimaan','Tujuan akhirnya retensi di ingatan.'],
+['pk','Mengecilkan ukuran kemasan agar tidak disadari konsumen berarti perubahan dijaga...','Di bawah JND','Di atas JND','Tepat di absolute threshold','Di zona perhatian','Perubahan di bawah JND tidak memicu resistensi.'],
+['pk','Perokok yang mengabaikan gambar peringatan kesehatan menunjukkan...','Perceptual defense','Perceptual vigilance','Closure','Halo effect','Otak memblokir stimulus yang mengancam secara psikologis.'],
+['pk','Kecenderungan melengkapi gambar atau pesan yang tidak utuh (misal teaser) adalah prinsip Gestalt...','Closure','Figure-ground','Grouping','Contrast','Mendorong partisipasi mental konsumen.'],
+['pk','Menilai keseluruhan produk dari satu dimensi dominan disebut...','Halo effect','Stereotyping','First impression','Semiotika','Dasar strategi brand extension dan licensing.'],
+['pk','Contoh isyarat ekstrinsik kualitas adalah...','Harga, citra merek, dan kemasan','Rasa makanan','Tekstur kain','Warna minuman','Rasa, tekstur, warna adalah isyarat intrinsik.'],
+['pk','Garansi uang kembali dan sampel gratis mengurangi risiko yang dipersepsikan berupa...','Fungsional dan fisik','Finansial','Psikologis','Sosial','Meyakinkan bahwa produk bekerja dan aman.'],
+['pk','Teori konsep diri yang menyatakan diri terbentuk dari penghargaan orang lain adalah...','Reflected appraisal (looking-glass self)','Social comparison','Biased scanning','Self-appraisal','Kita bercermin pada reaksi masyarakat.'],
+['pk','“Bagaimana saya ingin orang lain melihat saya” adalah...','Ideal social self','Actual self','Ideal self','Social self','Target pemasar: barang mewah dan personal branding.'],
+['pk','Pakaian, perhiasan, dan ponsel termasuk extended self pada level...','Individu','Keluarga','Komunitas','Grup','Rumah dan furnitur = level keluarga.'],
+['pk','Menjual baju dengan label ukuran lebih kecil dari aslinya disebut...','Vanity sizing','Gender bending','Enclothed cognition','Posing power','Memanipulasi self-esteem secara instan.'],
+['pk','Tipe Horney (CAD) yang sangat ingin dicintai dan diterima adalah...','Compliant','Aggressive','Detached','Neurotic','Aggressive ingin unggul, Detached ingin mandiri.'],
+['pk','Merek seperti Nike (Just Do It) termasuk arketipe...','Hero','Jester','Rebel','Creator','Jester: Old Spice dan M&Ms. Rebel: Harley-Davidson.'],
+['pk','Dimensi Big Five yang berkaitan dengan retail therapy dan belanja impulsif saat stres adalah...','Neuroticism','Openness','Conscientiousness','Agreeableness','OCEAN: Openness, Conscientiousness, Extroversion, Agreeableness, Neuroticism.'],
+['pk','Framework AIO untuk mengukur psikografis adalah...','Activities, Interests, Opinions','Attitude, Image, Output','Awareness, Interest, Order','Age, Income, Occupation','Berbeda dari demografi yang hanya menjawab siapa.'],
+['pk','Segmen VALS yang menjadi target pasar Gen Z (impulsif, suka pengalaman) adalah...','Experiencers','Thinkers','Achievers','Makers','Uang habis untuk konser, traveling, makanan viral.'],
+['pk','Empat elemen utama consumer learning adalah...','Motives, cues, responses, reinforcement','Attention, interest, desire, action','Product, price, place, promotion','Exposure, attention, comprehension, retention','Reinforcement membuat siklus berulang.'],
+['pk','Belajar lewat asosiasi dan repetisi seperti Pavlov disebut...','Classical conditioning','Instrumental conditioning','Observational learning','Cognitive learning','Contoh: alpukat dikaitkan dengan gaya hidup sehat.'],
+['pk','Peniru yang menyerupai kemasan brand leader memakai strategi...','Stimulus generalization','Stimulus discrimination','Shaping','Modeling','Apple “Think Different” adalah stimulus discrimination.'],
+['pk','Bonus saldo saat pertama kali mengunduh aplikasi e-commerce adalah contoh...','Shaping (instrumental conditioning)','Classical conditioning','Observational learning','Perceptual defense','Hadiah diberikan sebelum perilaku utama terjadi.'],
+['pk','Febreze akhirnya sukses setelah diposisikan sebagai...','Hadiah wangi setelah bersih-bersih','Penghilang bau paling kuat','Produk murah','Parfum mewah','Mengubah cue dan reinforcement.'],
+['idn','Lukisan gua prasejarah di Indonesia yang terkenal terdapat di...','Leang-Leang, Maros-Pangkep, Sulawesi Selatan','Borobudur, Jawa Tengah','Prambanan, Yogyakarta','Tanah Lot, Bali','Pengetahuan umum, cocokkan dengan slide dosen.'],
+['idn','Menhir, dolmen, dan punden berundak termasuk tradisi...','Megalitik','Paleolitik awal','Hindu-Buddha','Kolonial','Terkait pemujaan leluhur.'],
+['idn','Nekara perunggu dan moko merupakan peninggalan masa...','Perundagian (zaman logam)','Berburu dan meramu','Hindu-Buddha','Islam','Berornamen motif geometris.'],
+['idn','Motif geometris yang umum pada seni prasejarah Nusantara adalah...','Spiral, pilin, meander, tumpal','Kaligrafi Arab','Perspektif satu titik','Art deco','Pengetahuan umum, cocokkan dengan slide dosen.']
+];
+
+
+/* ---------- state ---------- */
+let done=store.get('uts.done',{});
+let notes=store.get('uts.notes',[]);
+let aiq=store.get('uts.aiq',[]);
+let best=store.get('uts.best',{});
+let SAMPLE=null;
+const prog=k=>{const t=MATERI[k];return [t.filter(x=>done[x.id]).length,t.length]};
+
+/* ---------- nav ---------- */
+const IC={
+ home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ jadwal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ materi:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>',
+ quiz:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/>',
+ ai:'<path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1-4.5A8 8 0 1 1 21 12z"/>',
+ saya:'<path d="M6 3h8l4 4v14H6z"/><path d="M12 11v6M9 14h6"/>'};
+const TABS=[['home','Beranda'],['jadwal','Jadwal'],['materi','Materi'],['quiz','Quiz'],['ai','Tanya AI'],['saya','Catatan']];
+$('#nav-top').innerHTML=TABS.map(([id,l])=>`<button role="tab" type="button" data-t="${id}" aria-selected="false">${l}</button>`).join('');
+$('#nav-bot').innerHTML=TABS.map(([id,l])=>`<button type="button" data-t="${id}" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[id]}</svg>${id==='ai'?'AI':l}</button>`).join('');
+function show(id){
+  if(!TABS.some(t=>t[0]===id)) id='home';
+  TABS.forEach(([t])=>{$('#p-'+t).hidden=t!==id});
+  $$('[data-t]').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===id));
+  try{history.replaceState(null,'','#'+id)}catch(e){}
+  window.scrollTo(0,0);
+  if(id==='home')renderHome(); if(id==='jadwal')renderJadwal(); if(id==='quiz'&&!quiz.run)renderQuizSetup();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)show(b.dataset.t)});
+
+/* ---------- jam + hitung mundur (1 detik) ---------- */
+const nextExam=()=>{const n=new Date();return EXAMS.find(e=>e.end>n)||null};
+function tickClock(){
+  const now=new Date();
+  $('#clock').textContent=hhmmss(now)+' WIB';
+  const c=$('#cd-d');if(!c||$('#p-home').hidden)return;
+  const n=nextExam();if(!n)return;
+  const running=n.start<=now;
+  const [d,h,m,s]=parts((running?n.end:n.start)-now);
+  $('#cd-d').textContent=d;$('#cd-h').textContent=p2(h);$('#cd-m').textContent=p2(m);$('#cd-s').textContent=p2(s);
+  if(running!==(c.dataset.run==='1'))renderHome();
+}
+setInterval(tickClock,1000);
+
+/* ---------- beranda ---------- */
+function renderHome(){
+  const n=nextExam(),now=new Date(),run=n&&n.start<=now;
+  const hero=n?`<div class="hero">
+    <div class="eyebrow">${run?'Ujian sedang berlangsung, selesai dalam':'UTS dimulai dalam'}</div>
+    <div class="cd"><div><b id="cd-d" data-run="${run?1:0}">0</b><span>hari</span></div><div><b id="cd-h">00</b><span>jam</span></div><div><b id="cd-m">00</b><span>menit</span></div><div><b id="cd-s">00</b><span>detik</span></div></div>
+    <div class="nx"><div><div class="eyebrow">${run?'Sedang':'Berikutnya'}</div><h3>${esc(n.nama)}</h3></div>
+      <div class="muted" style="font-size:14px">${dayLabel(n.start)}<br>${hhmm(n.start)} – ${hhmm(n.end)} WIB · ${n.ruang}</div></div>
+   </div>`:`<div class="hero"><h2>UTS sudah selesai. Semoga lancar semua.</h2></div>`;
+  const cards=['pkn','pk','idn'].map(k=>{const s=SUBJ[k],[a,b]=prog(k),qn=QB.filter(q=>q[0]===k).length;return `
+   <div class="subjcard s-${k}">
+     <div class="row" style="justify-content:space-between"><span class="tag">${s.kode}</span><span class="muted" style="font-size:13px">${s.jam} · ${s.ruang}</span></div>
+     <h3>${s.name}</h3>
+     <div><div class="bar-p"><span style="width:${a/b*100}%"></span></div><div class="muted" style="font-size:13px;margin-top:6px">${a} dari ${b} topik paham · ${qn} soal</div></div>
+     <div class="row"><button class="btn sm" data-go="materi" data-k="${k}" type="button">Baca materi</button><button class="btn sm" data-go="quiz" data-k="${k}" type="button">Latihan soal</button></div>
+   </div>`}).join('');
+  $('#p-home').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">UTS Gasal 2026 · hari Senin</span><h2>Siap hadapi 3 ujian?</h2></div>${hero}<div class="grid">${cards}</div>
+   <div class="row"><button class="btn pri" data-go="quiz" type="button">Quiz campur</button><button class="btn" data-go="ai" type="button">Tanya AI</button></div>`;
+  tickClock();
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(!g)return;
+  const k=g.dataset.k;
+  if(g.dataset.go==='materi'&&k) curSubj=k;
+  if(g.dataset.go==='quiz') quizSel=k?[k]:['pkn','pk','idn'];
+  if(g.dataset.go==='quiz') quiz.run=null;
+  if(g.dataset.go==='materi') renderMateri();
+  show(g.dataset.go);
+});
+
+/* ---------- jadwal ---------- */
+function renderJadwal(){
+  const now=new Date(),nx=nextExam();
+  const days=[...new Set(EXAMS.map(e=>dayLabel(e.start)))];
+  $('#p-jadwal').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">12 – 15 Oktober 2026 · WIB</span><h2>Jadwal UTS</h2></div>`+
+  days.map(d=>`<div class="day"><h3>${d}</h3>${EXAMS.filter(e=>dayLabel(e.start)===d).map(e=>{
+    const st=e.end<=now?'done':(e.start<=now?'now':(nx===e?'nxt':''));
+    const pill=st==='now'?'<span class="pill">berlangsung</span>':st==='nxt'?'<span class="pill">berikutnya</span>':'';
+    const side=e.s?`<button class="btn sm" data-go="materi" data-k="${e.s}" type="button">Materi</button>`:'';
+    return `<div class="exam ${st}"><span class="t">${hhmm(e.start)} – ${hhmm(e.end)}<small>WIB</small></span><div><div class="n">${esc(e.nama)}${pill}</div><div class="k">${e.kode} · Kelas X · Ruang ${e.ruang}</div></div>${side}</div>`}).join('')}</div>`).join('');
+}
+
+/* ---------- materi ---------- */
+let curSubj='pkn';
+function renderMateri(){
+  const s=SUBJ[curSubj];
+  const chips=['pkn','pk','idn'].map(k=>`<button class="chip s-${k}" type="button" data-s="${k}" aria-pressed="${k===curSubj}">${SUBJ[k].short}</button>`).join('');
+  const myN=notes.filter(n=>n.s===curSubj);
+  $('#p-materi').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Ringkasan simpel</span><h2>Materi</h2></div>
+   <div class="chips">${chips}</div>
+   <div class="s-${curSubj}" style="display:flex;flex-direction:column;gap:12px">
+    <div><h3>${s.name}</h3><div class="muted" style="font-size:14px">Senin 12 Okt · ${s.jam} · ${s.ruang}</div></div>
+    ${MATERI[curSubj].map((t,i)=>`<details class="topic" ${i===0?'open':''}><summary>${t.t}</summary><div class="body">
+      <div class="gist">${t.gist}</div>
+      <ul>${t.pts.map(p=>`<li>${p}</li>`).join('')}</ul>${(t.vis?t.vis():[]).join('')}
+      <div class="row" style="justify-content:space-between"><label class="done-ok"><input type="checkbox" data-d="${t.id}" ${done[t.id]?'checked':''}>Sudah paham</label>
+      <button class="btn sm" type="button" data-ask="${t.id}">Tanya AI</button></div></div></details>`).join('')}
+    ${myN.length?`<h3 style="margin-top:8px">Catatanmu</h3>`+myN.map(n=>`<div class="card mat"><b>${esc(n.title)}</b>${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px">${esc(n.sum)}</div>`:`<pre>${esc(n.text.slice(0,600))}</pre>`}</div>`).join(''):''}
+   </div>`;
+}
+$('#p-materi').addEventListener('click',e=>{
+  const c=e.target.closest('[data-s]');if(c){curSubj=c.dataset.s;renderMateri();return}
+  const a=e.target.closest('[data-ask]');if(a){const t=ALLTOPICS.find(x=>x.id===a.dataset.ask);show('ai');$('#chat-in').value='Jelaskan "'+t.t+'" dengan bahasa sederhana dan contoh anak muda. Setelah itu beri 2 soal latihan.';$('#chat-in').focus()}
+});
+$('#p-materi').addEventListener('change',e=>{const c=e.target.closest('[data-d]');if(!c)return;done[c.dataset.d]=c.checked;store.set('uts.done',done)});
+
+/* ---------- quiz ---------- */
+let quizSel=['pkn','pk','idn'],quizN=10;
+const quiz={run:null};
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const allQ=()=>QB.map(([s,q,c,a,b,d,e])=>({s,q,o:[c,a,b,d],a:0,e})).concat(aiq);
+function renderQuizSetup(){
+  const keys=['pkn','pk','idn'].concat(aiq.length?['ai']:[]);
+  const cnt=k=>allQ().filter(q=>q.s===k).length;
+  $('#p-quiz').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Latihan</span><h2>Quiz</h2><p class="lead">Pilih mapel dan jumlah soal. Urutan soal dan pilihan diacak tiap sesi.</p></div>
+   <div class="card" style="display:flex;flex-direction:column;gap:18px;max-width:720px">
+    <div><div class="eyebrow" style="margin-bottom:8px">Mapel</div><div class="chips">${keys.map(k=>`<button class="chip s-${k}" type="button" data-qk="${k}" aria-pressed="${quizSel.includes(k)}">${SUBJ[k].short} · ${cnt(k)}</button>`).join('')}</div></div>
+    <div><div class="eyebrow" style="margin-bottom:8px">Jumlah soal</div><div class="chips">${[10,20,0].map(n=>`<button class="chip" type="button" data-qn="${n}" aria-pressed="${quizN===n}">${n||'Semua'}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn pri" type="button" id="q-start">Mulai</button><button class="btn" type="button" id="q-gen">Tambah soal dari AI</button></div>
+    ${Object.keys(best).length?`<div class="muted" style="font-size:13px">Skor terbaik: ${Object.entries(best).map(([k,v])=>(SUBJ[k]?SUBJ[k].short:'Campur')+' '+v+'%').join(' · ')}</div>`:''}
+   </div>`;
+}
+$('#p-quiz').addEventListener('click',e=>{
+  const k=e.target.closest('[data-qk]');if(k){const v=k.dataset.qk;quizSel=quizSel.includes(v)?quizSel.filter(x=>x!==v):[...quizSel,v];renderQuizSetup();return}
+  const n=e.target.closest('[data-qn]');if(n){quizN=+n.dataset.qn;renderQuizSetup();return}
+  if(e.target.id==='q-start')startQuiz();
+  if(e.target.id==='q-gen')genFromSelection(e.target);
+  const o=e.target.closest('[data-o]');if(o&&!o.disabled)answer(+o.dataset.o);
+  if(e.target.id==='q-next')nextQ();
+  if(e.target.id==='q-again'){quiz.run=null;renderQuizSetup()}
+  if(e.target.id==='q-wrong')startQuiz(quiz.wrong);
+});
+function startQuiz(custom){
+  let pool=custom||allQ().filter(q=>quizSel.includes(q.s));
+  if(!pool.length){toast('Pilih minimal satu mapel yang punya soal.');return}
+  pool=shuffle(pool);if(!custom&&quizN)pool=pool.slice(0,quizN);
+  quiz.run={qs:pool.map(q=>({s:q.s,q:q.q,e:q.e,opts:shuffle(q.o.map((t,i)=>({t,ok:i===q.a})))})),i:0,score:0,picked:null,wrong:[],by:{}};
+  renderQ();
+}
+function renderQ(){
+  const r=quiz.run,q=r.qs[r.i];window.scrollTo(0,0);
+  $('#p-quiz').innerHTML=`<div class="qbox s-${q.s}">
+   <div class="row" style="justify-content:space-between"><span class="tag">${SUBJ[q.s].short}</span><span class="muted" style="font-size:14px">${r.i+1} / ${r.qs.length}</span></div>
+   <div class="bar-p"><span style="width:${r.i/r.qs.length*100}%"></span></div>
+   <div class="qtext">${esc(q.q)}</div>
+   <div class="opts">${q.opts.map((o,i)=>`<button class="opt" type="button" data-o="${i}"><span class="l">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+   <div id="q-fb"></div></div>`;
+}
+function answer(i){
+  const r=quiz.run,q=r.qs[r.i];if(r.picked!==null)return;r.picked=i;
+  const ok=q.opts[i].ok;if(ok)r.score++;else r.wrong.push({s:q.s,q:q.q,e:q.e,o:q.opts.map(o=>o.t),a:q.opts.findIndex(o=>o.ok)});
+  r.by[q.s]=r.by[q.s]||[0,0];r.by[q.s][1]++;if(ok)r.by[q.s][0]++;
+  $$('#p-quiz .opt').forEach((b,j)=>{b.disabled=true;if(q.opts[j].ok)b.classList.add('ok');else if(j===i)b.classList.add('no')});
+  $('#q-fb').innerHTML=`<div class="expl"><b>${ok?'Benar.':'Kurang tepat.'}</b> ${esc(q.e||'')}</div><div style="margin-top:12px"><button class="btn pri" type="button" id="q-next">${r.i+1<r.qs.length?'Lanjut':'Lihat skor'}</button></div>`;
+  $('#q-next').scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function nextQ(){const r=quiz.run;r.picked=null;r.i++;if(r.i<r.qs.length)renderQ();else finish()}
+function finish(){
+  const r=quiz.run,pct=Math.round(r.score/r.qs.length*100);
+  const keys=Object.keys(r.by);const key=keys.length===1?keys[0]:'campur';
+  if(!(best[key]>=pct)){best[key]=pct;store.set('uts.best',best)}
+  quiz.wrong=r.wrong.map(w=>({s:w.s,q:w.q,e:w.e,o:w.o,a:w.a}));
+  $('#p-quiz').innerHTML=`<div class="qbox"><span class="eyebrow">Hasil</span><div class="score">${pct}<small class="muted" style="font-size:.35em">%</small></div>
+   <p class="lead">${r.score} dari ${r.qs.length} soal benar. ${pct>=80?'Mantap, tinggal dijaga.':pct>=60?'Lumayan, ulangi yang salah.':'Baca materinya lagi, lalu coba lagi.'}</p>
+   <div class="row">${keys.map(k=>`<span class="tag s-${k}">${SUBJ[k].short} ${r.by[k][0]}/${r.by[k][1]}</span>`).join('')}</div>
+   <div class="row"><button class="btn pri" type="button" id="q-again">Quiz baru</button>${r.wrong.length?'<button class="btn" type="button" id="q-wrong">Ulangi yang salah</button>':''}</div>
+   ${r.wrong.length?`<h3 style="margin-top:8px">Yang perlu diulang</h3>`+r.wrong.map(w=>`<div class="card s-${w.s}" style="display:flex;flex-direction:column;gap:6px"><b>${esc(w.q)}</b><div style="color:var(--good)">Jawaban: ${esc(w.o[w.a])}</div><div class="muted" style="font-size:14px">${esc(w.e||'')}</div></div>`).join(''):''}</div>`;
+  quiz.run=null;
+}
+
+/* ---------- AI ---------- */
+function myCtx(keys){const ns=notes.filter(n=>!keys||keys.includes(n.s));return ns.map(n=>'## Catatan: '+n.title+'\n'+n.text).join('\n\n').slice(0,40000)}
+const SYS='Kamu adalah tutor belajar untuk mahasiswa DKV yang sedang menghadapi UTS. Jawab dalam Bahasa Indonesia yang santai tapi akurat, singkat, sederhana, dengan contoh dari kehidupan Gen Z. Acuan utama adalah materi di bawah. Kalau pertanyaan di luar materi, jawab dengan pengetahuan umum dan sebutkan itu di luar materi. Kalau tidak yakin, katakan tidak yakin. Jangan membuat kutipan atau data palsu.';
+function buildMsgs(hist){
+  let h=hist.slice(-12);while(h.length&&h[0].role!=='user')h=h.slice(1);
+  const use=$('#ctx')&&$('#ctx').checked;
+  const ctx=use?('\n\n# MATERI\n'+builtinCtx(['pkn','pk','idn'])+'\n\n# CATATAN MAHASISWA\n'+(myCtx()||'(kosong)')):'';
+  return h.map((m,i)=>i===0?{role:'user',content:SYS+ctx+'\n\n# PERTANYAAN\n'+m.content}:m);
+}
+const chat=[];let ctl=null;
+function renderAI(){
+  $('#p-ai').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Tutor pribadi</span><h2>Tanya AI</h2><p class="lead">Menjawab dari materi di web ini dan catatanmu.</p></div>
+   <div class="card chat" style="max-width:820px">
+    <div class="log" id="log" aria-live="polite"><div class="msg a">Halo. Tanya apa saja soal PKn atau Perilaku Konsumen. Bisa juga minta aku menguji kamu.</div></div>
+    <div class="sugs" id="sugs">${['Bedanya classical dan instrumental conditioning?','Jelaskan JND dengan contoh','Uji aku 3 soal PKn, satu per satu','Rangkum Maslow untuk dihafal'].map(s=>`<button type="button">${s}</button>`).join('')}</div>
+    <label class="done-ok" style="font-weight:500"><input type="checkbox" id="ctx" checked>Pakai materi di web ini sebagai acuan</label>
+    <div class="compose"><textarea id="chat-in" rows="1" placeholder="Tulis pertanyaanmu..." aria-label="Pertanyaan"></textarea><button class="btn pri" type="button" id="send">Kirim</button></div>
+    <p class="muted" id="ai-state" style="font-size:13px"></p>
+   </div>`;
+  setAIState();chat.forEach(m=>addMsg(m.role==='user'?'u':'a',m.content));
+}
+function addMsg(cls,text){const d=document.createElement('div');d.className='msg '+cls;d.textContent=text;$('#log').appendChild(d);$('#log').scrollTop=1e9;return d}
+function setAIState(){const s=$('#ai-state');if(!s)return;s.textContent=SAMPLE?'AI aktif. Pertama kali dipakai, kamu akan diminta izin.':'AI belum tersedia di tampilan ini. Buka halaman lewat claude.ai dalam keadaan masuk akun.';$('#send').disabled=!SAMPLE}
+const AIERR=e=>e&&e.code==='not_granted'?'Izin AI belum diberikan. Kirim lagi dan setujui permintaannya.':e&&e.code==='rate_limited'?'Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.':(e&&e.name==='AbortError')?'Dihentikan.':'Gagal menghubungi AI: '+((e&&e.message)||'coba lagi nanti.');
+async function send(){
+  const inp=$('#chat-in'),txt=inp.value.trim();
+  if(ctl){ctl.abort();return}
+  if(!txt||!SAMPLE)return;
+  inp.value='';chat.push({role:'user',content:txt});addMsg('u',txt);
+  const bub=addMsg('a','Mikir dulu...');ctl=new AbortController();$('#send').textContent='Stop';
+  try{
+    const r=await SAMPLE(buildMsgs(chat),{signal:ctl.signal,cache:false,onText:({text})=>{bub.textContent=text;$('#log').scrollTop=1e9}});
+    bub.textContent=r.text;chat.push({role:'assistant',content:r.text});
+  }catch(e){
+    if(e&&e.text){bub.textContent=e.text;chat.push({role:'assistant',content:e.text})}
+    else{bub.className='msg e';bub.textContent=AIERR(e);chat.pop()}
+  }
+  ctl=null;const sb=$('#send');if(sb)sb.textContent='Kirim';
+}
+$('#p-ai').addEventListener('click',e=>{
+  if(e.target.id==='send')send();
+  const s=e.target.closest('#sugs button');if(s){$('#chat-in').value=s.textContent;send()}
+});
+$('#p-ai').addEventListener('keydown',e=>{if(e.target.id==='chat-in'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+
+async function genQuestions(text,label){
+  if(!SAMPLE)throw {message:'AI belum tersedia di tampilan ini.'};
+  const p='Buat 8 soal pilihan ganda (4 opsi) dalam Bahasa Indonesia dari materi berikut untuk persiapan UTS. Soal harus bisa dijawab dari materi. Balas HANYA dengan JSON array valid tanpa teks lain, bentuk: [{"q":"soal","o":["opsi","opsi","opsi","opsi"],"a":0,"e":"penjelasan singkat"}] dengan "a" = indeks jawaban benar (0 sampai 3). Variasikan posisi jawaban benar.\n\nMATERI ('+label+'):\n'+text.slice(0,24000);
+  const r=await SAMPLE(p,{cache:false});
+  const raw=r.text,i=raw.indexOf('['),j=raw.lastIndexOf(']');
+  let arr;try{arr=JSON.parse(raw.slice(i,j+1))}catch(e){throw {message:'Format jawaban AI tidak terbaca. Coba lagi.'}}
+  const ok=arr.filter(x=>x&&typeof x.q==='string'&&Array.isArray(x.o)&&x.o.length===4&&Number.isInteger(x.a)&&x.a>=0&&x.a<4).map(x=>({s:'ai',q:x.q,o:x.o.map(String),a:x.a,e:String(x.e||'')}));
+  if(!ok.length)throw {message:'AI tidak menghasilkan soal yang valid. Coba lagi.'};
+  aiq=aiq.concat(ok).slice(-120);store.set('uts.aiq',aiq);return ok.length;
+}
+async function genFromSelection(btn){
+  const ks=quizSel.filter(k=>k!=='ai');if(!ks.length){toast('Pilih mapel dulu.');return}
+  btn.disabled=true;btn.textContent='Membuat soal...';
+  try{const n=await genQuestions(builtinCtx(ks)+'\n\n'+myCtx(ks),ks.map(k=>SUBJ[k].short).join(', '));toast(n+' soal AI ditambahkan.')}
+  catch(e){toast(AIERR(e))}
+  renderQuizSetup();
+}
+
+/* ---------- catatan ---------- */
+function renderSaya(){
+  $('#p-saya').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Tambah sendiri</span><h2>Catatan</h2><p class="lead">Tempel teks dari slide, PDF, atau catatan kuliah. Dipakai Tanya AI dan bisa dijadikan soal quiz. Tersimpan di browser ini.</p></div>
+   <div class="card" style="display:flex;flex-direction:column;gap:12px;max-width:820px">
+     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))">
+      <div><label class="eyebrow" for="n-s">Mapel</label><select id="n-s">${['pkn','pk','idn'].map(k=>`<option value="${k}">${SUBJ[k].name}</option>`).join('')}<option value="x">Mapel lain</option></select></div>
+      <div><label class="eyebrow" for="n-t">Judul</label><input type="text" id="n-t" placeholder="mis. Slide IDN Project"></div>
+     </div>
+     <div><label class="eyebrow" for="n-b">Isi materi</label><textarea id="n-b" placeholder="Tempel teks materi di sini..."></textarea></div>
+     <div class="row"><button class="btn pri" type="button" id="n-save">Simpan</button><label class="btn" for="n-f" style="cursor:pointer;display:inline-flex;align-items:center">Ambil dari file .txt / .md</label><input type="file" id="n-f" accept=".txt,.md,.csv,text/plain" hidden></div>
+     <p class="note">Untuk PDF atau PPT: salin teksnya lalu tempel di sini.</p>
+   </div>
+   <div id="n-list" style="display:flex;flex-direction:column;gap:12px;max-width:820px"></div>`;
+  renderNotes();
+}
+function renderNotes(){
+  const l=$('#n-list');if(!l)return;
+  l.innerHTML=notes.length?notes.map((n,i)=>`<div class="card mat s-${SUBJ[n.s]?n.s:'ai'}">
+    <div class="head"><div><b>${esc(n.title)}</b> <span class="tag">${SUBJ[n.s]?SUBJ[n.s].short:'Lainnya'}</span></div>
+    <div class="row"><button class="btn sm" type="button" data-a="sum" data-i="${i}">Ringkas AI</button><button class="btn sm" type="button" data-a="quiz" data-i="${i}">Buat soal</button><button class="btn sm" type="button" data-a="del" data-i="${i}">Hapus</button></div></div>
+    <pre>${esc(n.text.slice(0,700))}</pre>${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px;background:var(--surface2);border-radius:12px;padding:12px 14px">${esc(n.sum)}</div>`:''}</div>`).join(''):'<p class="muted">Belum ada catatan.</p>';
+}
+$('#p-saya').addEventListener('click',async e=>{
+  if(e.target.id==='n-save'){
+    const t=$('#n-t').value.trim()||'Tanpa judul',b=$('#n-b').value.trim();if(!b){toast('Isi materinya dulu.');return}
+    notes.unshift({s:$('#n-s').value,title:t,text:b});store.set('uts.notes',notes);$('#n-t').value='';$('#n-b').value='';renderNotes();toast('Catatan disimpan.');return}
+  const a=e.target.closest('[data-a]');if(!a)return;const i=+a.dataset.i,n=notes[i];
+  if(a.dataset.a==='del'){notes.splice(i,1);store.set('uts.notes',notes);renderNotes();return}
+  a.disabled=true;a.textContent='Memproses...';
+  try{
+    if(a.dataset.a==='quiz'){const c=await genQuestions(n.text,n.title);toast(c+' soal ditambahkan (mapel Soal AI).')}
+    else{if(!SAMPLE)throw {message:'AI belum tersedia di tampilan ini.'};const r=await SAMPLE('Ringkas materi berikut untuk belajar UTS dalam Bahasa Indonesia: poin kunci, istilah penting beserta artinya, dan contoh singkat. Maksimal 200 kata, tanpa markdown tebal.\n\n'+n.text.slice(0,24000),{cache:false});n.sum=r.text;store.set('uts.notes',notes)}
+  }catch(err){toast(AIERR(err))}
+  renderNotes();
+});
+$('#p-saya').addEventListener('change',e=>{
+  if(e.target.id!=='n-f')return;const f=e.target.files[0];if(!f)return;
+  if(f.size>2e6){toast('File terlalu besar (maks 2 MB).');return}
+  const rd=new FileReader();rd.onload=()=>{$('#n-b').value=String(rd.result);if(!$('#n-t').value)$('#n-t').value=f.name.replace(/\.[^.]+$/,'')};rd.readAsText(f);
+});
+
+/* ---------- boot ---------- */
+renderAI();renderSaya();renderMateri();
+show((location.hash||'#home').slice(1));
+(async()=>{try{if(window.claude&&window.claude.use){SAMPLE=await window.claude.use('sample');setAIState()}}catch(e){}})();
+</script>
+
+</body>
+</html>
