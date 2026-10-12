@@ -106,6 +106,13 @@ h3{font-size:19px}
 .badge-jaga{display:inline-block;font:700 11px var(--f-mono);letter-spacing:.06em;background:var(--fg);color:var(--bg);border-radius:6px;padding:2px 8px;margin-right:8px;vertical-align:middle}
 .exam.jaga.lexi{border-color:var(--c-ai)}
 .badge-jaga.lexi{background:var(--c-ai);color:var(--bg)}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px}
+.thumb{position:relative;width:84px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface2);padding:0}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .x{position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:99px;border:0;background:var(--fg);color:var(--bg);font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:16px}
+.lightbox img{max-width:100%;max-height:100%;border-radius:10px}
+.lightbox button{position:absolute;top:14px;right:14px}
 .jaga ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--muted)}
 .jaga .warn{margin-top:8px;font-size:13px;font-weight:600;color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent);border-radius:10px;padding:8px 10px}
 .jnote{font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:10px 14px}
@@ -1144,26 +1151,44 @@ function renderSaya(){
       <div><label class="eyebrow" for="n-s">Mapel</label><select id="n-s">${KEYS.map(k=>`<option value="${k}">${SUBJ[k].name}</option>`).join('')}<option value="x">Mapel lain</option></select></div>
       <div><label class="eyebrow" for="n-t">Judul</label><input type="text" id="n-t" placeholder="mis. Slide IDN Project"></div>
      </div>
-     <div><label class="eyebrow" for="n-b">Isi materi</label><textarea id="n-b" placeholder="Tempel teks materi di sini..."></textarea></div>
+     <div><label class="eyebrow" for="n-b">Isi materi</label><textarea id="n-b" placeholder="Tempel teks materi di sini (boleh kosong kalau hanya gambar)..."></textarea></div>
+     <div><div class="eyebrow" style="margin-bottom:8px">Gambar (foto slide, papan tulis, catatan tulisan tangan)</div><div class="thumbs" id="n-thumbs"></div><div class="row" style="margin-top:8px"><label class="btn sm" for="n-img" style="cursor:pointer;display:inline-flex;align-items:center">Pilih gambar</label><input type="file" id="n-img" accept="image/*" multiple hidden><label class="btn sm" for="n-cam" style="cursor:pointer;display:inline-flex;align-items:center">Foto langsung</label><input type="file" id="n-cam" accept="image/*" capture="environment" hidden><span class="muted" style="font-size:12px">Bisa juga tempel (Ctrl+V) gambar di kotak teks.</span></div></div>
      <div class="row"><button class="btn pri" type="button" id="n-save">Simpan</button><label class="btn" for="n-f" style="cursor:pointer;display:inline-flex;align-items:center">Ambil dari file .txt / .md</label><input type="file" id="n-f" accept=".txt,.md,.csv,text/plain" hidden></div>
-     <p class="note">Untuk PDF atau PPT: salin teksnya lalu tempel di sini.</p>
+     <p class="note">Untuk PDF atau PPT: salin teksnya lalu tempel di sini. Gambar disimpan di browser ini (dikecilkan otomatis). AI hanya membaca teks, bukan isi gambar.</p>
    </div>
    <div id="n-list" style="display:flex;flex-direction:column;gap:12px;max-width:820px"></div>`;
   renderNotes();
 }
+/* ---------- gambar catatan ---------- */
+let pend=[];const imgCache={};
+const imgGet=id=>{if(imgCache[id])return imgCache[id];try{return localStorage.getItem('uts.img.'+id)||''}catch(e){return''}};
+const imgPut=(id,d)=>{imgCache[id]=d;try{localStorage.setItem('uts.img.'+id,d);return true}catch(e){return false}};
+const imgDel=id=>{delete imgCache[id];try{localStorage.removeItem('uts.img.'+id)}catch(e){}};
+function shrink(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const M=1280,s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.72))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('bad'))};im.src=u})}
+async function addFiles(files){
+  for(const f of files){if(!/^image\//.test(f.type)){toast('Hanya file gambar.');continue}if(pend.length>=8){toast('Maksimal 8 gambar per catatan.');break}
+    try{pend.push(await shrink(f))}catch(e){toast('Gambar tidak bisa dibaca.')}}
+  drawPend();
+}
+function drawPend(){const t=$('#n-thumbs');if(!t)return;t.innerHTML=pend.map((d,i)=>`<div class="thumb"><img src="${d}" alt="Gambar ${i+1}"><button class="x" type="button" data-px="${i}" aria-label="Hapus gambar">×</button></div>`).join('')}
+function openLB(src){const l=document.createElement('div');l.className='lightbox';l.innerHTML=`<img src="${src}" alt="Gambar catatan"><button class="btn sm" type="button">Tutup</button>`;l.addEventListener('click',()=>l.remove());document.body.appendChild(l)}
 function renderNotes(){
   const l=$('#n-list');if(!l)return;
   l.innerHTML=notes.length?notes.map((n,i)=>`<div class="card mat s-${SUBJ[n.s]?n.s:'ai'}">
     <div class="head"><div><b>${esc(n.title)}</b> <span class="tag">${SUBJ[n.s]?SUBJ[n.s].short:'Lainnya'}</span></div>
     <div class="row"><button class="btn sm" type="button" data-a="sum" data-i="${i}">Ringkas AI</button><button class="btn sm" type="button" data-a="quiz" data-i="${i}">Buat soal</button><button class="btn sm" type="button" data-a="del" data-i="${i}">Hapus</button></div></div>
-    <pre>${esc(n.text.slice(0,700))}</pre>${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px;background:var(--surface2);border-radius:12px;padding:12px 14px">${esc(n.sum)}</div>`:''}</div>`).join(''):'<p class="muted">Belum ada catatan.</p>';
+    ${n.text?`<pre>${esc(n.text.slice(0,700))}</pre>`:''}${(n.imgs&&n.imgs.length)?`<div class="thumbs">${n.imgs.map(id=>{const d=imgGet(id);return d?`<button class="thumb" type="button" data-lb="${id}" aria-label="Buka gambar"><img src="${d}" alt="Gambar catatan"></button>`:''}).join('')}</div>`:''}${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px;background:var(--surface2);border-radius:12px;padding:12px 14px">${esc(n.sum)}</div>`:''}</div>`).join(''):'<p class="muted">Belum ada catatan.</p>';
 }
 $('#p-saya').addEventListener('click',async e=>{
   if(e.target.id==='n-save'){
-    const t=$('#n-t').value.trim()||'Tanpa judul',b=$('#n-b').value.trim();if(!b){toast('Isi materinya dulu.');return}
-    notes.unshift({s:$('#n-s').value,title:t,text:b});store.set('uts.notes',notes);$('#n-t').value='';$('#n-b').value='';renderNotes();toast('Catatan disimpan.');return}
+    const t=$('#n-t').value.trim()||'Tanpa judul',b=$('#n-b').value.trim();if(!b&&!pend.length){toast('Isi teks atau tambah gambar dulu.');return}
+    const ids=[];let fail=0;for(const d of pend){const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);if(imgPut(id,d))ids.push(id);else fail++}
+    notes.unshift({s:$('#n-s').value,title:t,text:b,imgs:ids});store.set('uts.notes',notes);pend=[];$('#n-t').value='';$('#n-b').value='';drawPend();renderNotes();toast(fail?fail+' gambar gagal disimpan (penyimpanan browser penuh). Sisanya tersimpan.':'Catatan disimpan.');return}
+  const px=e.target.closest('[data-px]');if(px){pend.splice(+px.dataset.px,1);drawPend();return}
+  const lb=e.target.closest('[data-lb]');if(lb){openLB(imgGet(lb.dataset.lb));return}
   const a=e.target.closest('[data-a]');if(!a)return;const i=+a.dataset.i,n=notes[i];
-  if(a.dataset.a==='del'){notes.splice(i,1);store.set('uts.notes',notes);renderNotes();return}
+  if(a.dataset.a==='del'){(n.imgs||[]).forEach(imgDel);notes.splice(i,1);store.set('uts.notes',notes);renderNotes();return}
+  if(!n.text){toast('Catatan ini hanya gambar. AI belum bisa membaca gambar, tambahkan teksnya dulu.');return}
   a.disabled=true;a.textContent='Memproses...';
   try{
     if(a.dataset.a==='quiz'){const c=await genQuestions(n.text,n.title);toast(c+' soal ditambahkan (mapel Soal AI).')}
@@ -1171,11 +1196,14 @@ $('#p-saya').addEventListener('click',async e=>{
   }catch(err){toast(AIERR(err))}
   renderNotes();
 });
-$('#p-saya').addEventListener('change',e=>{
+$('#p-saya').addEventListener('change',async e=>{
+  if(e.target.id==='n-img'||e.target.id==='n-cam'){const fs=[...e.target.files];e.target.value='';await addFiles(fs);return}
   if(e.target.id!=='n-f')return;const f=e.target.files[0];if(!f)return;
   if(f.size>2e6){toast('File terlalu besar (maks 2 MB).');return}
   const rd=new FileReader();rd.onload=()=>{$('#n-b').value=String(rd.result);if(!$('#n-t').value)$('#n-t').value=f.name.replace(/\.[^.]+$/,'')};rd.readAsText(f);
 });
+
+$('#p-saya').addEventListener('paste',e=>{const fs=[...(e.clipboardData&&e.clipboardData.files||[])].filter(f=>/^image\//.test(f.type));if(fs.length){e.preventDefault();addFiles(fs)}});
 
 /* ---------- boot ---------- */
 renderAI();renderSaya();renderMateri();
