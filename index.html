@@ -104,6 +104,8 @@ h3{font-size:19px}
 .exam.jaga .t{font-weight:700}
 @media(max-width:520px){.exam.jaga{grid-template-columns:1fr}}
 .badge-jaga{display:inline-block;font:700 11px var(--f-mono);letter-spacing:.06em;background:var(--fg);color:var(--bg);border-radius:6px;padding:2px 8px;margin-right:8px;vertical-align:middle}
+.exam.jaga.lexi{border-color:var(--c-ai)}
+.badge-jaga.lexi{background:var(--c-ai);color:var(--bg)}
 .jaga ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--muted)}
 .jaga .warn{margin-top:8px;font-size:13px;font-weight:600;color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent);border-radius:10px;padding:8px 10px}
 .jnote{font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:10px 14px}
@@ -957,24 +959,31 @@ document.addEventListener('click',e=>{
 
 /* ---------- jadwal jaga (kamu pengawas, bukan ujianmu) ---------- */
 const JAGA=[
- ['2026-10-13T10:30','N-110',['S1-SIB · Analisa dan Desain Sistem Informasi (2021/3)','S1-SIB · Analisa dan Desain Sistem (2024/3)','S1-DKV · Graphic Novel (2021/8)','S1-ELK · Sistem Digital (2024/3)']],
- ['2026-10-14T15:30','E-301',['S1-INF · Pancasila (2021/3)','S1-INF · Pancasila (2024/5)','S1-DES · Pancasila (2024/7)','S1-SIB · Pancasila (2021/7)']],
- ['2026-10-16T08:00','E-301',['S1-DKV · Desain Web (2024/3)','S1-DKV · Desain Web (2021/5)','S1-SIB · Bahasa Inggris (2024/3)','S1-SIB · Bahasa Inggris (2021/3)','E-commerce Application Development (2021/9)']]
-].map(([a,ruang,mk])=>({jaga:true,start:new Date(a+':00+07:00'),ruang,mk}));
+ ['edo','2026-10-13T10:30','N-110',['S1-SIB · Analisa dan Desain Sistem Informasi (2021/3)','S1-SIB · Analisa dan Desain Sistem (2024/3)','S1-DKV · Graphic Novel (2021/8)','S1-ELK · Sistem Digital (2024/3)']],
+ ['edo','2026-10-14T15:30','E-301',['S1-INF · Pancasila (2021/3)','S1-INF · Pancasila (2024/5)','S1-DES · Pancasila (2024/7)','S1-SIB · Pancasila (2021/7)']],
+ ['edo','2026-10-16T08:00','E-301',['S1-DKV · Desain Web (2024/3)','S1-DKV · Desain Web (2021/5)','S1-SIB · Bahasa Inggris (2024/3)','S1-SIB · Bahasa Inggris (2021/3)','E-commerce Application Development (2021/9)']],
+ ['lexi','2026-10-13T10:30','E-305',['S1-DES · Smart System For Product Design (2024/5)']],
+ ['lexi','2026-10-14T10:30','N-301',['INTPR · Calculus (2026/1)']],
+ ['lexi','2026-10-15T13:00','N-110',['S1-DKV · Metodologi Desain (2021/5)','S1-DKV · Ilustrasi Story Telling (2024/3)','S1-IND · Quantitative Data Analysis (2026/1)','S1-DES · Riset Desain (2017/7)']],
+ ['lexi','2026-10-16T08:00','N-110',['S1-INF · AI/ML Capstone Project (2024/5)','S1-ELK · Pengantar Artificial Intelligence (2024/5)','S1-IND · Introduction to Artificial Intelligence (2026/1)','S1-ELK · Introduction to Artificial Intelligence (2026/1)']]
+].map(([who,a,ruang,mk])=>({jaga:true,who,start:new Date(a+':00+07:00'),ruang,mk}));
+const JN={edo:'EDO',lexi:'LEXI'};let jagaF='all';
 
 /* ---------- jadwal ---------- */
 function renderJadwal(){
   const now=new Date(),nx=nextExam();
-  const ALL=[...EXAMS,...JAGA].sort((a,b)=>a.start-b.start);
+  const ALL=[...(jagaF==='lexi'?[]:EXAMS),...JAGA.filter(j=>jagaF==='all'||j.who===jagaF)].sort((a,b)=>a.start-b.start);
   const days=[...new Set(ALL.map(e=>dayLabel(e.start)))];
-  $('#p-jadwal').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">12 – 16 Oktober 2026 · WIB</span><h2>Jadwal UTS + Jaga</h2></div><div class="jnote">Kartu <b>polos</b> = ujianmu. Kartu <b>garis putus + label JAGA</b> = kamu jadi pengawas (bukan ujian). Pengawas wajib hadir <b>15 menit sebelum ujian</b>, dan wajib menandatangani presensi sebelum mengambil berkas ujian di BAAK Bawah Lt.1. HP dan laptop dilarang selama menjaga.</div>`+
+  $('#p-jadwal').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">12 – 16 Oktober 2026 · WIB</span><h2>Jadwal UTS + Jaga</h2></div><div class="jnote">Kartu <b>polos</b> = ujian Edo. Kartu <b>garis putus + label JAGA</b> = jadwal mengawas (bukan ujian): <b>hitam/putih = Edo (3x)</b>, <b>pink = Lexi (4x)</b>. Pengawas wajib hadir <b>15 menit sebelum ujian</b>, dan wajib menandatangani presensi sebelum mengambil berkas ujian di BAAK Bawah Lt.1. HP dan laptop dilarang selama menjaga.</div><div class="row" role="group" aria-label="Filter jadwal jaga">${[["all","Semua"],["edo","Edo (3x jaga)"],["lexi","Lexi (4x jaga)"]].map(([k,l])=>`<button class="chip" type="button" data-jf="${k}" aria-pressed="${k===jagaF}">${l}</button>`).join("")}</div>`+
   days.map(d=>`<div class="day"><h3>${d}</h3>${ALL.filter(e=>dayLabel(e.start)===d).map(e=>{
-    if(e.jaga){const hadir=new Date(e.start.getTime()-15*60000);const st=e.start.getTime()+90*60000<=now?'done':'';const bent=EXAMS.find(x=>x.start<=hadir&&x.end>hadir&&dayLabel(x.start)===d);return `<div class="exam jaga ${st}"><span class="t">${hhmm(e.start)}<small>hadir ${hhmm(hadir)}</small></span><div><div class="n"><span class="badge-jaga">JAGA</span>Ruang ${e.ruang}</div><ul>${e.mk.map(m=>`<li>${esc(m)}</li>`).join('')}</ul>${bent?`<div class="warn">Bentrok: ${esc(bent.nama)} (ujianmu) selesai ${hhmm(bent.end)} di ${bent.ruang}, padahal harus hadir ${hhmm(hadir)} di ${e.ruang}. Konfirmasi ke BAAK.</div>`:''}</div></div>`}
+    if(e.jaga){const hadir=new Date(e.start.getTime()-15*60000);const st=e.start.getTime()+90*60000<=now?'done':'';const bent=e.who!=='edo'?null:EXAMS.find(x=>x.start<=hadir&&x.end>hadir&&dayLabel(x.start)===d);return `<div class="exam jaga ${e.who} ${st}"><span class="t">${hhmm(e.start)}<small>hadir ${hhmm(hadir)}</small></span><div><div class="n"><span class="badge-jaga ${e.who}">JAGA ${JN[e.who]}</span>Ruang ${e.ruang}</div><ul>${e.mk.map(m=>`<li>${esc(m)}</li>`).join('')}</ul>${bent?`<div class="warn">Bentrok: ${esc(bent.nama)} (ujianmu) selesai ${hhmm(bent.end)} di ${bent.ruang}, padahal harus hadir ${hhmm(hadir)} di ${e.ruang}. Konfirmasi ke BAAK.</div>`:''}</div></div>`}
     const st=e.end<=now?'done':(e.start<=now?'now':(nx===e?'nxt':''));
     const pill=st==='now'?'<span class="pill">berlangsung</span>':st==='nxt'?'<span class="pill">berikutnya</span>':'';
     const side=e.s?`<button class="btn sm" data-go="materi" data-k="${e.s}" type="button">Materi</button>`:'';
     return `<div class="exam ${st}"><span class="t">${hhmm(e.start)} – ${hhmm(e.end)}<small>WIB</small></span><div><div class="n">${esc(e.nama)}${pill}</div><div class="k">${e.kode} · Kelas X · Ruang ${e.ruang}</div></div>${side}</div>`}).join('')}</div>`).join('');
 }
+
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-jf]');if(b){jagaF=b.dataset.jf;renderJadwal()}});
 
 /* ---------- materi ---------- */
 let curSubj='pkn';
