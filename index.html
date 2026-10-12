@@ -1,9 +1,4 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{color-scheme:light;padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<!doctype html><html lang="id"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>UTS Mode</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,19 +8,19 @@
 :root{
   --bg:#F3F4F7; --surface:#FFFFFF; --surface2:#EAECF1; --line:#DFE2E8;
   --fg:#12141A; --muted:#5A6373; --accent:#D9430F; --accent-ink:#FFFFFF;
-  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B;
+  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-pack:#2563EB; --c-sin:#B0302A;
   --good:#15803D; --bad:#C62828;
   --f-display:'Poppins',system-ui,sans-serif; --f-body:'Poppins',system-ui,sans-serif; --f-mono:'Poppins',system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -72,7 +67,14 @@ h3{font-size:19px}
 .btn.sm{padding:6px 12px;font-size:13px;min-height:36px}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .tag{display:inline-flex;align-items:center;font:500 12px var(--f-mono);color:var(--c);border-radius:999px;padding:3px 10px;background:color-mix(in srgb,var(--c) 14%,transparent)}
-.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-idn{--c:var(--c-idn)}.s-ai{--c:var(--c-ai)}
+.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
+.svrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.svp{display:flex;flex-direction:column;gap:2px;min-width:0}.svp svg{width:100%;height:auto;border-radius:12px;display:block}.svp b{font-size:13px}.svp span{font-size:12px;color:var(--muted)}
+.sv{width:100%;max-width:460px;height:auto;display:block;margin:0 auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:8px;font-size:12px}.lg{display:inline-flex;align-items:center;gap:6px}.lg i{display:inline-block;width:22px}
+.svcap{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 0}
+.tone{height:16px;border-radius:8px;background:linear-gradient(90deg,#000,#fff);margin:4px 0}.tonel{display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;font-size:12px;font-weight:600;margin-bottom:12px}.tonel small{font-weight:400;color:var(--muted)}
+.s-idn{--c:var(--c-idn)}.s-ai{--c:var(--c-ai)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .muted{color:var(--muted)}
 
@@ -226,18 +228,21 @@ const dayLabel=d=>{const w=wib(d);return HARI[w.getUTCDay()]+', '+w.getUTCDate()
 const parts=ms=>{const s=Math.max(0,Math.floor(ms/1000));return [Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
 
 /* ---------- data ---------- */
+const KEYS=['pkn','pk','idn','pack','sin'];
 const SUBJ={
-  pkn:{name:'Pendidikan Kewarganegaraan',short:'PKn',kode:'VC547',jam:'08:00 – 09:40',ruang:'E-301'},
-  pk:{name:'Perilaku Konsumen',short:'Perilaku Konsumen',kode:'VC546',jam:'10:30 – 12:10',ruang:'E-301'},
-  idn:{name:'Inovasi Design Nusantara',short:'Inovasi Design',kode:'VC545',jam:'13:00 – 15:30',ruang:'N-201'},
+  pkn:{name:'Pendidikan Kewarganegaraan',short:'PKn',kode:'VC547',jam:'08:00 – 09:40',ruang:'E-301',hari:'Senin 12 Okt'},
+  pk:{name:'Perilaku Konsumen',short:'Perilaku Konsumen',kode:'VC546',jam:'10:30 – 12:10',ruang:'E-301',hari:'Senin 12 Okt'},
+  idn:{name:'Inovasi Design Nusantara',short:'Inovasi Design',kode:'VC545',jam:'13:00 – 15:30',ruang:'N-201',hari:'Senin 12 Okt'},
+  pack:{name:'Packaging Design',short:'Packaging',kode:'VC544',jam:'08:00 – 10:30',ruang:'E-305',hari:'Selasa 13 Okt'},
+  sin:{name:'Sinematografi',short:'Sinematografi',kode:'CP501',jam:'13:00 – 15:30',ruang:'N-110',hari:'Selasa 13 Okt'},
   ai:{name:'Soal AI',short:'Soal AI'}
 };
 const EXAMS=[
  ['VC547','Pendidikan Kewarganegaraan','2026-10-12T08:00','2026-10-12T09:40','E-301','pkn'],
  ['VC546','Perilaku Konsumen','2026-10-12T10:30','2026-10-12T12:10','E-301','pk'],
  ['VC545','Inovasi Design Nusantara','2026-10-12T13:00','2026-10-12T15:30','N-201','idn'],
- ['VC544','Packaging Design','2026-10-13T08:00','2026-10-13T10:30','E-305'],
- ['CP501','Sinematografi','2026-10-13T13:00','2026-10-13T15:30','N-110'],
+ ['VC544','Packaging Design','2026-10-13T08:00','2026-10-13T10:30','E-305','pack'],
+ ['CP501','Sinematografi','2026-10-13T13:00','2026-10-13T15:30','N-110','sin'],
  ['VC024','Agama Kristen','2026-10-14T08:00','2026-10-14T09:40','E-301'],
  ['VC548','Pemasaran Terpadu','2026-10-15T08:00','2026-10-15T10:30','E-305'],
  ['VC549','UMKM Branding','2026-10-15T10:30','2026-10-15T13:00','E-301']
@@ -250,6 +255,84 @@ const V={
  g2:(t,o)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="g2"><span></span><span class="ax">${o.x[0]}</span><span class="ax">${o.x[1]}</span><span class="ax ay">${o.y[0]}</span>${o.c.slice(0,2).map(c=>`<div class="cell"><b>${c[0]}</b>${c[1]}</div>`).join('')}<span class="ax ay">${o.y[1]}</span>${o.c.slice(2).map(c=>`<div class="cell"><b>${c[0]}</b>${c[1]}</div>`).join('')}</div></figure>`,
  cols:(t,items)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="cols3">${items.map(i=>`<div><b>${i[0]}</b>${i[1]}</div>`).join('')}</div></figure>`,
  table:(t,head,rows)=>`<figure class="vis"><figcaption>${t}</figcaption><div class="twrap"><table class="tb"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div></figure>`
+};
+
+/* ---------- ilustrasi SVG (digambar langsung, ikut tema) ---------- */
+const SVF='style="font-family:var(--f-body)"';
+const SV={
+ fig:(t,inner)=>`<figure class="vis"><figcaption>${t}</figcaption>${inner}</figure>`,
+ panels:items=>`<div class="svrow">${items.map(([s,a,b])=>`<div class="svp">${s}<b>${a}</b><span>${b}</span></div>`).join('')}</div>`,
+
+ /* --- tiga gaya cahaya + posisi lampu Rembrandt --- */
+ lighting:()=>{
+  const dark='#0a0908';
+  const p1=`<svg viewBox="0 0 200 200" role="img" aria-label="Wajah dengan cahaya tajam dari kiri, sisi kanan gelap pekat"><defs><linearGradient id="svc1" x1="0" x2="1"><stop offset="0" stop-color="#f3dcb8"/><stop offset=".42" stop-color="#b98a52"/><stop offset=".58" stop-color="#2a1d12"/><stop offset="1" stop-color="#050403"/></linearGradient><radialGradient id="svc2" cx=".1" cy=".3" r=".8"><stop offset="0" stop-color="#ffcf8a" stop-opacity=".5"/><stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="${dark}"/><rect width="200" height="200" fill="url(#svc2)"/><path d="M52 200c3-38 22-52 48-52s45 14 48 52z" fill="url(#svc1)"/><ellipse cx="100" cy="92" rx="42" ry="54" fill="url(#svc1)"/><text x="8" y="192" fill="#f3dcb8" font-size="11" ${SVF}>terang</text><text x="192" y="192" text-anchor="end" fill="#9a9084" font-size="11" ${SVF}>gelap pekat</text></svg>`;
+  const p2=`<svg viewBox="0 0 200 200" role="img" aria-label="Wajah dengan segitiga cahaya kecil di pipi sisi bayangan"><defs><clipPath id="svr0"><ellipse cx="100" cy="92" rx="42" ry="54"/></clipPath><linearGradient id="svr1" x1="0" x2="1"><stop offset="0" stop-color="#f3dcb8"/><stop offset="1" stop-color="#b98a52"/></linearGradient></defs><rect width="200" height="200" fill="${dark}"/><path d="M52 200c3-38 22-52 48-52s45 14 48 52z" fill="#241a12"/><ellipse cx="100" cy="92" rx="42" ry="54" fill="#241a12"/><g clip-path="url(#svr0)"><path d="M50 30H100L106 70L100 110L108 150H50Z" fill="url(#svr1)"/><path d="M100 78L111 84L109 112L98 108Z" fill="#241a12"/><path d="M113 86L138 90L114 120Z" fill="#c79a62"/></g><ellipse cx="84" cy="78" rx="6" ry="2.6" fill="#1a120c"/><ellipse cx="118" cy="78" rx="6" ry="2.6" fill="#0e0a07"/><path d="M90 122Q100 127 110 122" stroke="#1a120c" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="24" cy="22" r="8" fill="#ffd37a"/><path d="M24 8V4M10 22H6M14 12l-3-3M34 12l3-3" stroke="#ffd37a" stroke-width="2" stroke-linecap="round"/><path d="M32 28L62 52" stroke="#ffd37a" stroke-width="1.5" stroke-dasharray="3 3"/><text x="192" y="192" text-anchor="end" fill="#c79a62" font-size="11" ${SVF}>segitiga cahaya</text></svg>`;
+  const p3=`<svg viewBox="0 0 200 200" role="img" aria-label="Ruangan dengan lampu tersembunyi di rak dekat langit-langit, cahaya memantul lembut"><defs><radialGradient id="svv1" cx=".25" cy=".2" r=".9"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="#10131a"/><rect width="200" height="200" fill="url(#svv1)"/><rect width="200" height="34" fill="#232938"/><rect y="34" width="14" height="150" fill="#232938"/><rect x="14" y="46" width="44" height="8" fill="#3b4457"/><rect x="18" y="41" width="36" height="5" rx="2.5" fill="#ffd37a"/><path d="M26 40V35M36 40V35M46 40V35" stroke="#ffd37a" stroke-width="2" stroke-linecap="round"/><path d="M60 35L110 100M80 35L140 100M110 35L170 100" stroke="#ffd37a" stroke-opacity=".45" stroke-width="1.5" stroke-dasharray="4 4"/><rect y="184" width="200" height="16" fill="#232938"/><circle cx="140" cy="128" r="10" fill="#4a5468"/><path d="M126 184Q126 146 140 144Q154 146 154 184Z" fill="#4a5468"/><text x="62" y="62" fill="#ffd37a" font-size="10" ${SVF}>LED tersembunyi</text><text x="100" y="22" fill="#cfd6e6" font-size="10" ${SVF}>pantul dari langit-langit</text></svg>`;
+  const p4=`<svg viewBox="0 0 200 200" role="img" aria-label="Tampak atas: lampu utama di depan kiri sekitar 45 derajat dari kamera"><rect width="200" height="200" fill="#10131a"/><path d="M100 114V168" stroke="#7d869a" stroke-dasharray="4 4"/><path d="M46 146L94 108" stroke="#ffd37a" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="100" cy="100" r="15" fill="#4a5468" stroke="#cfd6e6"/><path d="M95 114L100 122L105 114Z" fill="#cfd6e6"/><rect x="88" y="170" width="24" height="14" rx="3" fill="#cfd6e6"/><circle cx="100" cy="177" r="3" fill="#10131a"/><circle cx="46" cy="146" r="9" fill="#ffd37a"/><path d="M100 150A50 50 0 0 0 79 145" stroke="#ffd37a" fill="none" stroke-width="1.5"/><text x="12" y="172" fill="#ffd37a" font-size="10" ${SVF}>key light</text><text x="104" y="158" fill="#cfd6e6" font-size="10" ${SVF}>45°</text><rect x="152" y="86" width="6" height="30" fill="#8892a6"/><text x="190" y="132" text-anchor="end" fill="#8892a6" font-size="10" ${SVF}>reflector</text><text x="100" y="82" text-anchor="middle" fill="#cfd6e6" font-size="10" ${SVF}>subjek</text><text x="100" y="196" text-anchor="middle" fill="#cfd6e6" font-size="10" ${SVF}>kamera</text></svg>`;
+  return SV.fig('Ilustrasi cahaya (gambar skema)',SV.panels([[p1,'Chiaroscuro','gelap-terang yang tajam'],[p2,'Rembrandt','segitiga cahaya di pipi'],[p3,'Cove','cahaya pantul yang lembut'],[p4,'Posisi lampu Rembrandt','tampak atas, juga 45° di atas']]));
+ },
+
+ /* --- contrast ratio: bola dengan rasio 2:1 sampai 16:1 --- */
+ ratio:()=>{
+  const rs=[[2,'2:1','beda 1 stop'],[4,'4:1','beda 2 stop'],[8,'8:1','beda 3 stop'],[16,'16:1','beda 4 stop']];
+  return SV.fig('Bola yang sama, rasio terang:gelap berbeda',SV.panels(rs.map(([r,l,s],i)=>{
+   const sh=Math.round(236*Math.pow(1/r,1/2.2)),mid=Math.round((236+sh)/2);
+   return [`<svg viewBox="0 0 120 120" role="img" aria-label="Bola dengan rasio ${l}"><defs><linearGradient id="svb${i}" x1="0" x2="1"><stop offset="0" stop-color="rgb(236,232,226)"/><stop offset=".5" stop-color="rgb(${mid},${mid},${mid-3})"/><stop offset="1" stop-color="rgb(${sh},${sh},${Math.max(0,sh-4)})"/></linearGradient></defs><rect width="120" height="120" fill="#101216"/><circle cx="60" cy="60" r="46" fill="url(#svb${i})"/></svg>`,l,s];
+  })));
+ },
+
+ /* --- diagram warna CIE 1931: Rec.709, DCI-P3, Rec.2020 --- */
+ gamut:()=>{
+  const X=x=>30+x*380,Y=y=>350-y*380;
+  const loc=[[.1741,.005],[.144,.0297],[.1241,.0578],[.0913,.1327],[.0454,.295],[.0082,.5384],[.0139,.7502],[.0743,.8338],[.1547,.8059],[.2296,.7543],[.3016,.6923],[.3731,.6245],[.4441,.5547],[.5125,.4866],[.5752,.4242],[.627,.3725],[.6915,.3083],[.719,.2809],[.7347,.2653]];
+  const path='M'+loc.map(([x,y])=>X(x).toFixed(1)+' '+Y(y).toFixed(1)).join('L')+'Z';
+  const tri=pts=>'M'+pts.map(([x,y])=>X(x).toFixed(1)+' '+Y(y).toFixed(1)).join('L')+'Z';
+  const r709=[[.64,.33],[.3,.6],[.15,.06]],p3=[[.68,.32],[.265,.69],[.15,.06]],r2020=[[.708,.292],[.17,.797],[.131,.046]];
+  const svg=`<svg viewBox="0 0 350 370" class="sv" role="img" aria-label="Diagram warna: segitiga Rec.709 paling kecil, DCI-P3 sedang, Rec.2020 paling besar"><path d="${path}" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/><path d="${tri(r2020)}" fill="var(--c-pkn)" fill-opacity=".10" stroke="var(--c-pkn)" stroke-width="2.4"/><path d="${tri(p3)}" fill="var(--accent)" fill-opacity=".10" stroke="var(--accent)" stroke-width="2.2" stroke-dasharray="7 4"/><path d="${tri(r709)}" fill="var(--fg)" fill-opacity=".10" stroke="var(--fg)" stroke-width="1.8"/><circle cx="${X(.3127)}" cy="${Y(.329)}" r="3.5" fill="var(--fg)"/><text x="${X(.3127)+7}" y="${Y(.329)+4}" font-size="11" fill="var(--fg)" ${SVF}>D65</text><text x="${X(.17)-4}" y="${Y(.797)-8}" font-size="11" fill="var(--muted)" ${SVF}>hijau</text><text x="${X(.708)-34}" y="${Y(.292)+20}" font-size="11" fill="var(--muted)" ${SVF}>merah</text><text x="${X(.131)-6}" y="${Y(.046)+16}" font-size="11" fill="var(--muted)" ${SVF}>biru</text></svg>`;
+  const lg=(c,d,t)=>`<span class="lg"><i style="border-top:3px ${d} ${c}"></i>${t}</span>`;
+  return SV.fig('Peta warna (CIE 1931): makin besar segitiga, makin banyak warna',svg+`<div class="legend">${lg('var(--fg)','solid','Rec.709 (terkecil)')}${lg('var(--accent)','dashed','DCI-P3 (sedang)')}${lg('var(--c-pkn)','solid','Rec.2020 (terbesar)')}</div><p class="svcap">Bentuk tapal kuda = semua warna yang bisa dilihat mata. Titik D65 = putih standar video.</p>`);
+ },
+
+ /* --- kurva log: Rec.709 vs S-Log2 vs S-Log3 (dari rumus kurva Sony) --- */
+ slog:()=>{
+  const s0=-7,s1=8,L=40,R=345,T=15,B=215;
+  const X=s=>L+(s-s0)/(s1-s0)*(R-L),Y=v=>B-Math.max(0,Math.min(1,v))*(B-T);
+  const lin=s=>0.18*Math.pow(2,s);
+  const f709=x=>{x=Math.min(x,1);return x<0.018?4.5*x:1.099*Math.pow(x,0.45)-0.099};
+  const f3=x=>x>=0.01125?(420+Math.log10((x+0.01)/0.19)*261.5)/1023:(x*(171.2102946929-95)/0.01125+95)/1023;
+  const f2=x=>0.432699*Math.log10(155*x/219.9+0.037584)+0.616596+0.03;
+  const curve=f=>{let d='';for(let s=s0;s<=s1+1e-9;s+=0.1){d+=(d?'L':'M')+X(s).toFixed(1)+' '+Y(f(lin(s))).toFixed(1)}return d};
+  let grid='';for(let s=-6;s<=8;s+=2){grid+=`<path d="M${X(s)} ${T}V${B}" stroke="var(--line)"/><text x="${X(s)}" y="${B+14}" text-anchor="middle" font-size="10" fill="var(--muted)" ${SVF}>${s>0?'+'+s:s}</text>`}
+  for(const v of [0,.5,1]){grid+=`<path d="M${L} ${Y(v)}H${R}" stroke="var(--line)"/><text x="${L-6}" y="${Y(v)+3}" text-anchor="end" font-size="10" fill="var(--muted)" ${SVF}>${Math.round(v*100)}%</text>`}
+  const sc=Math.log2(1/0.18);
+  const svg=`<svg viewBox="0 0 360 250" class="sv" role="img" aria-label="Kurva sinyal: Rec.709 habis di sekitar 2,5 stop di atas abu-abu, S-Log2 dan S-Log3 masih naik sampai lebih dari 5 stop"><rect x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="var(--surface)"/>${grid}<path d="M${X(0)} ${T}V${B}" stroke="var(--muted)" stroke-dasharray="4 3"/><text x="${X(0)+4}" y="${B-6}" font-size="10" fill="var(--muted)" ${SVF}>abu-abu 18%</text><path d="${curve(f709)}" fill="none" stroke="var(--fg)" stroke-width="2"/><path d="${curve(f2)}" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-dasharray="7 4"/><path d="${curve(f3)}" fill="none" stroke="var(--c-pk)" stroke-width="2.2"/><circle cx="${X(sc)}" cy="${Y(1)}" r="4" fill="var(--fg)"/><text x="${X(sc)-6}" y="${Y(1)+16}" text-anchor="end" font-size="10" fill="var(--fg)" ${SVF}>Rec.709 habis (clip)</text><text x="${(L+R)/2}" y="244" text-anchor="middle" font-size="10" fill="var(--muted)" ${SVF}>cahaya dibanding abu-abu 18% (stop, +1 = 2x terang)</text></svg>`;
+  const lg=(c,d,t)=>`<span class="lg"><i style="border-top:3px ${d} ${c}"></i>${t}</span>`;
+  return SV.fig('Kurva rekaman: log memuat lebih banyak terang',svg+`<div class="legend">${lg('var(--fg)','solid','Rec.709 (video biasa)')}${lg('var(--accent)','dashed','S-Log2')}${lg('var(--c-pk)','solid','S-Log3')}</div><p class="svcap">Digambar dari rumus kurva Sony yang disederhanakan, untuk memberi gambaran bentuk. Angka di kamera asli bisa sedikit berbeda.</p>`);
+ },
+
+ /* --- Lift, Gamma, Gain --- */
+ lgg:()=>{
+  const S=150,L=16,R=138,B=134,T=12;
+  const X=x=>L+x*(R-L),Y=y=>B-Math.max(0,Math.min(1,y))*(B-T);
+  const draw=(f,band,lab,sub)=>{
+   let d='';for(let i=0;i<=40;i++){const x=i/40;d+=(d?'L':'M')+X(x).toFixed(1)+' '+Y(f(x)).toFixed(1)}
+   return [`<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="${lab}"><rect x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="var(--surface)"/><rect x="${X(band[0])}" y="${T}" width="${(band[1]-band[0])*(R-L)}" height="${B-T}" fill="var(--accent)" fill-opacity=".14"/><path d="M${X(0)} ${Y(0)}L${X(1)} ${Y(1)}" stroke="var(--muted)" stroke-dasharray="4 3"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.4"/><text x="${L}" y="${B+12}" font-size="8" fill="var(--muted)" ${SVF}>gelap</text><text x="${R}" y="${B+12}" text-anchor="end" font-size="8" fill="var(--muted)" ${SVF}>terang</text></svg>`,lab,sub];
+  };
+  const panels=[
+   draw(x=>x+0.18*(1-x),[0,.34],'Lift dinaikkan','hitam terangkat jadi abu'),
+   draw(x=>Math.pow(x,1/1.7),[.33,.67],'Gamma dinaikkan','tengah lebih terang'),
+   draw(x=>x*1.3,[.66,1],'Gain dinaikkan','putih lebih terang, bisa clip')
+  ];
+  const bar=`<div class="tone" role="img" aria-label="Skala dari hitam ke putih: lift di kiri, gamma di tengah, gain di kanan"></div><div class="tonel"><span>LIFT<br><small>bayangan</small></span><span>GAMMA<br><small>nada tengah</small></span><span>GAIN<br><small>highlight</small></span></div>`;
+  return SV.fig('Tiga kontrol, tiga daerah (garis putus = tanpa perubahan)',bar+SV.panels(panels));
+ },
+
+ /* --- Snorricam (Aronofsky) --- */
+ snorri:()=>{
+  const svg=`<svg viewBox="0 0 320 170" class="sv" role="img" aria-label="Skema snorricam: kamera diikat ke badan aktor dan menghadap wajahnya"><rect width="320" height="170" rx="12" fill="#10131a"/><circle cx="84" cy="52" r="15" fill="#4a5468"/><path d="M84 67V120M84 78L64 104M84 78L108 96M84 120L68 156M84 120L100 156" stroke="#4a5468" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M96 90L170 72" stroke="#cfd6e6" stroke-width="3"/><rect x="170" y="58" width="26" height="22" rx="4" fill="#cfd6e6"/><circle cx="170" cy="69" r="5" fill="#10131a"/><path d="M168 69L99 50M168 69L99 56" stroke="#ffd37a" stroke-opacity=".7" stroke-dasharray="3 3"/><path d="M40 28L18 28M18 28L26 22M18 28L26 34" stroke="#cfd6e6" stroke-width="2" fill="none" stroke-linecap="round"/><text x="12" y="48" fill="#cfd6e6" font-size="10" ${SVF}>aktor berjalan</text><text x="116" y="138" fill="#ffd37a" font-size="10" ${SVF}>kamera terikat</text><text x="116" y="150" fill="#ffd37a" font-size="10" ${SVF}>ke badan</text><rect x="222" y="22" width="84" height="122" rx="8" fill="#1b212d" stroke="#3b4457"/><path d="M222 50Q242 40 262 52T306 48M222 84Q242 74 262 86T306 82M222 118Q242 108 262 120T306 116" stroke="#4a5468" stroke-width="2" fill="none"/><circle cx="264" cy="80" r="17" fill="#c79a62"/><circle cx="258" cy="76" r="2" fill="#1a120c"/><circle cx="270" cy="76" r="2" fill="#1a120c"/><text x="306" y="160" text-anchor="end" fill="#cfd6e6" font-size="9" ${SVF}>wajah diam, dunia goyang</text></svg>`;
+  return SV.fig('Snorricam (skema)',svg);
+ }
 };
 
 /* ---------- materi (bahasa sederhana) ---------- */
@@ -439,18 +522,225 @@ pk:[
  ],ingat:'Empat elemen: Motives, Cues, Responses, Reinforcement. Tiga jenis belajar: Classical, Instrumental, Observational.',vis:()=>[V.flow('Mesin pembelajaran',['Motive','Cue','Response','Reinforcement']),V.cols('Tiga jenis belajar',[['Classical','Asosiasi (jingle, Pavlov)'],['Instrumental','Hadiah (diskon, poin)'],['Observational','Meniru (review, endorser)']])]}
 ],
 idn:[
- {id:'idn1',t:'Budaya visual prasejarah',gist:'Seni zaman prasejarah adalah akar dari banyak motif dan makna desain Nusantara.',pts:[
-  `<b>Catatan penting:</b> file slide (.ppt) belum bisa kubaca. Ini ringkasan umum dari judul file, jadi samakan dengan slide dosen. Tempel teks slide di menu Catatan supaya AI memakai materi aslimu.`,
-  `<b>Lukisan gua:</b> manusia purba menggambar di dinding gua. Contohnya di Leang-Leang (Maros-Pangkep, Sulawesi Selatan): cap tangan dan gambar hewan buruan. Fungsinya diduga untuk ritual dan komunikasi.`,
-  `<b>Tradisi megalitik (batu besar):</b> menhir (batu tegak), dolmen (meja batu), punden berundak (bangunan berundak), sarkofagus (peti batu), dan arca batu. Terkait pemujaan leluhur.`,
-  `<b>Zaman logam:</b> nekara perunggu dan moko dihiasi motif geometris seperti spiral, pilin, meander, dan tumpal.`,
-  `<b>Kenapa penting untuk desainer:</b> visual prasejarah berfungsi sebagai simbol kepercayaan dan penanda identitas kelompok, dan jadi sumber inspirasi motif desain Nusantara masa kini.`
- ]},
- {id:'idn2',t:'IDN Project',gist:'Materi dari file 01_IDN_Project belum terbaca.',pts:[
-  `Upload ulang sebagai PDF di chat Claude, atau tempel teksnya di menu <b>Catatan</b> (pilih Inovasi Design Nusantara). Setelah itu AI bisa merangkum dan membuat soal dari isinya.`
- ]}
+ {id:'idn0',t:'Peta UTS (dari RPS)',gist:'UTS Inovasi Design Nusantara itu ujian tertulis di kelas. Yang diuji: kamu bisa mengenali, menganalisis, dan menerapkan elemen budaya lokal Nusantara dalam desain.',pts:[
+  `<b>Cakupan = minggu 1–7 di RPS:</b> (1) konsep kekayaan budaya Nusantara, (2) sejarah budaya lokal, (3) motif dan simbol, (4) warna dan bentuk tradisional, (5) integrasi budaya ke desain, (6) metodologi penelitian budaya, (7) eksperimen cipta desain.`,
+  `<b>Bobot:</b> UTS 20%, UAS 25%, Proyek 30%, Tugas 1 dan 2 masing-masing 10% dan 15%. Jadi UTS lumayan, tapi bukan segalanya.`,
+  `<b>Cara pakai halaman ini:</b> baca 7 topik di bawah dari atas ke bawah. Slide dosen jadi sumber utama. Kata kunci per topik ada di kotak "Ingat" paling bawah.`,
+  `<b>Catatan jujur:</b> beberapa slide (motif tiap daerah, gambar) isinya foto saja, tidak ada teks. Itu tidak bisa kubaca, jadi lihat langsung slide aslinya untuk gambar-gambarnya.`
+ ],ingat:'UTS = tertulis di kelas, minggu 1–7. Kata kerja kunci: identifikasi, analisis, terapkan.'},
+ {id:'idn1',t:'Tugas IDN Project',gist:'Tugas besar mata kuliah ini: ambil budaya Indonesia, lalu olah jadi karya desain baru.',pts:[
+  `<b>Tugas UTS:</b> pilih satu cerita rakyat Indonesia. Pelajari latar belakangnya, lalu kembangkan visualnya dan buat desain karakter. Hasil jadi boleh berupa <b>poster ilustrasi, animasi sederhana, fotografi, atau video pendek</b>.
+   ${e('cerita rakyat Malin Kundang jadi seri poster ilustrasi, dengan karakter Malin yang digambar ulang secara modern.')}`,
+  `<b>Tugas UAS:</b> pilih produk lokal untuk di-<b>rebranding</b>. Pelajari latar belakangnya, lalu buat desain pemasarannya dengan konsep budaya Indonesia.
+   ${e('keripik tempe di sebuah kota dibuat ulang kemasan dan logonya dengan motif batik daerah itu.')}`,
+  `<b>Rebranding</b> artinya mengubah wajah merek (logo, warna, kemasan) agar lebih segar atau lebih mengena, tanpa membuang jati dirinya.`
+ ],ingat:'UTS = cerita rakyat jadi visual. UAS = rebranding produk lokal. Bentuk hasil: poster ilustrasi, animasi, foto, video.',
+  vis:()=>[V.cols('Dua tugas besar',[['Tugas UTS','Cerita rakyat → karakter visual → poster / animasi / foto / video'],['Tugas UAS','Produk lokal → rebranding → desain pemasaran berbudaya'],['Intinya','Budaya Indonesia jadi sumber ide desain modern']])]},
+ {id:'idn2',t:'Budaya visual prasejarah',gist:'Seni paling awal manusia ada di dinding gua. Dari situ muncul gambar, kepercayaan, dan akhirnya budaya serta aturan hidup bersama.',pts:[
+  `<b>Kenapa manusia purba berkesenian?</b> Untuk memenuhi kebutuhan <b>rohani</b>, bukan sekadar hiasan.`,
+  `<b>Karya awal = lukisan di dinding gua.</b> Objeknya <b>hewan buruan</b>, karena itu penentu hidup mereka.`,
+  `<b>Lalu gambar manusia.</b> Kalau mulai menggambar manusia, artinya cara berpikir mereka sudah berkembang.`,
+  `<b>Dari keluarga ke masyarakat:</b> mikir soal pernikahan dan keturunan → keluarga → beberapa keluarga jadi <b>perkampungan</b> → memilih <b>kepala suku / kepala adat</b>.`,
+  `<b>Lahir karya budaya:</b> aturan atau hukum (teks) dan benda (kebendaan). Ada ritual keagamaan: <b>animisme</b> (percaya roh pada benda dan alam) dan <b>dinamisme</b> (percaya benda punya kekuatan gaib).`,
+  `<b>Alat kebendaan:</b> kapak, tombak, periuk, dan sebagainya.`
+ ],ingat:'Urutan: lukisan gua (hewan) → gambar manusia → keluarga → kampung → kepala adat → aturan + ritual (animisme, dinamisme).',
+  vis:()=>[V.flow('Dari gua sampai budaya',['Lukis hewan buruan','Gambar manusia','Keluarga','Kampung','Kepala adat','Aturan dan ritual'])]},
+ {id:'idn3',t:'10 elemen desain tradisional Nusantara',gist:'Ada 10 "bahan baku" visual dari budaya Nusantara yang bisa dipakai di DKV: dari motif sampai filosofi.',pts:[
+  `<b>Cara hafal:</b> tiap elemen punya dua sisi, apa itu dan buat apa di DKV. Intinya selalu: beri identitas budaya, boleh disederhanakan agar modern.`,
+  `<b>1. Motif dan ornamen:</b> batik, ukir, tenun, anyaman. Contoh kawung, parang. Pakai untuk poster, branding, kemasan.`,
+  `<b>2. Warna tradisional:</b> warna bermakna simbol. Merah = keberanian, hijau = kesuburan, emas = kemuliaan.`,
+  `<b>3. Tipografi dan aksara:</b> Jawa (Hanacaraka), Bali, Sunda, Batak. Bisa jadi logo atau font modern.`,
+  `<b>4. Simbol dan ikonografi:</b> Garuda Pancasila, kala, simbol spiritual. Wajib paham maknanya supaya tidak salah tafsir.`,
+  `<b>5. Bentuk dan siluet:</b> rumah adat, keris, gamelan. Cocok untuk logo dan ilustrasi karena mudah dikenali.`,
+  `<b>6. Tekstur dan pola:</b> anyaman, tenun, ukiran kayu. Jadi latar atau hiasan, cocok untuk kemasan.`,
+  `<b>7. Tata letak dan komposisi:</b> wayang kulit, relief candi. Susunannya seimbang dan bermakna, bisa dipakai untuk layout poster atau antarmuka digital.`,
+  `<b>8. Cerita dan narasi visual:</b> relief candi, wayang, lukisan tradisional. Dipakai di ilustrasi, komik, animasi, kampanye sosial.`,
+  `<b>9. Material dan teknik tradisional:</b> kayu, kain, logam; teknik batik, ukir, tenun. Efeknya bisa ditiru digital agar terasa handmade.`,
+  `<b>10. Nilai dan filosofi budaya:</b> harmoni, keseimbangan, hubungan manusia dengan alam. Bisa jadi konsep utama desain.`
+ ],ingat:'Singkatan bantu: Motif, Warna, Aksara, Simbol, Bentuk, Tekstur, Tata letak, Narasi, Material, Nilai (10 elemen).',
+  vis:()=>[V.table('Ringkasan 10 elemen',['#','Elemen','Contoh','Dipakai untuk'],[['1','Motif dan ornamen','kawung, parang','poster, branding, kemasan'],['2','Warna','merah, hijau, emas','kesan budaya, branding'],['3','Aksara','Hanacaraka, Bali','logo, font'],['4','Simbol','Garuda, kala','logo, ikon'],['5','Bentuk dan siluet','rumah adat, keris','logo, ilustrasi'],['6','Tekstur dan pola','anyaman, tenun','latar, kemasan'],['7','Tata letak','wayang kulit, relief','layout poster, UI'],['8','Narasi visual','relief candi, wayang','komik, animasi'],['9','Material dan teknik','batik, ukir, tenun','tampilan handmade'],['10','Nilai dan filosofi','harmoni, keseimbangan','konsep desain']])]},
+ {id:'idn4',t:'Desain inovatif',gist:'Desain inovatif = merancang produk atau sistem baru dengan menggabungkan ide kreatif dan kebutuhan pengguna.',pts:[
+  `<b>Peran:</b> memadukan teknologi, kreativitas, dan pemahaman pengguna untuk solusi yang lebih efisien, berkelanjutan, dan manusiawi.`,
+  `<b>5 jenis (dengan contoh dari slide):</b>
+   <br>1. <b>Produk:</b> smartphone pintar, mobil listrik ramah lingkungan.
+   <br>2. <b>Layanan:</b> aplikasi pengiriman makanan.
+   <br>3. <b>Komunikasi:</b> iklan kreatif yang memikat perhatian konsumen.
+   <br>4. <b>Lingkungan:</b> hunian ramah lingkungan, energi terbarukan, bahan daur ulang.
+   <br>5. <b>Interaksi:</b> tampilan smartphone yang intuitif dan responsif.`,
+  `<b>7 langkah merancang:</b> (1) penelitian mendalam, (2) generate ide, (3) perancangan konsep, (4) prototyping, (5) pengujian, (6) iterasi, (7) produksi.
+   ${e('mau bikin kemasan jajanan: riset selera pembeli → 20 ide kemasan → pilih 1 konsep → bikin mockup → tes ke 10 orang → revisi → cetak massal.')}`
+ ],ingat:'5 jenis: Produk, Layanan, Komunikasi, Lingkungan, Interaksi. 7 langkah: Riset, Ide, Konsep, Prototype, Uji, Iterasi, Produksi.',
+  vis:()=>[V.flow('7 langkah desain inovatif',['Riset','Generate ide','Konsep','Prototyping','Pengujian','Iterasi','Produksi'])]},
+ {id:'idn5',t:'Kekayaan budaya Indonesia',gist:'Budaya Indonesia kaya karena geografi, etnis, dan budayanya beragam. Slide membaginya jadi 5 kelompok.',pts:[
+  `<b>1. Kesenian tradisional:</b> tari, musik, seni lukis. Contoh Tari Pendet (Bali), Tari Saman (Aceh), Reog Ponorogo (Jawa Timur).`,
+  `<b>2. Kerajinan tangan:</b> batik, ukiran kayu dan batu, alat musik, patung. Bukti keahlian pengrajin.`,
+  `<b>3. Bahasa dan sastra:</b> Bahasa Indonesia mengikat semua daerah. Contoh sastrawan: Pramoedya Ananta Toer.`,
+  `<b>4. Adat istiadat dan ritual:</b> membentuk identitas lokal. Contoh upacara adat Toraja dan Seren Taun (Jawa Barat).`,
+  `<b>5. Budaya kontemporer:</b> film, musik pop, seni rupa kontemporer, desain mode. Tradisi bertemu modern.`
+ ],ingat:'5 kelompok: Kesenian, Kerajinan, Bahasa-sastra, Adat-ritual, Kontemporer. Hafal satu contoh tiap kelompok.',
+  vis:()=>[V.table('Kelompok dan contohnya',['Kelompok','Contoh'],[['Kesenian','Tari Pendet, Saman, Reog'],['Kerajinan','Batik, ukiran, patung'],['Bahasa dan sastra','Bahasa Indonesia, Pramoedya'],['Adat dan ritual','Upacara Toraja, Seren Taun'],['Kontemporer','Film, musik pop, mode']])]},
+ {id:'idn6',t:'Ornamen dan motif: makna dan fungsi',gist:'Ornamen = hiasan. Motif = unsur pokok ornamen, yaitu bentuk dasar yang diulang atau digubah.',pts:[
+  `<b>Ornamen:</b> komponen karya seni yang sengaja ditambahkan sebagai hiasan estetis. Dari bahasa Yunani <b>ornare</b> (hiasan, perhiasan). Hakikatnya "irama" dalam garis atau bidang, atau ilmu menghias.`,
+  `<b>3 fungsi ornamen:</b>
+   <br>1. <b>Murni estetis:</b> memperindah. Contoh keramik, peralatan rumah.
+   <br>2. <b>Simbolis:</b> menyimpan harapan, tanda, cita-cita. Biasanya di benda pusaka atau sakral.
+   <br>3. <b>Estetik konstruktif:</b> memperindah sekaligus ikut membentuk konstruksi. Contoh ukiran kayu.`,
+  `<b>Motif:</b> unsur pokok ornamen, dari bentuk alam atau gubahannya.`,
+  `<b>6 jenis motif:</b> geometris, manusia, benda alam, khayal, tumbuhan, binatang.`,
+  `<b>Deformasi dan distorsi:</b> bentuk (misalnya binatang) disederhanakan atau diubah sampai tinggal kesannya saja.
+   ${e('ayam jago digambar jadi garis-garis lengkung, tapi orang masih menangkap "ini ayam".')}`,
+  `<b>Motif daerah di slide:</b> Surakarta, Mataram, Jepara, Bali, Kalimantan, Papua, Toraja, Batak (isinya gambar, lihat slide asli).`
+ ],ingat:'3 fungsi: estetis, simbolis, estetik-konstruktif. 6 motif: geometris, manusia, benda alam, khayal, tumbuhan, binatang.',
+  vis:()=>[V.cols('3 fungsi ornamen',[['Estetis','Hanya mempercantik'],['Simbolis','Membawa harapan dan makna'],['Estetik konstruktif','Cantik dan ikut menyusun konstruksi']]),V.cols('6 jenis motif',[['Geometris','garis, segitiga, spiral'],['Manusia / binatang','figur disederhanakan'],['Alam / tumbuhan / khayal','awan, daun, makhluk mitos']])]},
+ {id:'idn7',t:'Pemasaran interaktif',gist:'Konsumen tidak lagi cuma penerima iklan. Mereka ikut aktif dan menjadi rekan dalam menciptakan serta mengembangkan produk.',pts:[
+  `<b>Tujuan:</b> memikat dan memelihara konsumen yang jadi rekan bisnis (menciptakan, membeli, mengembangkan produk dan layanan).`,
+  `<b>2 metode:</b>
+   <br><b>Pull marketing:</b> konsumen yang mencari sendiri, lewat web browser (cari, baca, unduh).
+   <br><b>Push marketing:</b> informasi dikirim otomatis ke konsumen (software Web/Net Broadcaster seperti PointCast, BackWeb, Castanet), tampil sebagai banner atau screen saver.
+   ${e('Pull = kamu googling harga sepatu. Push = notifikasi diskon masuk sendiri ke HP.')}`,
+  `<b>3 media pemasaran interaktif:</b> (1) <b>Direct mail:</b> kirim penawaran ke alamat tertentu (surat, brosur). (2) <b>Telemarketing:</b> menawarkan lewat telepon atau telekomunikasi. (3) <b>Internet:</b> media penyampai pesan luas yang sangat memengaruhi penjualan.`,
+  `<b>5 beda internet vs media massa:</b>
+   <br>1. Lebih ke <b>pull</b> daripada push.
+   <br>2. Memungkinkan <b>interaksi</b> (pesan lewat web, penjual menghubungi lewat telepon atau email).
+   <br>3. Bisa <b>one-to-one atau many-to-many</b>, bukan hanya one-to-many. Konsumen bisa ikut menentukan desain produk (Hoffman dan Novak).
+   <br>4. Mengubah standar komunikasi pemasaran: website bisa menginformasikan, membujuk, sekaligus jualan langsung (dialog).
+   <br>5. Mengubah saluran distribusi dan marketplace, batas keluar-masuk perusahaan mengecil.`,
+  `<b>3 elemen keefektifan:</b> <b>Encoding</b> (merancang isi pesan sesuai audiens), <b>Noise</b> (gangguan luar yang menurunkan kualitas pesan), <b>Decoding</b> (penerima menafsirkan pesan, tergantung kognisi dan lama pakai internet).`,
+  `<b>3 aturan hubungan dengan konsumen:</b> (1) taruh pemasaran interaktif dalam strategi besar yang terus memberi keuntungan, (2) jaga keseimbangan tujuan perusahaan dan kebutuhan belanja konsumen, (3) cari cara agar tiap teknologi memberi banyak manfaat sekaligus.`
+ ],ingat:'Pull = konsumen cari. Push = dikirim ke konsumen. Efektif bila Encoding, Noise, Decoding terkendali.',
+  vis:()=>[V.g2('Pull vs Push',{x:['Pull','Push'],y:['Siapa mulai','Contoh'],c:[['Konsumen','mencari sendiri'],['Perusahaan','mengirim otomatis'],['Googling info produk','Banner / notifikasi'],['Web browser','Net broadcaster']]}),V.flow('Alur pesan',['Encoding (dibuat)','Noise (gangguan)','Decoding (ditafsir)'])]},
+ {id:'idn8',t:'Multimedia interaktif',gist:'Menurut Green dan Brown, multimedia interaktif memadukan teks, grafik, audio, dan interaktivitas. Untuk menilainya, ada 6 kriteria Thorn.',pts:[
+  `<b>Thorn (2006), 6 kriteria menilai multimedia interaktif:</b> (1) kemudahan navigasi, (2) kandungan kognisi, (3) presentasi informasi, (4) integrasi media, (5) artistik dan estetika, (6) fungsi secara keseluruhan.`,
+  `<b>Green dan Brown, 4 unsur:</b>
+   <br><b>1. Teks:</b> simbol visual untuk menjelaskan bahasa lisan. Ukuran: length (banyak teks) dan size (besar huruf; standar 10 atau 12 poin).
+   <br><b>2. Grafik:</b> medium visual 2D (kertas, TV, layar), bisa realita atau ikonik. Ada gambar diam dan bergerak. Contoh ikon toilet laki-laki dan perempuan.
+   <br><b>3. Audio:</b> yang didengar: narasi, lagu, sound effect, back sound.
+   <br><b>4. Interaktivitas:</b> bukan medium, tapi <b>rancangan di balik program</b>. Disebut juga interface design atau human factor design.`
+ ],ingat:'Thorn = 6 kriteria menilai. Green dan Brown = Teks, Grafik, Audio, Interaktivitas (interaktivitas itu rancangan, bukan medium).',
+  vis:()=>[V.cols('4 unsur multimedia',[['Teks','Time New Roman, Arial; size 10-12'],['Grafik','Diam dan bergerak, 2D'],['Audio + Interaktivitas','Suara; rancangan interface']])]}
+
+],
+pack:[
+ {id:'pack0',t:'Peta materi Packaging Design',gist:'Materi ini dari file Desain Kemasan: Tujuan dan Stakeholder, lalu Tugas 1 Desain Label Kemasan.',pts:[
+  `<b>Isi:</b> (1) definisi dan fungsi kemasan, (2) tujuan kemasan, (3) faktor pertimbangan desain, (4) dampak ke penjualan, (5) stakeholder, (6) label kemasan.`,
+  `<b>Catatan jujur:</b> yang kubaca hanya satu file (Bagian 01 dan 02 plus Tugas 1). Kalau dosen punya slide lain, cek juga.`
+ ],ingat:'Urutan belajar: definisi, fungsi, tujuan, faktor, dampak, stakeholder, label.'},
+ {id:'pack1',t:'Definisi dan 2 fungsi kemasan',gist:'Kemasan bukan cuma pembungkus. Ia melindungi produk dan sekaligus menjual produk.',pts:[
+  `<b>Kotler dan Keller:</b> kemasan = seluruh kegiatan merancang dan memproduksi wadah atau pembungkus suatu produk.`,
+  `<b>Klimchuk dan Krasovec:</b> kemasan = disiplin kreatif yang memadukan bentuk struktural, bahan, warna, citra, dan tipografi agar produk siap dipasarkan.`,
+  `<b>Fungsi protektif:</b> melindungi dari cuaca, guncangan, tekanan, mikroba, dan mencegah kerugian saat distribusi.`,
+  `<b>Fungsi promosional:</b> jadi <b>"silent salesperson"</b> (penjual diam) yang menarik perhatian dan mengomunikasikan identitas merek.
+   ${e('mi instan dibungkus plastik tebal (protektif) dan bergambar mi yang menggugah selera (promosional).')}`
+ ],ingat:'Dua fungsi: protektif + promosional ("silent salesperson").',
+  vis:()=>[V.cols('2 fungsi utama',[['Protektif','Menjaga produk aman'],['Promosional','Menarik dan menjual'],['Hasilnya','Produk aman sampai ke tangan dan terjual']])]},
+ {id:'pack2',t:'5 tujuan utama kemasan',gist:'Lima tujuan kemasan, dari pelindung sampai alat branding.',pts:[
+  `<b>1. Barrier dan physical protection:</b> lindungi dari suhu, getaran, oksigen, uap air, debu.`,
+  `<b>2. Containment dan agglomeration:</b> menyatukan benda kecil dalam satu paket agar mudah ditangani dan ditata.
+   ${e('permen 100 biji dimasukkan satu toples.')}`,
+  `<b>3. Information transmission:</b> cara pakai, komposisi, tanggal kedaluwarsa, identitas legal.`,
+  `<b>4. Security dan theft reduction:</b> cegah akses ilegal dan pencurian, ada segel keamanan.`,
+  `<b>5. Marketing dan branding:</b> desain visual untuk membujuk konsumen dan membedakan dari pesaing.`,
+  `<b>3 fungsi menurut Kotler dan Keller (slide):</b> proteksi logistik (kurangi kerusakan, pembusukan, kehilangan di rantai pasok), daya tarik visual (tarik perhatian di toko, perkuat citra), komunikasi pemasaran (pesan promosi + kemudahan wadah, mendorong keputusan beli).`
+ ],ingat:'5 tujuan: Barrier, Containment, Informasi, Security, Marketing.',
+  vis:()=>[V.table('5 tujuan kemasan',['Tujuan','Intinya'],[['Barrier','Lindungi fisik dan iklim'],['Containment','Kumpulkan, mudah ditata'],['Information','Cara pakai, komposisi, expired'],['Security','Segel, cegah pencurian'],['Marketing','Branding dan membujuk']])]},
+ {id:'pack3',t:'4 faktor pertimbangan desain',gist:'Sebelum mendesain, pikirkan 4 sisi: bahan, tampilan, kenyamanan, dan biaya serta lingkungan.',pts:[
+  `<b>1. Struktural dan material:</b> kekuatan bahan (karton, plastik, kaca, metal) sesuai daya tahan yang dibutuhkan.`,
+  `<b>2. Visual dan estetika:</b> warna, tipografi, logo, tata letak untuk membangun daya tarik.`,
+  `<b>3. Ergonomi dan usability:</b> nyaman dipegang, dibuka, dituang, disimpan kembali.`,
+  `<b>4. Ekonomi dan ekologi:</b> hemat biaya cetak dan produksi, serta ramah lingkungan (recyclability).`
+ ],ingat:'4 faktor: Struktur, Visual, Ergonomi, Ekonomi-Ekologi.',
+  vis:()=>[V.g2('4 faktor desain',{x:['Fisik','Persepsi'],y:['Produk','Pasar'],c:[['Struktural','bahan dan kekuatan'],['Visual','warna, logo, layout'],['Ergonomi','mudah dipakai'],['Ekonomi dan ekologi','biaya dan daur ulang']]})]},
+ {id:'pack4',t:'Dampak kemasan pada penjualan',gist:'Kemasan menentukan pilihan pembeli di depan rak, dalam hitungan detik.',pts:[
+  `<b>Point of purchase impact:</b> lebih dari <b>70%</b> keputusan membeli diambil langsung di depan rak toko.`,
+  `<b>First moment of truth:</b> dalam <b>3 sampai 7 detik</b>, visual kemasan menentukan apakah konsumen memilih produkmu atau merek lain.`,
+  `Artinya kemasan harus <b>terbaca cepat</b>: merek jelas, warna menonjol, pesan singkat.`
+ ],ingat:'70% keputusan di rak. 3-7 detik = first moment of truth.',
+  vis:()=>[V.flow('Di depan rak',['Lihat kemasan','3-7 detik','Putuskan beli'])]},
+ {id:'pack5',t:'Stakeholder perancangan kemasan',gist:'Kemasan dibuat tim lintas disiplin: merek, desain, teknik, hukum, dan produksi.',pts:[
+  `<b>Tim merek dan pemasaran:</b> <b>Brand Manager</b> (posisi produk, nilai merek, tenggat, anggaran), <b>tim pemasaran</b> (tren pasar, target audiens, diferensiasi dari pesaing), <b>riset konsumen</b> (uji konsep lewat focus group).`,
+  `<b>Packaging graphic designer:</b> fokus visual: layout, warna, ilustrasi, hierarki bacaan. Kerja teknis: file siap cetak (vector artwork), <b>dieline</b> (pola potong), panduan warna <b>Pantone</b>.`,
+  `<b>Structural / packaging engineer:</b> fokus fisik: bentuk 3D, kekuatan, mekanika lipatan. Kerja teknis: memilih substrat, uji ketahanan (<b>drop test</b>), efisiensi logistik.`,
+  `<b>Legal dan regulatory:</b> kepatuhan regulasi: label BPOM, klaim produk, sertifikasi Halal, komposisi.`,
+  `<b>Percetakan dan manufaktur:</b> produksi massal: teknik cetak (offset atau digital), toleransi warna, efisiensi biaya.`
+ ],ingat:'Designer = visual dan dieline. Engineer = struktur dan drop test. Legal = BPOM dan Halal. Percetakan = cetak dan biaya.',
+  vis:()=>[V.table('Siapa mengurus apa',['Pihak','Fokus'],[['Brand dan marketing','Strategi, daya tarik pasar, pesan merek'],['Packaging designer','Estetika, informasi, dieline'],['Packaging engineer','Perlindungan, kekuatan, ergonomi'],['Legal','BPOM, klaim, Halal, komposisi'],['Percetakan','Teknik cetak, warna, biaya']])]},
+ {id:'pack6',t:'Tugas 1: desain label kemasan',gist:'Latihan memahami produk lalu membuat label. Langkah awal: client brief dan riset pasar, lalu aturan hukum dan anatomi label.',pts:[
+  `<b>Langkah:</b> client brief dan riset pasar, lalu aturan hukum dan anatomi label (primer dan sekunder).`,
+  `<b>5 komponen wajib label:</b> (1) nama produk dan merek, (2) berat bersih / netto, (3) daftar bahan / komposisi, (4) legalitas dan produsen, (5) barcode dan expired date.`
+ ],ingat:'Wajib label: Nama+merek, Netto, Komposisi, Legalitas+produsen, Barcode+expired.',
+  vis:()=>[V.flow('Alur tugas label',['Client brief','Riset pasar','Aturan dan anatomi label','Desain label'])]}
+],
+sin:[
+ {id:'sin0',t:'Peta materi Sinematografi',gist:'Daftar yang kamu terima: Chiaroscuro, Cove Lighting, Rembrandt Lighting, Darren Aronofsky, Rec709/Rec2020/DCI P3, S-Log2/S-Log3, Contrast Ratio, Lift Gamma Gain.',pts:[
+  `<b>Catatan jujur:</b> tidak ada slide sinematografi yang kubaca, jadi isinya dari pengetahuan umum. Angka teknis (persen warna, nilai kurva) hanya gambaran. Cocokkan dengan catatan dosen.`,
+  `<b>Dikelompokkan jadi 3:</b> cahaya (chiaroscuro, cove, Rembrandt, contrast ratio), warna dan kamera (Rec709/P3/2020, S-Log), grading (Lift Gamma Gain). Plus satu sutradara (Aronofsky).`,
+  `Di topik terakhir ada tabel <b>perbedaan dan persamaan</b> semuanya.`
+ ],ingat:'Cahaya, Warna-kamera, Grading, Sutradara.'},
+ {id:'sin1',t:'Chiaroscuro, Cove, Rembrandt (cahaya)',gist:'Tiga istilah cahaya. Chiaroscuro itu gaya kontras. Rembrandt itu cara menata satu lampu. Cove itu cara memasang lampu lembut.',pts:[
+  `<b>Chiaroscuro:</b> bahasa Italia, "terang-gelap" (chiaro = terang, scuro = gelap). Gaya pencahayaan dengan kontras tajam antara area terang dan gelap, bayangan pekat dipakai untuk drama dan mood. Berakar di lukisan (Caravaggio) dan dipakai di film noir.
+   ${e('wajah setengah terang, setengah gelap pekat di film detektif klasik.')}`,
+  `<b>Rembrandt lighting:</b> teknik portrait dari lukisan Rembrandt. Satu lampu utama (key light) di samping depan dan agak di atas subjek (sekitar 45° ke samping dan 45° ke atas). Ciri: ada <b>segitiga cahaya kecil</b> di pipi sisi yang gelap, dan mata sisi gelap tetap kena cahaya.
+   ${e('wajah tegas tapi tetap kelihatan natural, sering dipakai untuk adegan serius.')}`,
+  `<b>Cove lighting:</b> lampu disembunyikan di cekungan atau rak dekat langit-langit atau dinding, lalu cahayanya memantul ke permukaan. Hasilnya cahaya <b>lembut, merata, tidak langsung</b>, tanpa bayangan keras. Biasa di interior, dan di film untuk memberi ambient lembut pada set.`,
+  `<b>Perbedaan singkat:</b> Chiaroscuro = <b>hasil visual</b> yang kontras. Rembrandt = <b>cara menata</b> satu lampu (sering menghasilkan efek mirip chiaroscuro). Cove = <b>jenis sumber</b> cahaya lembut, kebalikan dari kontras keras.`,
+  `<b>Persamaan:</b> ketiganya mengatur arah dan karakter cahaya untuk membentuk mood dan dimensi. Chiaroscuro dan Rembrandt sama-sama bersumber dari lukisan dan memakai bayangan.`
+ ],ingat:'Chiaroscuro = terang-gelap tajam. Rembrandt = segitiga cahaya di pipi, 45°. Cove = lampu tersembunyi, pantul lembut.',
+  vis:()=>[SV.lighting(),V.table('Perbandingan',['','Chiaroscuro','Rembrandt','Cove'],[['Jenis','Gaya kontras','Teknik penataan lampu','Teknik pemasangan lampu'],['Kesan','Dramatis, misterius','Serius, natural','Lembut, tenang'],['Bayangan','Pekat, luas','Ada, ada segitiga di pipi','Hampir tidak ada'],['Kontras','Tinggi','Sedang-tinggi','Rendah'],['Contoh','Film noir','Portrait / adegan serius','Interior, ruangan']])]},
+ {id:'sin2',t:'Contrast ratio',gist:'Contrast ratio = seberapa besar beda terang dan gelap. Makin besar rasionya, makin dramatis gambarnya.',pts:[
+  `<b>Dalam pencahayaan (lighting ratio):</b> perbandingan sisi terang (key + fill) dengan sisi gelap (fill). Contoh 4:1 berarti sisi terang 4 kali lebih terang dari sisi gelap.`,
+  `<b>Dalam "stop":</b> setiap 1 stop berarti 2 kali lipat terang. Jadi 2:1 = beda 1 stop, 4:1 = 2 stop, 8:1 = 3 stop, 16:1 = 4 stop.`,
+  `<b>Patokan umum:</b> 2:1 lembut dan datar (komedi, beauty). 4:1 kontras wajar. 8:1 dramatis. 16:1 atau lebih = sangat tajam seperti chiaroscuro / noir.`,
+  `<b>Dalam layar:</b> contrast ratio juga dipakai untuk spesifikasi monitor, misalnya 1000:1 = putih paling terang 1000 kali lebih terang dari hitam paling gelap.`,
+  `<b>Cara mengatur di set:</b> turunkan atau naikkan fill light, atau tambah reflector. Fill makin lemah, rasio makin besar.`
+ ],ingat:'Rasio dobel = +1 stop. 2:1 lembut, 4:1 wajar, 8:1 dramatis, 16:1 noir.',
+  vis:()=>[SV.ratio()]},
+ {id:'sin3',t:'Darren Aronofsky',gist:'Sutradara Amerika yang terkenal dengan film psikologis yang intens dan gaya kamera yang "menempel" ke tokoh.',pts:[
+  `<b>Siapa:</b> Darren Aronofsky, sutradara dan penulis AS. Film terkenal: <b>Pi</b> (1998), <b>Requiem for a Dream</b> (2000), <b>The Wrestler</b> (2008), <b>Black Swan</b> (2010), <b>mother!</b> (2017), <b>The Whale</b> (2022).`,
+  `<b>Tema:</b> obsesi, kecanduan, tubuh dan pikiran yang hancur, psikologis yang gelap.`,
+  `<b>Gaya khas:</b>
+   <br>1. <b>Snorricam:</b> kamera diikat ke badan aktor sehingga wajah diam dan dunia bergoyang. Dipakai di Pi dan Requiem.
+   <br>2. <b>Hip-hop montage:</b> potongan sangat cepat (close-up pendek) untuk adegan kebiasaan seperti pakai obat di Requiem.
+   <br>3. <b>Close-up ekstrem dan kamera mengikuti dari belakang</b> (terutama The Wrestler dan Black Swan).
+   <br>4. Visual yang menekan dan subjektif (kita ikut rasakan kondisi tokoh).`,
+  `<b>Tim langganan:</b> komposer Clint Mansell, sinematografer Matthew Libatique (di sebagian besar filmnya).`
+ ],ingat:'Aronofsky = psikologis intens. Ciri: Snorricam, hip-hop montage, close-up ekstrem. Film: Pi, Requiem, Black Swan, The Whale.',
+  vis:()=>[SV.snorri()]},
+ {id:'sin4',t:'Rec709, Rec2020, DCI-P3',gist:'Tiga standar warna: seberapa banyak warna yang boleh ditampilkan. Rec709 paling kecil, DCI-P3 sedang, Rec2020 paling besar.',pts:[
+  `<b>Rec.709 (BT.709):</b> standar <b>HD TV</b> dan video web. Sama dasarnya dengan sRGB. Warna paling terbatas. Aman untuk hampir semua layar.`,
+  `<b>DCI-P3:</b> standar <b>bioskop digital</b>. Lebih luas dari 709, terutama di merah dan hijau yang lebih "kaya". Banyak HP dan laptop modern pakai versi Display P3.`,
+  `<b>Rec.2020 (BT.2020):</b> standar <b>UHD / 4K HDR</b>. Gamut terluas, jadi target masa depan. Belum ada layar yang menampilkan 100%.`,
+  `<b>Angka kira-kira</b> (porsi dari seluruh warna yang terlihat mata, CIE 1931): 709 sekitar 36%, DCI-P3 sekitar 45%, Rec.2020 sekitar 76%. Ini gambaran, bukan angka pasti.`,
+  `<b>Persamaan:</b> ketiganya mendefinisikan warna dasar (merah, hijau, biru) dan titik putih lewat segitiga di diagram warna. Titik putih 709 dan 2020 = D65. DCI-P3 bioskop punya titik putih sendiri, sedangkan Display P3 memakai D65.`,
+  `<b>Kenapa penting di sinematografi:</b> kamu syuting dalam gamut lebar, lalu grading ke gamut tujuan (web = 709, bioskop = P3, HDR = 2020).
+   ${e('film untuk YouTube di-export Rec.709. Film untuk bioskop di-grade P3.')}`
+ ],ingat:'709 = TV / web (terkecil). P3 = bioskop (sedang). 2020 = UHD HDR (terbesar).',
+  vis:()=>[SV.gamut(),V.table('Perbandingan',['','Rec.709','DCI-P3','Rec.2020'],[['Untuk','HD TV, web','Bioskop digital','UHD, HDR'],['Ukuran gamut','Kecil','Sedang','Besar'],['Perkiraan area','~36%','~45%','~76%'],['Titik putih','D65','Khas bioskop (Display P3: D65)','D65']])]},
+ {id:'sin5',t:'S-Log2 dan S-Log3',gist:'Keduanya kurva rekam "log" dari Sony. Hasilnya gambar pucat tapi memuat detail terang dan gelap lebih banyak, untuk di-grade nanti.',pts:[
+  `<b>Apa itu log?</b> Cara merekam yang "memampatkan" rentang terang-gelap yang lebar agar muat di file. Gambar mentah terlihat pucat dan datar. Setelah di-grading (atau dipasang LUT), kembali normal.`,
+  `<b>S-Log2:</b> generasi lebih lama dari Sony. Sering dipasangkan dengan S-Gamut. Gambar lebih terang pada tonal tengah (abu-abu 18% di sekitar 32%), bayangan lebih cepat naik, noise di gelap lebih terlihat.`,
+  `<b>S-Log3:</b> lebih baru. Mirip kurva Cineon yang dipakai di dunia film. Abu-abu 18% di sekitar 41%, memberi lebih banyak ruang detail di <b>bayangan dan nada tengah</b>, grading terasa lebih natural.`,
+  `<b>Persamaan:</b> keduanya merekam dynamic range lebar (sekitar 14 stop pada banyak kamera Sony), butuh grading atau LUT, dan lebih baik direkam 10-bit.`,
+  `<b>Mana yang dipakai?</b> Kebanyakan kamera Sony baru menyarankan S-Log3. S-Log2 ada karena kamera lama.`,
+  `<b>Catatan:</b> nilai persen di atas berasal dari data kurva Sony. Boleh sedikit berbeda antar kamera, jadi anggap sebagai gambaran.`
+ ],ingat:'S-Log2 = lama. S-Log3 = baru, mirip Cineon, lebih halus di bayangan. Keduanya log, pucat, perlu grading.',
+  vis:()=>[SV.slog(),V.table('Perbandingan',['','S-Log2','S-Log3'],[['Generasi','Lebih lama','Lebih baru'],['Abu-abu 18%','~32%','~41%'],['Karakter','Cenderung lebih kontras, bayangan cepat naik','Lebih natural di bayangan'],['Dynamic range','~14 stop (tergantung kamera)','~14 stop atau lebih (tergantung kamera)'],['Persamaan','Log, pucat, butuh grading','Log, pucat, butuh grading']])]},
+ {id:'sin6',t:'Lift, Gamma, Gain',gist:'Tiga kontrol grading warna: Lift mengubah bagian gelap, Gamma bagian tengah, Gain bagian terang.',pts:[
+  `<b>Lift:</b> mengatur <b>bayangan</b> (area gelap). Naikkan = hitam jadi keabu-abuan (look pudar). Turunkan = hitam lebih pekat.`,
+  `<b>Gamma:</b> mengatur <b>nada tengah</b> (kulit, sebagian besar isi gambar). Naikkan = gambar terasa lebih terang tanpa menggeser hitam dan putih.`,
+  `<b>Gain:</b> mengatur <b>highlight</b> (area terang). Naikkan = putih lebih terang, tapi hati-hati clip (detail hilang).`,
+  `<b>Warna:</b> ketiganya biasanya berupa roda warna. Tambah biru di Lift untuk bayangan dingin, tambah oranye di Gain untuk highlight hangat (look "teal and orange").`,
+  `<b>Mirip tapi beda:</b> Shadows, Midtones, Highlights itu istilah serupa. Bedanya, Lift/Gamma/Gain bekerja mulus ke seluruh kurva, sementara Shadows/Mids/Highlights lebih terbatas per daerah.`
+ ],ingat:'Lift = gelap, Gamma = tengah, Gain = terang. Lift naik = hitam pudar. Gain naik = putih makin terang (awas clip).',
+  vis:()=>[SV.lgg()]},
+ {id:'sin7',t:'Perbedaan dan persamaan (ringkasan)',gist:'Semua istilah dikelompokkan supaya kamu bisa menjawab "bedanya apa" dan "samanya apa".',pts:[
+  `<b>Kelompok cahaya:</b> Chiaroscuro, Rembrandt, Cove, Contrast ratio. Persamaan: semuanya soal mengatur terang-gelap. Beda: chiaroscuro = gaya, Rembrandt = penataan satu lampu, cove = jenis sumber lembut, contrast ratio = ukuran angka.`,
+  `<b>Kelompok warna:</b> Rec709, DCI-P3, Rec2020. Persamaan: standar warna berbentuk segitiga di diagram. Beda: ukuran gamut dan tujuan (web, bioskop, UHD).`,
+  `<b>Kelompok kurva rekam:</b> S-Log2, S-Log3. Persamaan: kurva log Sony, pucat, perlu grading. Beda: generasi dan penempatan abu-abu 18%.`,
+  `<b>Kelompok grading:</b> Lift, Gamma, Gain. Persamaan: kontrol tonal dalam color grading. Beda: lift = bayangan, gamma = tengah, gain = highlight.`
+ ],ingat:'Cahaya (4), Warna (3), Kurva (2), Grading (3). Hafal ide tiap kelompok.',
+  vis:()=>[V.table('Peta istilah',['Kelompok','Istilah','Yang sama','Yang beda'],[['Cahaya','Chiaroscuro, Rembrandt, Cove, Contrast ratio','Mengatur terang-gelap','Gaya vs teknik vs sumber vs ukuran'],['Warna','Rec709, DCI-P3, Rec2020','Standar warna','Kecil / sedang / besar'],['Kurva','S-Log2, S-Log3','Log Sony','Lama vs baru'],['Grading','Lift, Gamma, Gain','Kontrol tonal','Gelap / tengah / terang']])]}
 ]};
-const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn];
+const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin];
 const strip=h=>h.replace(/<br>/g,' ').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
 function builtinCtx(keys){return keys.map(k=>'## '+SUBJ[k].name+'\n'+MATERI[k].map(t=>'### '+t.t+'\n'+t.gist+'\n'+t.pts.map(p=>'- '+strip(p)).join('\n')).join('\n')).join('\n\n')}
 
@@ -504,10 +794,84 @@ const QB=[
 ['pk','Peniru yang menyerupai kemasan brand leader memakai strategi...','Stimulus generalization','Stimulus discrimination','Shaping','Modeling','Apple “Think Different” adalah stimulus discrimination.'],
 ['pk','Bonus saldo saat pertama kali mengunduh aplikasi e-commerce adalah contoh...','Shaping (instrumental conditioning)','Classical conditioning','Observational learning','Perceptual defense','Hadiah diberikan sebelum perilaku utama terjadi.'],
 ['pk','Febreze akhirnya sukses setelah diposisikan sebagai...','Hadiah wangi setelah bersih-bersih','Penghilang bau paling kuat','Produk murah','Parfum mewah','Mengubah cue dan reinforcement.'],
-['idn','Lukisan gua prasejarah di Indonesia yang terkenal terdapat di...','Leang-Leang, Maros-Pangkep, Sulawesi Selatan','Borobudur, Jawa Tengah','Prambanan, Yogyakarta','Tanah Lot, Bali','Pengetahuan umum, cocokkan dengan slide dosen.'],
-['idn','Menhir, dolmen, dan punden berundak termasuk tradisi...','Megalitik','Paleolitik awal','Hindu-Buddha','Kolonial','Terkait pemujaan leluhur.'],
-['idn','Nekara perunggu dan moko merupakan peninggalan masa...','Perundagian (zaman logam)','Berburu dan meramu','Hindu-Buddha','Islam','Berornamen motif geometris.'],
-['idn','Motif geometris yang umum pada seni prasejarah Nusantara adalah...','Spiral, pilin, meander, tumpal','Kaligrafi Arab','Perspektif satu titik','Art deco','Pengetahuan umum, cocokkan dengan slide dosen.']
+['idn','Tugas UTS Inovasi Design Nusantara adalah memilih...','Satu cerita rakyat Indonesia lalu mengembangkan visual dan karakternya','Satu produk lokal untuk dirangkai jadi iklan TV','Satu bangunan adat untuk dimodelkan 3D','Satu aksara daerah untuk dibuat font','Slide IDN Project: UTS = cerita rakyat, UAS = rebranding produk lokal.'],
+['idn','Tugas UAS pada slide IDN Project adalah...','Rebranding produk lokal dengan desain pemasaran berkonsep budaya Indonesia','Membuat poster cerita rakyat','Membuat animasi tarian daerah','Menulis paper sejarah budaya','UTS cerita rakyat, UAS rebranding.'],
+['idn','Hasil jadi tugas cerita rakyat BUKAN berupa...','Laporan keuangan','Poster ilustrasi','Animasi sederhana','Video pendek','Pilihannya: poster ilustrasi, animasi sederhana, fotografi, video pendek.'],
+['idn','Karya seni paling awal manusia purba yang berkembang adalah...','Seni lukis di dinding gua','Seni patung perunggu','Seni tari istana','Seni cetak','Slide prasejarah: seni lukis dengan menggambar di dinding gua.'],
+['idn','Objek utama lukisan manusia purba pada awalnya adalah...','Hewan buruan','Bunga','Raja','Bintang','Hewan buruan penting untuk bertahan hidup.'],
+['idn','Mulai menggambar objek manusia menandakan...','Tingkat pemikiran manusia sudah mulai terbentuk','Manusia malas berburu','Perang antarsuku','Datangnya agama baru','Menurut slide, itu tanda pola pikir berkembang.'],
+['idn','Dua bentuk ritual keagamaan zaman prasejarah pada slide adalah...','Animisme dan dinamisme','Hindu dan Buddha','Islam dan Kristen','Monoteisme dan ateisme','Animisme (roh) dan dinamisme (kekuatan benda).'],
+['idn','Beberapa keluarga yang berkumpul akhirnya membentuk...','Perkampungan dengan kepala suku atau kepala adat','Kerajaan besar','Kota modern','Negara','Dari keluarga ke kampung dengan pemimpin adat.'],
+['idn','Berapa jumlah elemen desain tradisional Nusantara pada slide?','10','5','7','12','Dari motif dan ornamen sampai nilai dan filosofi budaya.'],
+['idn','Warna merah dalam desain Nusantara pada slide melambangkan...','Keberanian','Kesuburan','Kemuliaan','Kesedihan','Merah = keberanian, hijau = kesuburan, emas = kemuliaan.'],
+['idn','Emas melambangkan...','Kemuliaan','Keberanian','Kesuburan','Kesederhanaan','Emas = kemuliaan.'],
+['idn','Aksara tradisional yang disebut pada slide meliputi...','Jawa (Hanacaraka), Bali, Sunda, Batak','Latin, Kirilik, Arab','Kanji, Hangul, Hiragana','Braille, Morse, Rune','Elemen 3: Tipografi dan aksara Nusantara.'],
+['idn','Mengapa simbol budaya perlu dipahami maknanya sebelum dipakai?','Agar tidak terjadi misinterpretasi','Agar warnanya lebih cerah','Agar harganya mahal','Agar mudah dicetak','Slide elemen 4: simbol dan ikonografi.'],
+['idn','Contoh sumber komposisi tradisional pada elemen tata letak adalah...','Wayang kulit dan relief candi','Majalah modern','Billboard','Website','Elemen 7: tata letak dan komposisi.'],
+['idn','Narasi visual pada relief candi dan wayang cocok dipakai untuk...','Ilustrasi, komik, animasi, kampanye sosial','Hanya kemasan makanan','Hanya logo bank','Hanya seragam','Elemen 8: cerita dan narasi visual.'],
+['idn','Desain inovatif adalah proses merancang produk atau sistem baru yang menggabungkan...','Ide kreatif dan kebutuhan pengguna','Biaya murah dan produksi cepat','Tradisi lama tanpa perubahan','Warna cerah dan gambar besar','Definisi di slide Desain Inovatif.'],
+['idn','Aplikasi pengiriman makanan adalah contoh desain...','Layanan inovatif','Produk inovatif','Lingkungan inovatif','Interaksi inovatif','Desain layanan mengubah cara berinteraksi dengan produk dan perusahaan.'],
+['idn','Hunian ramah lingkungan dengan energi terbarukan adalah contoh desain...','Lingkungan inovatif','Produk inovatif','Komunikasi inovatif','Layanan inovatif','Ruang fisik berkelanjutan dan efisien sumber daya.'],
+['idn','Urutan 7 langkah desain inovatif yang benar adalah...','Penelitian, ide, konsep, prototyping, pengujian, iterasi, produksi','Ide, produksi, riset, uji, konsep, iterasi, prototyping','Konsep, riset, produksi, ide, uji, prototyping, iterasi','Riset, produksi, prototyping, konsep, ide, uji, iterasi','Hafal: Riset, Ide, Konsep, Prototype, Uji, Iterasi, Produksi.'],
+['idn','Langkah "Prototyping" berarti...','Membuat prototipe fisik atau virtual','Menjual produk','Menulis laporan','Memilih nama merek','Langkah ke-4.'],
+['idn','Kelima kelompok kekayaan budaya Indonesia pada slide adalah...','Kesenian, kerajinan, bahasa dan sastra, adat dan ritual, budaya kontemporer','Kuliner, fashion, olahraga, teknologi, politik','Tari, musik, film, game, komik','Batik, tenun, ukir, anyam, pahat','Lima kelompok dari slide Kekayaan Budaya.'],
+['idn','Tari Saman berasal dari...','Aceh','Bali','Jawa Timur','Toraja','Pendet = Bali, Saman = Aceh, Reog = Ponorogo (Jawa Timur).'],
+['idn','Upacara adat Seren Taun berasal dari...','Jawa Barat','Toraja','Bali','Papua','Slide: adat Toraja dan Seren Taun (Jawa Barat).'],
+['idn','Kata "ornamen" berasal dari bahasa Yunani "ornare" yang berarti...','Hiasan atau perhiasan','Gambar','Warna','Bangunan','Ornamen = hiasan.'],
+['idn','Fungsi ornamen yang menyimpan harapan dan cita-cita biasanya pada benda pusaka disebut fungsi...','Simbolis','Murni estetis','Estetik konstruktif','Ergonomis','Ada 3 fungsi: murni estetis, simbolis, estetik konstruktif.'],
+['idn','Ornamen pada ukiran kayu yang memperindah sekaligus membentuk konstruksi disebut...','Estetik konstruktif','Murni estetis','Simbolis','Fungsional murni','Contoh pada slide: motif ukiran kayu.'],
+['idn','Yang BUKAN jenis motif ornamen pada slide adalah...','Motif digital','Motif geometris','Motif tumbuhan','Motif khayal','Enam jenis: geometris, manusia, benda alam, khayal, tumbuhan, binatang.'],
+['idn','Bentuk binatang yang disederhanakan sampai tinggal kesannya disebut...','Deformasi dan distorsi','Replikasi','Fotografi','Printing','Motif dikembangkan lewat deformasi dan distorsi.'],
+['idn','Pull marketing berarti...','Konsumen mencari sendiri informasi lewat web','Perusahaan mengirim informasi otomatis','Menelepon calon pembeli','Mengirim brosur lewat pos','Pull = konsumen yang berinisiatif.'],
+['idn','Push marketing menggunakan...','Web atau Net broadcaster yang mengirim informasi otomatis','Pencarian Google oleh konsumen','Kunjungan toko','Pameran','Contoh software: PointCast, BackWeb, Castanet.'],
+['idn','Tiga media pemasaran interaktif pada slide adalah...','Direct mail, telemarketing, internet','Radio, TV, koran','Billboard, spanduk, baliho','Sosmed, podcast, game','Slide Macam Media Pemasaran Interaktif.'],
+['idn','Thorn (2006) mengajukan berapa kriteria menilai multimedia interaktif?','6','4','5','3','Navigasi, kognisi, presentasi, integrasi media, estetika, fungsi.'],
+['idn','Menurut Green dan Brown, yang BUKAN merupakan medium adalah...','Interaktivitas','Teks','Grafik','Audio','Interaktivitas adalah rancangan di balik program.'],
+['idn','Standar ukuran (size) teks pada multimedia adalah...','10 atau 12 poin','24 poin','50 poin','5 poin','Slide teks: standar size 10 atau 12 poin.'],
+['idn','Tiga elemen keefektifan internet marketing adalah...','Encoding, noise, decoding','Push, pull, mail','Teks, grafik, audio','Riset, ide, konsep','Encoding merancang konten, noise gangguan, decoding penafsiran.'],
+['idn','Noise dalam internet marketing adalah...','Pengaruh eksternal yang memengaruhi kualitas pesan','Merancang konten website','Menafsirkan pesan','Mengirim iklan','Definisi dari slide.'],
+['idn','Dibanding media massa lain, internet marketing berpotensi...','One-to-one atau many-to-many','Hanya one-to-many','Hanya satu arah','Tanpa interaksi','Hubungan lebih personal.'],
+['pack','Dua fungsi utama kemasan adalah...','Protektif dan promosional','Estetika dan ergonomi','Distribusi dan produksi','Hukum dan ekonomi','Protektif melindungi, promosional menjual ("silent salesperson").'],
+['pack','"Silent salesperson" dalam kemasan berarti...','Kemasan menarik perhatian dan mengomunikasikan merek tanpa penjual','Penjual yang pendiam','Iklan radio','Diskon diam-diam','Fungsi promosional.'],
+['pack','Kemasan adalah seluruh kegiatan merancang dan memproduksi wadah atau pembungkus produk. Definisi ini dari...','Kotler dan Keller','Klimchuk dan Krasovec','Sri Julianti','Pantone','Klimchuk dan Krasovec mendefinisikan kemasan sebagai disiplin kreatif.'],
+['pack','Kemasan sebagai disiplin kreatif yang memadukan bentuk struktural, bahan, warna, citra, dan tipografi adalah definisi dari...','Klimchuk dan Krasovec','Kotler dan Keller','Marianne saja','BPOM','Dua pandangan ahli di slide.'],
+['pack','Mengelompokkan benda kecil dalam satu paket demi efisiensi disebut...','Containment dan agglomeration','Barrier','Security','Branding','Tujuan kedua kemasan.'],
+['pack','Tujuan kemasan yang melindungi dari suhu, getaran, oksigen, uap air, dan debu adalah...','Barrier dan physical protection','Information transmission','Marketing','Containment','Tujuan pertama.'],
+['pack','Petunjuk pakai, komposisi, dan tanggal kedaluwarsa termasuk tujuan...','Information transmission','Security','Containment','Barrier','Tujuan ketiga.'],
+['pack','Segel keamanan dan pengurangan risiko pencurian termasuk tujuan...','Security dan theft reduction','Marketing','Barrier','Containment','Tujuan keempat.'],
+['pack','Faktor desain: kekuatan bahan karton, plastik, kaca, metal masuk faktor...','Struktural dan material','Visual dan estetika','Ergonomi','Ekologi','Faktor pertama.'],
+['pack','Kenyamanan membuka, menuang, dan menyimpan kembali produk masuk faktor...','Ergonomi dan usability','Struktural','Visual','Ekonomi','Faktor ketiga.'],
+['pack','Efisiensi biaya cetak dan kemasan yang bisa didaur ulang masuk faktor...','Ekonomi dan ekologi','Visual','Ergonomi','Struktural','Faktor keempat.'],
+['pack','Berapa persen keputusan membeli diambil langsung di depan rak?','Lebih dari 70%','Sekitar 20%','Sekitar 40%','Hampir 100%','Point of purchase impact.'],
+['pack','First Moment of Truth berlangsung sekitar...','3 sampai 7 detik','30 menit','1 jam','1 detik','Waktu singkat di depan rak.'],
+['pack','Siapa yang menentukan posisi produk, nilai merek, tenggat, dan anggaran?','Brand manager','Packaging engineer','Percetakan','Graphic designer','Peran tim merek.'],
+['pack','Dieline adalah...','Pola potong kemasan','Daftar komposisi','Slogan merek','Barcode','Dibuat oleh packaging graphic designer.'],
+['pack','Drop test dilakukan oleh...','Structural / packaging engineer','Brand manager','Riset konsumen','Legal','Uji daya tahan kemasan.'],
+['pack','Label BPOM, klaim produk, dan sertifikasi Halal diurus oleh...','Legal dan regulatory','Percetakan','Brand manager','Graphic designer','Kepatuhan regulasi.'],
+['pack','Yang BUKAN komponen wajib label pada slide adalah...','Slogan iklan','Nama produk dan merek','Berat bersih','Barcode dan expired date','Lima komponen: nama+merek, netto, komposisi, legalitas+produsen, barcode+expired.'],
+['pack','Uji konsep desain lewat focus group dilakukan oleh...','Riset konsumen','Percetakan','Engineer','Legal','Peran riset konsumen.'],
+['sin','Chiaroscuro berarti...','Terang-gelap (kontras tajam)','Cahaya lembut merata','Warna hangat','Cahaya dari bawah','Bahasa Italia: chiaro terang, scuro gelap.'],
+['sin','Ciri khas Rembrandt lighting adalah...','Segitiga cahaya kecil di pipi sisi bayangan','Wajah sepenuhnya terang','Wajah sepenuhnya gelap','Cahaya dari bawah dagu','Key light sekitar 45° samping dan atas.'],
+['sin','Cove lighting adalah lampu yang...','Disembunyikan di cekungan lalu memantul lembut','Menyorot langsung wajah','Dipasang di kamera','Dipakai hanya di luar ruangan','Cahaya tidak langsung, lembut.'],
+['sin','Cahaya yang paling lembut dan hampir tanpa bayangan keras adalah...','Cove lighting','Chiaroscuro','Rembrandt','Hard light','Memantul dulu sebelum mengenai objek.'],
+['sin','Gaya cahaya yang berasal dari seni lukis Caravaggio dan dipakai di film noir adalah...','Chiaroscuro','Cove','Flat lighting','High key','Kontras tinggi dramatis.'],
+['sin','Lighting ratio 4:1 berarti beda berapa stop?','2 stop','1 stop','3 stop','4 stop','Setiap 1 stop = 2 kali lipat. 4:1 = 2 stop.'],
+['sin','Rasio kontras yang paling dramatis di antara pilihan ini adalah...','16:1','2:1','4:1','1:1','Makin besar rasionya, makin kontras.'],
+['sin','Contrast ratio 2:1 memberi kesan...','Lembut dan datar','Sangat dramatis','Noir','Gelap total','Beda hanya 1 stop.'],
+['sin','Darren Aronofsky menyutradarai film...','Black Swan','Inception','Titanic','Parasite','Juga Pi, Requiem for a Dream, The Whale.'],
+['sin','Kamera diikat ke badan aktor disebut...','Snorricam','Steadicam','Dolly','Crane','Teknik khas Aronofsky.'],
+['sin','Sinematografer langganan Aronofsky adalah...','Matthew Libatique','Roger Deakins','Emmanuel Lubezki','Hoyte van Hoytema','Libatique mengerjakan sebagian besar filmnya.'],
+['sin','Standar warna untuk HD TV dan web adalah...','Rec.709','DCI-P3','Rec.2020','ProPhoto','Gamut paling kecil.'],
+['sin','Standar warna untuk bioskop digital adalah...','DCI-P3','Rec.709','Rec.2020','sRGB','Gamut sedang.'],
+['sin','Gamut terluas di antara ketiganya adalah...','Rec.2020','Rec.709','DCI-P3','sRGB','Dipakai UHD dan HDR.'],
+['sin','Urutan ukuran gamut dari kecil ke besar...','Rec.709, DCI-P3, Rec.2020','Rec.2020, DCI-P3, Rec.709','DCI-P3, Rec.709, Rec.2020','Rec.709, Rec.2020, DCI-P3','Segitiga makin besar.'],
+['sin','S-Log2 dan S-Log3 adalah kurva rekam dari...','Sony','Canon','ARRI','RED','Keduanya log Sony.'],
+['sin','Dibanding S-Log2, S-Log3 umumnya...','Lebih natural di bayangan dan nada tengah','Lebih sedikit dynamic range','Tidak butuh grading','Hanya untuk 8 bit','S-Log3 mirip Cineon.'],
+['sin','Gambar log yang pucat dan datar itu...','Normal dan perlu di-grading atau diberi LUT','Tanda kamera rusak','Selalu salah eksposur','Tidak bisa dipakai','Log memampatkan rentang terang-gelap.'],
+['sin','Lift mengubah bagian...','Bayangan (gelap)','Nada tengah','Highlight','Hanya warna','Lift = shadows.'],
+['sin','Gamma mengubah bagian...','Nada tengah','Bayangan','Highlight','Hitam murni','Gamma = midtones.'],
+['sin','Gain mengubah bagian...','Highlight (terang)','Bayangan','Nada tengah','Hanya saturasi','Gain = highlights.'],
+['sin','Menaikkan Lift akan membuat...','Hitam menjadi keabu-abuan','Putih lebih terang','Gambar lebih tajam','Gambar monokrom','Lift mengangkat bayangan.']
 ];
 
 
@@ -563,14 +927,14 @@ function renderHome(){
     <div class="nx"><div><div class="eyebrow">${run?'Sedang':'Berikutnya'}</div><h3>${esc(n.nama)}</h3></div>
       <div class="muted" style="font-size:14px">${dayLabel(n.start)}<br>${hhmm(n.start)} – ${hhmm(n.end)} WIB · ${n.ruang}</div></div>
    </div>`:`<div class="hero"><h2>UTS sudah selesai. Semoga lancar semua.</h2></div>`;
-  const cards=['pkn','pk','idn'].map(k=>{const s=SUBJ[k],[a,b]=prog(k),qn=QB.filter(q=>q[0]===k).length;return `
+  const cards=KEYS.map(k=>{const s=SUBJ[k],[a,b]=prog(k),qn=QB.filter(q=>q[0]===k).length;return `
    <div class="subjcard s-${k}">
      <div class="row" style="justify-content:space-between"><span class="tag">${s.kode}</span><span class="muted" style="font-size:13px">${s.jam} · ${s.ruang}</span></div>
      <h3>${s.name}</h3>
      <div><div class="bar-p"><span style="width:${a/b*100}%"></span></div><div class="muted" style="font-size:13px;margin-top:6px">${a} dari ${b} topik paham · ${qn} soal</div></div>
      <div class="row"><button class="btn sm" data-go="materi" data-k="${k}" type="button">Baca materi</button><button class="btn sm" data-go="quiz" data-k="${k}" type="button">Latihan soal</button></div>
    </div>`}).join('');
-  $('#p-home').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">UTS Gasal 2026 · hari Senin</span><h2>Siap hadapi 3 ujian?</h2></div>${hero}<div class="grid">${cards}</div>
+  $('#p-home').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">UTS Gasal 2026 · 12–15 Okt</span><h2>Siap hadapi UTS?</h2></div>${hero}<div class="grid">${cards}</div>
    <div class="row"><button class="btn pri" data-go="quiz" type="button">Quiz campur</button><button class="btn" data-go="ai" type="button">Tanya AI</button></div>`;
   tickClock();
 }
@@ -578,7 +942,7 @@ document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]');if(!g)return;
   const k=g.dataset.k;
   if(g.dataset.go==='materi'&&k) curSubj=k;
-  if(g.dataset.go==='quiz') quizSel=k?[k]:['pkn','pk','idn'];
+  if(g.dataset.go==='quiz') quizSel=k?[k]:KEYS;
   if(g.dataset.go==='quiz') quiz.run=null;
   if(g.dataset.go==='materi') renderMateri();
   show(g.dataset.go);
@@ -600,12 +964,12 @@ function renderJadwal(){
 let curSubj='pkn';
 function renderMateri(){
   const s=SUBJ[curSubj];
-  const chips=['pkn','pk','idn'].map(k=>`<button class="chip s-${k}" type="button" data-s="${k}" aria-pressed="${k===curSubj}">${SUBJ[k].short}</button>`).join('');
+  const chips=KEYS.map(k=>`<button class="chip s-${k}" type="button" data-s="${k}" aria-pressed="${k===curSubj}">${SUBJ[k].short}</button>`).join('');
   const myN=notes.filter(n=>n.s===curSubj);
   $('#p-materi').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Ringkasan simpel</span><h2>Materi</h2></div>
    <div class="chips">${chips}</div>
    <div class="s-${curSubj}" style="display:flex;flex-direction:column;gap:12px">
-    <div><h3>${s.name}</h3><div class="muted" style="font-size:14px">Senin 12 Okt · ${s.jam} · ${s.ruang}</div></div>
+    <div><h3>${s.name}</h3><div class="muted" style="font-size:14px">${s.hari} · ${s.jam} · ${s.ruang}</div></div>
     ${MATERI[curSubj].map((t,i)=>`<details class="topic" ${i===0?'open':''}><summary>${t.t}</summary><div class="body">
       <div class="gist">${t.gist}</div>
       <ul>${t.pts.map(p=>`<li>${p}</li>`).join('')}</ul>${t.ingat?`<p class="note"><b>Cara ingat:</b> ${t.ingat}</p>`:''}${(t.vis?t.vis():[]).join('')}
@@ -621,12 +985,12 @@ $('#p-materi').addEventListener('click',e=>{
 $('#p-materi').addEventListener('change',e=>{const c=e.target.closest('[data-d]');if(!c)return;done[c.dataset.d]=c.checked;store.set('uts.done',done)});
 
 /* ---------- quiz ---------- */
-let quizSel=['pkn','pk','idn'],quizN=10;
+let quizSel=KEYS,quizN=10;
 const quiz={run:null};
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const allQ=()=>QB.map(([s,q,c,a,b,d,e])=>({s,q,o:[c,a,b,d],a:0,e})).concat(aiq);
 function renderQuizSetup(){
-  const keys=['pkn','pk','idn'].concat(aiq.length?['ai']:[]);
+  const keys=KEYS.concat(aiq.length?['ai']:[]);
   const cnt=k=>allQ().filter(q=>q.s===k).length;
   $('#p-quiz').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Latihan</span><h2>Quiz</h2><p class="lead">Pilih mapel dan jumlah soal. Urutan soal dan pilihan diacak tiap sesi.</p></div>
    <div class="card" style="display:flex;flex-direction:column;gap:18px;max-width:720px">
@@ -690,7 +1054,7 @@ const SYS='Kamu adalah tutor belajar untuk mahasiswa DKV yang sedang menghadapi 
 function buildMsgs(hist){
   let h=hist.slice(-12);while(h.length&&h[0].role!=='user')h=h.slice(1);
   const use=$('#ctx')&&$('#ctx').checked;
-  const ctx=use?('\n\n# MATERI\n'+builtinCtx(['pkn','pk','idn'])+'\n\n# CATATAN MAHASISWA\n'+(myCtx()||'(kosong)')):'';
+  const ctx=use?('\n\n# MATERI\n'+builtinCtx(KEYS)+'\n\n# CATATAN MAHASISWA\n'+(myCtx()||'(kosong)')):'';
   return h.map((m,i)=>i===0?{role:'user',content:SYS+ctx+'\n\n# PERTANYAAN\n'+m.content}:m);
 }
 const chat=[];let ctl=null;
@@ -752,7 +1116,7 @@ function renderSaya(){
   $('#p-saya').innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Tambah sendiri</span><h2>Catatan</h2><p class="lead">Tempel teks dari slide, PDF, atau catatan kuliah. Dipakai Tanya AI dan bisa dijadikan soal quiz. Tersimpan di browser ini.</p></div>
    <div class="card" style="display:flex;flex-direction:column;gap:12px;max-width:820px">
      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))">
-      <div><label class="eyebrow" for="n-s">Mapel</label><select id="n-s">${['pkn','pk','idn'].map(k=>`<option value="${k}">${SUBJ[k].name}</option>`).join('')}<option value="x">Mapel lain</option></select></div>
+      <div><label class="eyebrow" for="n-s">Mapel</label><select id="n-s">${KEYS.map(k=>`<option value="${k}">${SUBJ[k].name}</option>`).join('')}<option value="x">Mapel lain</option></select></div>
       <div><label class="eyebrow" for="n-t">Judul</label><input type="text" id="n-t" placeholder="mis. Slide IDN Project"></div>
      </div>
      <div><label class="eyebrow" for="n-b">Isi materi</label><textarea id="n-b" placeholder="Tempel teks materi di sini..."></textarea></div>
@@ -794,5 +1158,4 @@ show((location.hash||'#home').slice(1));
 (async()=>{try{if(window.claude&&window.claude.use){SAMPLE=await window.claude.use('sample');setAIState()}}catch(e){}})();
 </script>
 
-</body>
-</html>
+</body></html>
