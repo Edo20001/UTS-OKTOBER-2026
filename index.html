@@ -110,6 +110,7 @@ h3{font-size:19px}
 .thumb{position:relative;width:84px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface2);padding:0}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .thumb .x{position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:99px;border:0;background:var(--fg);color:var(--bg);font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center}
+.thumbs.big .thumb{width:120px;height:120px}
 .lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:16px}
 .lightbox img{max-width:100%;max-height:100%;border-radius:10px}
 .lightbox button{position:absolute;top:14px;right:14px}
@@ -1007,10 +1008,11 @@ function renderMateri(){
       <ul>${t.pts.map(p=>`<li>${p}</li>`).join('')}</ul>${t.ingat?`<p class="note"><b>Cara ingat:</b> ${t.ingat}</p>`:''}${(t.vis?t.vis():[]).join('')}
       <div class="row" style="justify-content:space-between"><label class="done-ok"><input type="checkbox" data-d="${t.id}" ${done[t.id]?'checked':''}>Sudah paham</label>
       <button class="btn sm" type="button" data-ask="${t.id}">Tanya AI</button></div></div></details>`).join('')}
-    ${myN.length?`<h3 style="margin-top:8px">Catatanmu</h3>`+myN.map(n=>`<div class="card mat"><b>${esc(n.title)}</b>${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px">${esc(n.sum)}</div>`:`<pre>${esc(n.text.slice(0,600))}</pre>`}</div>`).join(''):''}
+    ${myN.length?`<h3 style="margin-top:8px">Catatanmu</h3>`+myN.map(n=>`<div class="card mat"><b>${esc(n.title)}</b>${n.sum?`<div style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px">${esc(n.sum)}</div>`:n.text?`<pre>${esc(n.text.slice(0,600))}</pre>`:''}${(n.imgs&&n.imgs.length)?`<div class="thumbs big">${n.imgs.map(id=>{const d=imgGet(id);return d?`<button class="thumb" type="button" data-lb="${id}" aria-label="Buka gambar"><img src="${d}" alt="Gambar catatan ${esc(n.title)}"></button>`:''}).join('')}</div>`:''}</div>`).join(''):''}
    </div>`;
 }
 $('#p-materi').addEventListener('click',e=>{
+  const lb=e.target.closest('[data-lb]');if(lb){openLB(imgGet(lb.dataset.lb));return}
   const c=e.target.closest('[data-s]');if(c){curSubj=c.dataset.s;renderMateri();return}
   const a=e.target.closest('[data-ask]');if(a){const t=ALLTOPICS.find(x=>x.id===a.dataset.ask);show('ai');$('#chat-in').value='Jelaskan "'+t.t+'" dengan bahasa sederhana dan contoh anak muda. Setelah itu beri 2 soal latihan.';$('#chat-in').focus()}
 });
