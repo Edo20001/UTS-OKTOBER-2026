@@ -8,19 +8,19 @@
 :root{
   --bg:#F3F4F7; --surface:#FFFFFF; --surface2:#EAECF1; --line:#DFE2E8;
   --fg:#12141A; --muted:#5A6373; --accent:#D9430F; --accent-ink:#FFFFFF;
-  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-pack:#2563EB; --c-sin:#B0302A;
+  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-ak:#5B7F00; --c-pack:#2563EB; --c-sin:#B0302A;
   --good:#15803D; --bad:#C62828;
   --f-display:'Poppins',system-ui,sans-serif; --f-body:'Poppins',system-ui,sans-serif; --f-mono:'Poppins',system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-pack:#7FB0FF; --c-sin:#FF8F85;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-pack:#7FB0FF; --c-sin:#FF8F85;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -67,7 +67,7 @@ h3{font-size:19px}
 .btn.sm{padding:6px 12px;font-size:13px;min-height:36px}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .tag{display:inline-flex;align-items:center;font:500 12px var(--f-mono);color:var(--c);border-radius:999px;padding:3px 10px;background:color-mix(in srgb,var(--c) 14%,transparent)}
-.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
+.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-ak{--c:var(--c-ak)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
 .svrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .svp{display:flex;flex-direction:column;gap:2px;min-width:0}.svp svg{width:100%;height:auto;border-radius:12px;display:block}.svp b{font-size:13px}.svp span{font-size:12px;color:var(--muted)}
 .sv{width:100%;max-width:460px;height:auto;display:block;margin:0 auto}
@@ -245,13 +245,14 @@ const dayLabel=d=>{const w=wib(d);return HARI[w.getUTCDay()]+', '+w.getUTCDate()
 const parts=ms=>{const s=Math.max(0,Math.floor(ms/1000));return [Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
 
 /* ---------- data ---------- */
-const KEYS=['pkn','pk','idn','pack','sin'];
+const KEYS=['pkn','pk','idn','pack','sin','ak'];
 const SUBJ={
   pkn:{name:'Pendidikan Kewarganegaraan',short:'PKn',kode:'VC547',jam:'08:00 – 09:40',ruang:'E-301',hari:'Senin 12 Okt'},
   pk:{name:'Perilaku Konsumen',short:'Perilaku Konsumen',kode:'VC546',jam:'10:30 – 12:10',ruang:'E-301',hari:'Senin 12 Okt'},
   idn:{name:'Inovasi Design Nusantara',short:'Inovasi Design',kode:'VC545',jam:'13:00 – 15:30',ruang:'N-201',hari:'Senin 12 Okt'},
   pack:{name:'Packaging Design',short:'Packaging',kode:'VC544',jam:'08:00 – 10:30',ruang:'E-305',hari:'Selasa 13 Okt'},
   sin:{name:'Sinematografi',short:'Sinematografi',kode:'CP501',jam:'13:00 – 15:30',ruang:'N-110',hari:'Selasa 13 Okt'},
+  ak:{name:'Agama Kristen',short:'Agama Kristen',kode:'VC024',jam:'08:00 – 09:40',ruang:'E-301',hari:'Rabu 14 Okt'},
   ai:{name:'Soal AI',short:'Soal AI'}
 };
 const EXAMS=[
@@ -260,7 +261,7 @@ const EXAMS=[
  ['VC545','Inovasi Design Nusantara','2026-10-12T13:00','2026-10-12T15:30','N-201','idn'],
  ['VC544','Packaging Design','2026-10-13T08:00','2026-10-13T10:30','E-305','pack'],
  ['CP501','Sinematografi','2026-10-13T13:00','2026-10-13T15:30','N-110','sin'],
- ['VC024','Agama Kristen','2026-10-14T08:00','2026-10-14T09:40','E-301'],
+ ['VC024','Agama Kristen','2026-10-14T08:00','2026-10-14T09:40','E-301','ak'],
  ['VC548','Pemasaran Terpadu','2026-10-15T08:00','2026-10-15T10:30','E-305'],
  ['VC549','UMKM Branding','2026-10-15T10:30','2026-10-15T13:00','E-301']
 ].map(([kode,nama,a,b,ruang,s])=>({kode,nama,start:new Date(a+':00+07:00'),end:new Date(b+':00+07:00'),ruang,s}));
@@ -756,8 +757,78 @@ sin:[
   `<b>Kelompok grading:</b> Lift, Gamma, Gain. Persamaan: kontrol tonal dalam color grading. Beda: lift = bayangan, gamma = tengah, gain = highlight.`
  ],ingat:'Cahaya (4), Warna (3), Kurva (2), Grading (3). Hafal ide tiap kelompok.',
   vis:()=>[V.table('Peta istilah',['Kelompok','Istilah','Yang sama','Yang beda'],[['Cahaya','Chiaroscuro, Rembrandt, Cove, Contrast ratio','Mengatur terang-gelap','Gaya vs teknik vs sumber vs ukuran'],['Warna','Rec709, DCI-P3, Rec2020','Standar warna','Kecil / sedang / besar'],['Kurva','S-Log2, S-Log3','Log Sony','Lama vs baru'],['Grading','Lift, Gamma, Gain','Kontrol tonal','Gelap / tengah / terang']])]}
+],
+ak:[
+ {id:'ak1',t:'1. Keselamatan (Soteriologi)',gist:'Pembebasan manusia dari dosa, maut, dan hukuman Allah, serta pemulihan relasi dengan Allah melalui karya Yesus Kristus. Kata Yunaninya soteria. Keselamatan sering dipahami dalam tiga waktu: sudah (dibenarkan), sedang (dikuduskan), dan akan (dimuliakan).',pts:[
+  `<b>Pandangan terkenal</b>`,
+  `<b>Katolik:</b> Keselamatan adalah anugerah Allah yang diterima lewat iman, sakramen (terutama baptisan), dan perbuatan kasih. Pembenaran dipahami sebagai proses (Konsili Trente).`,
+  `<b>Martin Luther (Lutheran):</b> Sola gratia dan sola fide, yaitu selamat hanya oleh anugerah melalui iman. Pembenaran bersifat forensik: Allah menyatakan orang berdosa benar karena Kristus.`,
+  `<b>Yohanes Calvin (Reformed):</b> Penekanan pada kedaulatan Allah dan predestinasi (pemilihan). Ajaran ini dirangkum dalam TULIP.`,
+  `<b>Jacobus Arminius dan John Wesley (Arminian/Wesleyan):</b> Allah memberi anugerah kepada semua orang, dan manusia bebas menerima atau menolaknya. Wesley menekankan kekudusan hidup.`,
+  `<b>Ortodoks Timur:</b> Keselamatan adalah theosis, yaitu manusia dibawa makin dekat dan serupa dengan Allah.`,
+  `<b>Teori penebusan</b>`,
+  `<b>Satisfaction (Anselmus):</b> Kristus memuaskan keadilan Allah.`,
+  `<b>Penal substitution (Calvin):</b> Kristus menggantikan manusia menanggung hukuman.`,
+  `<b>Christus Victor (Gustaf Aulén):</b> Kristus mengalahkan dosa, maut, dan Iblis.`,
+  `<b>Moral influence (Abelard):</b> Salib menunjukkan kasih Allah dan menggerakkan manusia untuk bertobat.`,
+  `<b>Pandangan tentang cakupan keselamatan</b>`,
+  `<b>Eksklusivisme:</b> keselamatan hanya melalui Kristus.`,
+  `<b>Inklusivisme</b> (Karl Rahner).`,
+  `<b>Pluralisme</b> (John Hick).`,
+  `<b>Universalisme:</b> semua orang akhirnya diselamatkan.`
+ ]},
+ {id:'ak2',t:'2. Manusia Baru',gist:'Perubahan hidup orang percaya yang meninggalkan "manusia lama" (hidup dalam dosa) dan hidup dalam kebenaran dan kekudusan di dalam Kristus. Dasar Alkitabnya antara lain 2 Korintus 5:17, Efesus 4:22-24, Kolose 3:9-10, dan Roma 6:6.',pts:[
+  `<b>Pandangan terkenal</b>`,
+  `<b>Paulus:</b> Manusia lama disalibkan bersama Kristus. Kristus adalah "Adam kedua" yang menjadi awal umat manusia yang baru.`,
+  `<b>Luther:</b> Simul justus et peccator, yaitu orang percaya sekaligus benar dan berdosa. Manusia lama dan baru terus bergumul sepanjang hidup.`,
+  `<b>Calvin:</b> Pembaruan terdiri dari mortification (mematikan dosa) dan vivification (dihidupkan dalam kebenaran), yang berlangsung seumur hidup.`,
+  `<b>Reformed/Injili:</b> Manusia baru dimulai dengan regenerasi (kelahiran baru oleh Roh Kudus), lalu bertumbuh lewat pengudusan progresif.`,
+  `<b>Katolik:</b> Baptisan menghapus dosa asal dan memberi rahmat pengudusan yang menjadikan seseorang ciptaan baru.`,
+  `<b>Wesley:</b> Kelahiran baru diikuti kekudusan yang makin sempurna (entire sanctification).`,
+  `<b>Pentakosta/Karismatik:</b> Pembaruan dialami melalui baptisan Roh Kudus dan hidup dalam kuasa Roh.`
+ ]},
+ {id:'ak3',t:'3. Yohanes 10:10',gist:'Teks resmi Alkitab Indonesia (Terjemahan Baru) dilindungi hak cipta. Ringkasan di bawah ditulis dengan kata-kata sendiri. Untuk kutipan persis, ambil dari Alkitab atau alkitab.sabda.org.',pts:[
+  `<b>A. Teks (Yohanes 10:1-10)</b>`,
+  `<b>Ay. 1-2:</b> Yesus berkata bahwa orang yang masuk ke kandang domba tidak lewat pintu, tetapi memanjat dari tempat lain, adalah pencuri dan perampok. Gembala yang sesungguhnya masuk melalui pintu.`,
+  `<b>Ay. 3-5:</b> Penjaga membukakan pintu bagi gembala itu. Domba-domba mendengar suaranya, dipanggil menurut namanya, lalu dituntun keluar. Mereka mengikutinya karena mengenal suaranya, tetapi tidak akan mengikuti orang asing.`,
+  `<b>Ay. 6:</b> Penulis mencatat bahwa para pendengar tidak mengerti maksud perumpamaan ini.`,
+  `<b>Ay. 7-9:</b> Yesus menjelaskan bahwa Dia sendiri adalah pintu bagi domba-domba. Semua yang datang sebelum Dia adalah pencuri dan perampok, dan domba tidak mendengarkan mereka. Siapa yang masuk melalui Dia akan diselamatkan, bebas keluar masuk, dan mendapat padang rumput.`,
+  `<b>Ay. 10:</b> Pencuri datang hanya untuk mencuri, membunuh, dan membinasakan. Yesus datang supaya domba-domba memiliki hidup, dan memilikinya dalam kelimpahan.`,
+  `<b>B. Konteks</b>`,
+  `<b>Konteks dekat (pasal 9):</b> Yohanes 10 melanjutkan pasal 9, yaitu Yesus menyembuhkan orang yang buta sejak lahir. Orang Farisi menyelidiki orang itu, lalu mengusirnya dari rumah ibadat. Karena itu "pencuri dan perampok" dalam 10:1-10 terutama menunjuk pada pemimpin agama yang menindas umat, bukan memeliharanya. Orang buta yang diusir itu adalah contoh "domba" yang diabaikan oleh gembala palsu, lalu dicari dan diterima oleh Yesus (9:35-38).`,
+  `<b>Latar Perjanjian Lama:</b> Gambaran gembala dan domba sangat dikenal bangsa Israel. Allah disebut Gembala Israel (Mzm. 23), dan para pemimpin yang tidak peduli umat dikecam sebagai gembala-gembala jahat (Yeh. 34, Yer. 23). Dengan menyebut diri gembala yang baik, Yesus menyatakan bahwa Dia menggenapi peran yang dijanjikan Allah.`,
+  `<b>Latar budaya:</b> Kandang domba di Palestina biasanya berupa pagar batu dengan satu pintu. Pada malam hari gembala sering berbaring di pintu itu, sehingga ia sendiri menjadi "pintu" yang melindungi domba.`,
+  `<b>Konteks sastra:</b> Bagian ini adalah salah satu pernyataan "Aku adalah" dalam Injil Yohanes (Akulah pintu, Akulah gembala yang baik). Ayat 10 menjadi inti dari bagian ini, yaitu pertentangan antara tujuan pencuri dan tujuan Kristus. Pembahasan tentang gembala yang baik berlanjut sampai ayat 18, dengan puncak bahwa gembala itu menyerahkan nyawanya bagi domba.`,
+  `<b>C. Tafsiran. Makna kata kunci</b>`,
+  `<b>Hidup (Yun. zoe):</b> hidup ilahi dan hidup kekal, bukan sekadar hidup biologis (bios).`,
+  `<b>Berkelimpahan (Yun. perissos):</b> melimpah, melampaui kebutuhan dasar.`,
+  `<b>Mencuri, membunuh, membinasakan:</b> tiga kata kerja yang menggambarkan pemimpin palsu yang mengeksploitasi umat demi keuntungan sendiri.`,
+  `<b>Tafsiran utama</b>`,
+  `<b>Tradisional/Injili/Reformed:</b> Hidup berkelimpahan adalah hidup kekal dan hidup rohani yang penuh dalam hubungan dengan Allah, yaitu damai sejahtera, sukacita, dan pengampunan, bukan kekayaan materi. Pandangan ini paling sesuai dengan konteks dan tema Injil Yohanes.`,
+  `<b>Teologi kemakmuran:</b> Mengartikannya sebagai janji kesehatan dan kekayaan jasmani. Tafsiran ini banyak dikritik karena mengabaikan konteks dan kontras antara gembala sejati dan gembala palsu.`,
+  `<b>Teologi pembebasan:</b> Menekankan bahwa Kristus menghendaki kehidupan yang layak bagi kaum miskin dan tertindas, sehingga gereja dituntut berpihak pada keadilan sosial.`,
+  `<b>Agustinus dan Calvin:</b> Menekankan Kristus sebagai sumber hidup sejati. Hidup itu diterima melalui "pintu" (Kristus), dan gembala itu rela memberikan nyawa-Nya bagi domba.`
+ ],ingat:'Intinya: Ayat ini mengontraskan dua jenis pemimpin. Pemimpin palsu mengambil hidup dari domba demi dirinya sendiri, sedangkan Kristus memberikan hidup-Nya supaya domba-domba hidup. Hidup berkelimpahan adalah buah dari karya-Nya itu.'},
+ {id:'ak4',t:'4. Kutuk',gist:'Pernyataan atau keadaan yang menjadi akibat buruk dan hukuman ilahi karena pelanggaran terhadap Allah atau perjanjian-Nya. Dalam bahasa Ibrani qelalah atau arar, dalam bahasa Yunani katara atau anathema. Contohnya: Kejadian 3:14-19 (kutuk atas ular dan tanah), Ulangan 27-28 (berkat dan kutuk perjanjian), dan Galatia 3:13 (Kristus menebus kita dari kutuk Taurat dengan menjadi kutuk).',pts:[
+  `<b>Pandangan terkenal</b>`,
+  `<b>Reformed/Injili:</b> Kutuk adalah akibat dosa dan pelanggaran hukum Taurat. Kristus menanggungnya di salib, sehingga orang percaya bebas dari kutuk itu.`,
+  `<b>Katolik:</b> Kata anathema juga dipakai dalam konteks gerejawi, yaitu pengucilan atau penolakan terhadap ajaran sesat.`,
+  `<b>Pentakosta/Karismatik tertentu:</b> Mengajarkan adanya "kutuk generasi" (dosa leluhur yang menurun) dan perlunya doa pelepasan. Pandangan ini diperdebatkan karena dianggap bertentangan dengan Yehezkiel 18 (setiap orang menanggung dosanya sendiri) dan karya Kristus yang sudah cukup.`,
+  `<b>Pandangan arus utama:</b> Penderitaan tidak otomatis berarti kutukan (lihat Yoh. 9:1-3 tentang orang yang buta sejak lahir), dan kutuk tanpa sebab tidak berlaku (Ams. 26:2).`
+ ]},
+ {id:'ak5',t:'5. Iman',gist:'Kepercayaan dan penyerahan diri kepada Allah serta janji-Nya. Ibrani 11:1 menyebut iman sebagai dasar dari segala sesuatu yang kita harapkan dan bukti dari segala sesuatu yang tidak kita lihat. Kata Yunaninya pistis, Ibraninya emunah. Pada masa Reformasi, iman dipahami memiliki tiga unsur: notitia (pengetahuan), assensus (persetujuan), dan fiducia (kepercayaan/penyerahan diri).',pts:[
+  `<b>Pandangan terkenal</b>`,
+  `<b>Agustinus dan Anselmus:</b> Credo ut intelligam ("aku percaya supaya aku mengerti"), yaitu iman mendahului pemahaman.`,
+  `<b>Thomas Aquinas (Katolik):</b> Iman adalah kebajikan teologal (bersama pengharapan dan kasih) yang diberikan Allah. Iman dan akal budi tidak bertentangan.`,
+  `<b>Luther:</b> Iman adalah kepercayaan hidup kepada janji Allah dalam Kristus, dan satu-satunya jalan pembenaran (sola fide).`,
+  `<b>Calvin:</b> Iman adalah pengetahuan yang teguh tentang kebaikan Allah, yang dikaruniakan oleh Roh Kudus.`,
+  `<b>Arminian:</b> Iman adalah respons bebas manusia terhadap anugerah Allah.`,
+  `<b>Yakobus vs Paulus:</b> Paulus menekankan pembenaran oleh iman, Yakobus menekankan bahwa iman tanpa perbuatan adalah mati. Banyak teolog menyatukannya: iman yang sejati pasti menghasilkan perbuatan, tetapi perbuatan bukan dasar keselamatan.`,
+  `<b>Søren Kierkegaard:</b> Iman sebagai "lompatan" kepercayaan yang melampaui bukti rasional.`,
+  `<b>Karl Barth:</b> Iman adalah karunia dan respons terhadap penyataan Allah, bukan hasil usaha manusia.`
+ ],ingat:'Tips UTS: Tiap dosen biasanya mengikuti tradisi gereja tertentu (misalnya Reformed, Katolik, atau Pentakosta), jadi cocokkan jawaban dengan slide atau modul kuliah.'}
 ]};
-const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin];
+const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin,...MATERI.ak];
 const strip=h=>h.replace(/<br>/g,' ').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
 function builtinCtx(keys){return keys.map(k=>'## '+SUBJ[k].name+'\n'+MATERI[k].map(t=>'### '+t.t+'\n'+t.gist+'\n'+t.pts.map(p=>'- '+strip(p)).join('\n')).join('\n')).join('\n\n')}
 
@@ -888,7 +959,26 @@ const QB=[
 ['sin','Lift mengubah bagian...','Bayangan (gelap)','Nada tengah','Highlight','Hanya warna','Lift = shadows.'],
 ['sin','Gamma mengubah bagian...','Nada tengah','Bayangan','Highlight','Hitam murni','Gamma = midtones.'],
 ['sin','Gain mengubah bagian...','Highlight (terang)','Bayangan','Nada tengah','Hanya saturasi','Gain = highlights.'],
-['sin','Menaikkan Lift akan membuat...','Hitam menjadi keabu-abuan','Putih lebih terang','Gambar lebih tajam','Gambar monokrom','Lift mengangkat bayangan.']
+['sin','Menaikkan Lift akan membuat...','Hitam menjadi keabu-abuan','Putih lebih terang','Gambar lebih tajam','Gambar monokrom','Lift mengangkat bayangan.'],
+['ak','Kata Yunani untuk keselamatan adalah...','Soteria','Pistis','Zoe','Anathema','Soteriologi = ajaran tentang keselamatan.'],
+['ak','Tiga waktu keselamatan menurut materi adalah...','Sudah dibenarkan, sedang dikuduskan, akan dimuliakan','Lahir, hidup, mati','Pertobatan, baptisan, kebangkitan','Hukum, anugerah, kasih','Tiga waktu keselamatan.'],
+['ak','Sola gratia dan sola fide adalah ajaran...','Martin Luther','Calvin','Thomas Aquinas','Wesley','Selamat hanya oleh anugerah melalui iman; pembenaran bersifat forensik.'],
+['ak','Predestinasi dan TULIP dikaitkan dengan...','Yohanes Calvin','Jacobus Arminius','Karl Rahner','Abelard','Reformed menekankan kedaulatan Allah.'],
+['ak','Keselamatan sebagai theosis adalah pandangan...','Ortodoks Timur','Katolik','Lutheran','Pentakosta','Manusia dibawa makin dekat dan serupa dengan Allah.'],
+['ak','Teori penebusan Christus Victor berasal dari...','Gustaf Aulén','Anselmus','Abelard','Calvin','Kristus mengalahkan dosa, maut, dan Iblis.'],
+['ak','Teori penebusan yang menyatakan Kristus memuaskan keadilan Allah adalah...','Satisfaction (Anselmus)','Moral influence (Abelard)','Christus Victor','Theosis','Satisfaction.'],
+['ak','Pandangan bahwa keselamatan hanya melalui Kristus disebut...','Eksklusivisme','Inklusivisme','Pluralisme','Universalisme','Inklusivisme dikaitkan dengan Karl Rahner, pluralisme dengan John Hick.'],
+['ak','Simul justus et peccator berarti...','Sekaligus benar dan berdosa','Hanya benar','Hanya berdosa','Ditentukan dari awal','Pandangan Luther tentang manusia baru.'],
+['ak','Mortification dan vivification adalah istilah...','Calvin tentang pembaruan hidup','Luther tentang iman','Wesley tentang kekudusan','Paulus tentang Adam','Mematikan dosa dan dihidupkan dalam kebenaran.'],
+['ak','Kata Yunani "zoe" dalam Yohanes 10:10 berarti...','Hidup ilahi dan hidup kekal','Hidup biologis','Kekayaan','Kesehatan jasmani','Bios = hidup biologis.'],
+['ak','Dalam Yohanes 10:1-10, "pencuri dan perampok" terutama menunjuk pada...','Pemimpin agama yang menindas umat','Orang buta','Murid Yesus','Penjaga pintu','Konteks pasal 9: orang Farisi.'],
+['ak','Tafsiran Yohanes 10:10 sebagai janji kesehatan dan kekayaan jasmani adalah...','Teologi kemakmuran','Teologi pembebasan','Reformed','Katolik','Banyak dikritik karena mengabaikan konteks.'],
+['ak','Kutuk dalam bahasa Ibrani adalah...','Qelalah atau arar','Pistis','Soteria','Emunah','Dalam Yunani: katara atau anathema.'],
+['ak','Galatia 3:13 menyatakan bahwa Kristus...','Menebus kita dari kutuk Taurat dengan menjadi kutuk','Memberi hukum baru','Membatalkan perjanjian','Mengutuk orang berdosa','Salah satu contoh rujukan kutuk.'],
+['ak','Tiga unsur iman pada masa Reformasi adalah...','Notitia, assensus, fiducia','Fides, spes, caritas','Credo, ut, intelligam','Sola, gratia, fide','Pengetahuan, persetujuan, penyerahan diri.'],
+['ak','Credo ut intelligam berarti...','Aku percaya supaya aku mengerti','Aku berpikir maka aku ada','Hanya oleh iman','Hanya oleh anugerah','Dikaitkan dengan Agustinus dan Anselmus.'],
+['ak','Yang menyatakan iman sebagai respons bebas manusia terhadap anugerah adalah...','Arminian','Calvin','Luther','Barth','Berbeda dengan Reformed.'],
+['ak','Iman sebagai "lompatan" kepercayaan melampaui bukti rasional adalah pandangan...','Søren Kierkegaard','Karl Barth','Thomas Aquinas','Luther','Kierkegaard.']
 ];
 
 
