@@ -8,19 +8,19 @@
 :root{
   --bg:#F3F4F7; --surface:#FFFFFF; --surface2:#EAECF1; --line:#DFE2E8;
   --fg:#12141A; --muted:#5A6373; --accent:#D9430F; --accent-ink:#FFFFFF;
-  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-ak:#5B7F00; --c-pt:#0B6E99; --c-pack:#2563EB; --c-sin:#B0302A;
+  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-ak:#5B7F00; --c-pt:#0B6E99; --c-um:#9B2D8F; --c-pack:#2563EB; --c-sin:#B0302A;
   --good:#15803D; --bad:#C62828;
   --f-display:'Poppins',system-ui,sans-serif; --f-body:'Poppins',system-ui,sans-serif; --f-mono:'Poppins',system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pt:#6CCBFF; --c-pack:#7FB0FF; --c-sin:#FF8F85;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pt:#6CCBFF; --c-um:#E49BDC; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pt:#6CCBFF; --c-pack:#7FB0FF; --c-sin:#FF8F85;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pt:#6CCBFF; --c-um:#E49BDC; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -67,7 +67,7 @@ h3{font-size:19px}
 .btn.sm{padding:6px 12px;font-size:13px;min-height:36px}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .tag{display:inline-flex;align-items:center;font:500 12px var(--f-mono);color:var(--c);border-radius:999px;padding:3px 10px;background:color-mix(in srgb,var(--c) 14%,transparent)}
-.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-pt{--c:var(--c-pt)}.s-ak{--c:var(--c-ak)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
+.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-um{--c:var(--c-um)}.s-pt{--c:var(--c-pt)}.s-ak{--c:var(--c-ak)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
 .svrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .svp{display:flex;flex-direction:column;gap:2px;min-width:0}.svp svg{width:100%;height:auto;border-radius:12px;display:block}.svp b{font-size:13px}.svp span{font-size:12px;color:var(--muted)}
 .sv{width:100%;max-width:460px;height:auto;display:block;margin:0 auto}
@@ -245,13 +245,14 @@ const dayLabel=d=>{const w=wib(d);return HARI[w.getUTCDay()]+', '+w.getUTCDate()
 const parts=ms=>{const s=Math.max(0,Math.floor(ms/1000));return [Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
 
 /* ---------- data ---------- */
-const KEYS=['pkn','pk','idn','pack','sin','ak','pt'];
+const KEYS=['pkn','pk','idn','pack','sin','ak','pt','um'];
 const SUBJ={
   pkn:{name:'Pendidikan Kewarganegaraan',short:'PKn',kode:'VC547',jam:'08:00 – 09:40',ruang:'E-301',hari:'Senin 12 Okt'},
   pk:{name:'Perilaku Konsumen',short:'Perilaku Konsumen',kode:'VC546',jam:'10:30 – 12:10',ruang:'E-301',hari:'Senin 12 Okt'},
   idn:{name:'Inovasi Design Nusantara',short:'Inovasi Design',kode:'VC545',jam:'13:00 – 15:30',ruang:'N-201',hari:'Senin 12 Okt'},
   pack:{name:'Packaging Design',short:'Packaging',kode:'VC544',jam:'08:00 – 10:30',ruang:'E-305',hari:'Selasa 13 Okt'},
   sin:{name:'Sinematografi',short:'Sinematografi',kode:'CP501',jam:'13:00 – 15:30',ruang:'N-110',hari:'Selasa 13 Okt'},
+  um:{name:'UMKM Branding',short:'UMKM Branding',kode:'VC549',jam:'10:30 – 13:00',ruang:'E-301',hari:'Kamis 15 Okt'},
   pt:{name:'Pemasaran Terpadu',short:'Pemasaran Terpadu',kode:'VC548',jam:'08:00 – 10:30',ruang:'E-305',hari:'Kamis 15 Okt'},
   ak:{name:'Agama Kristen',short:'Agama Kristen',kode:'VC024',jam:'08:00 – 09:40',ruang:'E-301',hari:'Rabu 14 Okt'},
   ai:{name:'Soal AI',short:'Soal AI'}
@@ -264,7 +265,7 @@ const EXAMS=[
  ['CP501','Sinematografi','2026-10-13T13:00','2026-10-13T15:30','N-110','sin'],
  ['VC024','Agama Kristen','2026-10-14T08:00','2026-10-14T09:40','E-301','ak'],
  ['VC548','Pemasaran Terpadu','2026-10-15T08:00','2026-10-15T10:30','E-305','pt'],
- ['VC549','UMKM Branding','2026-10-15T10:30','2026-10-15T13:00','E-301']
+ ['VC549','UMKM Branding','2026-10-15T10:30','2026-10-15T13:00','E-301','um']
 ].map(([kode,nama,a,b,ruang,s])=>({kode,nama,start:new Date(a+':00+07:00'),end:new Date(b+':00+07:00'),ruang,s}));
 
 /* ---------- visual helpers ---------- */
@@ -890,9 +891,60 @@ pt:[
  {id:'pt11',t:'11. Ringkasan eksekutif ujian',gist:'Keberhasilan IMC menuntut harmoni sempurna antara seni membangun ekuitas merek jangka panjang (Pilar Brand Image dan Awareness) dan sains akuntabilitas finansial yang membuktikan perubahan perilaku nyata konsumen.',pts:[
   `<b>Seni:</b> ekuitas merek jangka panjang (Brand Image dan Awareness).`,
   `<b>Sains:</b> akuntabilitas finansial (MMM, ROI) yang membuktikan perubahan perilaku nyata.`
- ],ingat:'IMC = seni (ekuitas merek) + sains (akuntabilitas).'}
+ ],ingat:'IMC = seni (ekuitas merek) + sains (akuntabilitas).'},
+ {id:'pt12',t:'Soal latihan 1: IMC menurut Tom Duncan',gist:'Dari soal dan pembahasan UTS Pemasaran Terpadu (versi 17-10-2025, DKV Semester VI, closed book, dosen Dr. Decky A.I). Soal 1 bobot 20 poin.',pts:[
+  `<b>Soal:</b> Pesan komunikasi perlu disampaikan terus-menerus dengan konsep Integrated Marketing Communication. Jelaskan pemahaman IMC menurut Tom Duncan!`,
+  `<b>Jawaban:</b> IMC adalah proses strategis yang digunakan untuk menciptakan, merencanakan, mengevaluasi, dan mengkoordinasikan komunikasi yang berkesinambungan, jelas, serta persuasif dengan pelanggan dan berbagai pemangku kepentingan (stakeholder) dari waktu ke waktu.`,
+  `<b>Tujuan:</b> membangun hubungan jangka panjang yang menguntungkan dan menciptakan sinergi lintas saluran (iklan, PR, promosi) demi terciptanya satu suara (<b>one voice, one look</b>) yang konsisten.`
+ ],ingat:'Tom Duncan: proses strategis (create, plan, evaluate, coordinate) komunikasi yang berkesinambungan, jelas, persuasif. Tujuan: hubungan jangka panjang, one voice one look.'},
+ {id:'pt13',t:'Soal latihan 2 dan 3: 3 pemain utama IMC partner',gist:'Soal 2 (30 poin, masing-masing 10) menanyakan 3 pemain utama IMC partner. Soal 3 (30 poin) menanyakan hubungan ketiganya.',pts:[
+  `<b>1. The Organization (pengiklan / klien):</b> pemilik brand, produk, atau jasa yang memiliki inisiatif pemasaran dan anggaran kampanye.`,
+  `<b>2. The Advertising / Marketing Communication Agency (agensi):</b> mitra eksternal yang merancang strategi kreatif, konten, dan eksekusi kampanye.`,
+  `<b>3. The Media (media massa / saluran distribusi):</b> saluran atau platform tempat pesan iklan disebarluaskan kepada target audiens.`,
+  `<b>Hubungan (soal 3):</b> saling ketergantungan (interdependent) dan simbiosis mutualisme. Klien memiliki produk dan dana tetapi butuh keahlian kreatif dari agensi. Agensi membuat pesan namun butuh media untuk menyebarkannya ke publik. Sebaliknya, media membutuhkan konten dari agensi dan pendanaan iklan dari klien agar roda industri media tetap berputar.`
+ ],ingat:'3 pemain: Organization (klien), Agency (kreatif), Media (distribusi). Hubungan: interdependent, simbiosis mutualisme.',
+  vis:()=>[V.flow('Ekosistem IMC partner',['Organization (klien)','Ad agency (kreatif)','Media (distribusi)']),V.table('Siapa butuh apa',['Pihak','Punya','Butuh'],[['Klien','Produk dan dana','Keahlian kreatif agensi'],['Agensi','Pesan kreatif','Media untuk menyebarkan'],['Media','Saluran distribusi','Konten agensi dan dana iklan klien']])]},
+ {id:'pt14',t:'Soal latihan 4: organisasi berpengaruh IMC',gist:'Soal 4 (20 poin): sebutkan salah satu contoh organisasi berpengaruh IMC. Organisasi ini mendukung dan mengatur ekosistem periklanan.',pts:[
+  `<b>Contoh:</b> Dewan Periklanan Indonesia (DPI) atau P3I (Persatuan Perusahaan Periklanan Indonesia), serta asosiasi global seperti IAA atau AAAA.`,
+  `<b>Fungsi:</b> pengawas etika periklanan, regulator standar profesional, dan pelindung kepentingan seluruh ekosistem pemain IMC. (Di PDF tertulis "etika pariwisata/periklanan", kemungkinan salah ketik. Pakai "etika periklanan".)`,
+  `<b>Skema:</b> [Organization (klien)] ↔ [Ad agency (kreatif)] ↔ [Media (distribusi)], didukung organisasi industri dan regulator (contoh P3I / Dewan Periklanan).`
+ ],ingat:'Organisasi: DPI atau P3I (global: IAA, AAAA). Fungsi: etika, standar profesional, pelindung ekosistem.'}
+],
+um:[
+ {id:'um0',t:'Peta UTS UMKM Branding',gist:'UTS UMKM Branding terdiri dari 4 bagian: dua soal teori dan konsep logo, pitching (praktek), dan desain alternatif booth dan rombong. Total bobot disebut: 15, 20 (+5 lampiran), 20, dan 40 poin.',pts:[
+  `<b>Bagian I:</b> ujian teori, brainstorming dalam perancangan logo (15 poin).`,
+  `<b>Bagian II:</b> konsep tampilan visual logo final (20 poin + 5 poin lampiran).`,
+  `<b>Bagian III:</b> ujian praktek, pitching rencana branding (20 poin).`,
+  `<b>Bagian IV:</b> desain alternatif booth bazaar dan rombong (40 poin), sketsa di kertas A4.`,
+  `Sumber: file "Materi Belajar UMKM Branding UTS ISTTS" (DKV Prog. Profesional, Semester 5).`
+ ],ingat:'Bagian: I Brainstorming (15), II Logo (20+5), III Pitching (20), IV Booth dan Rombong (40).',
+  vis:()=>[V.table('Peta UTS',['Bagian','Isi','Bobot'],[['I','Brainstorming perancangan logo (teori)','15'],['II','Konsep visual logo final','20 + 5 (lampiran)'],['III','Pitching rencana branding (praktek)','20'],['IV','Desain alternatif booth bazaar dan rombong','40']])]},
+ {id:'um1',t:'Bagian I: brainstorming dalam perancangan logo',gist:'Brainstorming adalah tahap eksplorasi awal untuk memunculkan ide kreatif, asosiasi kata, dan konsep visual sebebas mungkin tanpa penghakiman dini.',pts:[
+  `<b>Manfaat 1, memperluas perspektif visual:</b> membuka berbagai sudut pandang alternatif agar desain tidak terjebak pada ide klise pertama yang muncul.`,
+  `<b>Manfaat 2, menghasilkan hubungan asosiatif:</b> menghubungkan nilai inti UMKM (filosofi, produk, target pasar) dengan simbol, bentuk, dan warna yang relevan.`,
+  `<b>Manfaat 3, menyaring ide lemah sejak dini:</b> memilah konsep yang kurang kuat atau terlalu rumit sebelum masuk ke tahap eksekusi digital.`
+ ],ingat:'3 manfaat: perluas perspektif, hubungan asosiatif, saring ide lemah.',
+  vis:()=>[V.cols('3 manfaat brainstorming',[['Perluas perspektif','Tidak terjebak ide klise pertama'],['Hubungan asosiatif','Nilai UMKM terhubung ke simbol, bentuk, warna'],['Saring ide lemah','Sebelum eksekusi digital']])]},
+ {id:'um2',t:'Bagian II: konsep tampilan visual logo final',gist:'Saat menjelaskan logo final kelompok, uraikan komponen pembentuknya secara sistematis: logotype, logogram, dan filosofi warna.',pts:[
+  `<b>Nama dan logotype:</b> pemilihan jenis huruf (serif / sans-serif / script), tingkat keterbacaan (readability), dan alasan psikologis pemilihan font tersebut.`,
+  `<b>Logogram / simbol:</b> bentuk ikonik atau stilisasi objek yang merepresentasikan identitas unik UMKM.`,
+  `<b>Filosofi warna:</b> makna emosional dan asosiasi warna yang digunakan (misal: merah untuk energi atau nafsu makan, hijau untuk kesehatan atau alami).`
+ ],ingat:'3 komponen logo: Logotype (huruf), Logogram (simbol), Filosofi warna.',
+  vis:()=>[V.cols('Komponen yang dijelaskan',[['Logotype','Jenis huruf, readability, alasan psikologis'],['Logogram','Simbol ikonik identitas UMKM'],['Filosofi warna','Makna emosional dan asosiasi']])]},
+ {id:'um3',t:'Bagian III: pitching rencana branding',gist:'Struktur presentasi (pitching) proposal pengabdian masyarakat di depan klien atau dosen. Pastikan tiga poin ini terjabarkan konsisten.',pts:[
+  `<b>Kondisi awal UMKM:</b> identifikasi masalah visual, pemasaran, dan identitas merek yang dialami UMKM sebelum direbranding.`,
+  `<b>Strategi rebranding:</b> solusi visual dan strategi komunikasi yang ditawarkan untuk meningkatkan daya saing produk.`,
+  `<b>Proposal pengabdian masyarakat:</b> rencana aksi nyata pendampingan UMKM dari tahap riset, perancangan, hingga implementasi media promosi.`
+ ],ingat:'Pitching: Kondisi awal, Strategi rebranding, Proposal pengabdian masyarakat.',
+  vis:()=>[V.flow('Alur pitching',['Kondisi awal UMKM','Strategi rebranding','Proposal pengabdian masyarakat'])]},
+ {id:'um4',t:'Bagian IV: desain alternatif booth bazaar dan rombong',gist:'Buat 2 alternatif sketsa terpisah di kertas A4: 1 sketsa booth bazaar dan 1 sketsa toko / rombong keliling.',pts:[
+  `<b>Peletakan logo utama:</b> ditempatkan pada area eye-level (sejajar mata) atau bagian fasad atas agar mudah terlihat dari kejauhan.`,
+  `<b>X-banner dan media promosi:</b> penempatan atribut pendukung seperti X-banner di samping stan, daftar menu / harga yang jelas, serta kemasan produk.`,
+  `<b>Detail visual dan ergonomi:</b> gambarkan cukup detail alur interaksi pembeli, estetika visual, serta kesesuaian karakter merek dengan lingkungan operasional UMKM.`
+ ],ingat:'2 sketsa A4: booth bazaar + rombong. Logo di eye-level atau fasad atas. X-banner di samping. Detail alur pembeli.',
+  vis:()=>[V.table('Checklist sketsa',['Elemen','Penempatan / isi'],[['Logo utama','Eye-level atau fasad atas'],['X-banner','Di samping stan'],['Menu dan harga','Jelas terbaca'],['Kemasan produk','Terlihat dan tertata'],['Alur pembeli','Digambar dengan detail']])]}
 ]};
-const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin,...MATERI.ak,...MATERI.pt];
+const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin,...MATERI.ak,...MATERI.pt,...MATERI.um];
 const strip=h=>h.replace(/<br>/g,' ').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
 function builtinCtx(keys){return keys.map(k=>'## '+SUBJ[k].name+'\n'+MATERI[k].map(t=>'### '+t.t+'\n'+t.gist+'\n'+t.pts.map(p=>'- '+strip(p)).join('\n')).join('\n')).join('\n\n')}
 
@@ -1066,7 +1118,27 @@ const QB=[
 ['pt','Mengumpulkan stempel poin adalah contoh...','Komitmen dan konsistensi','Kelangkaan','Timbal balik','Otoritas','Mempertahankan pilihan kecil sebelumnya.'],
 ['pt','Rantai Means-End memetakan...','Atribut → Konsekuensi → Nilai personal','Produk → Harga → Promosi','Awareness → Image → Loyalty','Kognitif → Afektif → Konatif','Dengan wawancara mendalam.'],
 ['pt','Vampire Effect terjadi pada daya tarik...','Humor','Fear','Guilt','Otoritas','Penonton ingat lucunya tapi lupa mereknya.'],
-['pt','Agar fear appeal tidak diblokir audiens, pesan harus menyertakan...','Solusi (self-efficacy)','Humor','Selebritas','Diskon','Ancaman berlebihan tanpa solusi membuat audiens defensif.']
+['pt','Agar fear appeal tidak diblokir audiens, pesan harus menyertakan...','Solusi (self-efficacy)','Humor','Selebritas','Diskon','Ancaman berlebihan tanpa solusi membuat audiens defensif.'],
+['pt','Menurut Tom Duncan, IMC adalah...','Proses strategis menciptakan, merencanakan, mengevaluasi, dan mengkoordinasikan komunikasi yang berkesinambungan, jelas, dan persuasif','Kegiatan beriklan di TV saja','Pemberian diskon','Pembuatan logo','Tujuannya hubungan jangka panjang dan one voice, one look.'],
+['pt','Tiga pemain utama IMC partner adalah...','Organization (klien), agency, media','Klien, kompetitor, konsumen','Produsen, distributor, pengecer','Agensi, percetakan, bank','Soal latihan 2.'],
+['pt','Hubungan tiga pemain utama IMC partner bersifat...','Interdependent, simbiosis mutualisme','Saling bersaing','Satu arah','Terpisah','Klien butuh agensi, agensi butuh media, media butuh klien dan agensi.'],
+['pt','Contoh organisasi pendukung ekosistem periklanan di Indonesia adalah...','Dewan Periklanan Indonesia (DPI) atau P3I','BPOM','OJK','KPK','Global: IAA atau AAAA.'],
+['pt','One voice, one look dalam IMC berarti...','Pesan konsisten lintas saluran','Hanya satu media','Satu agensi saja','Satu produk saja','Sinergi iklan, PR, promosi.'],
+['um','Brainstorming dalam perancangan logo adalah...','Tahap eksplorasi awal untuk memunculkan ide tanpa penghakiman dini','Tahap eksekusi digital akhir','Tahap mencetak logo','Tahap menguji logo ke pasar','Mengeksplorasi ide, asosiasi kata, dan konsep visual sebebas mungkin.'],
+['um','Salah satu manfaat brainstorming adalah...','Memperluas perspektif visual sehingga tidak terjebak ide klise','Mempercepat percetakan','Menghemat biaya produksi','Menghapus peran klien','Manfaat 1.'],
+['um','Menghubungkan nilai inti UMKM dengan simbol, bentuk, dan warna adalah manfaat...','Menghasilkan hubungan asosiatif','Menyaring ide lemah','Memperluas perspektif','Eksekusi digital','Manfaat 2.'],
+['um','Memilah konsep yang lemah atau terlalu rumit sebelum eksekusi digital adalah manfaat...','Menyaring ide lemah sejak dini','Hubungan asosiatif','Perspektif visual','Pitching','Manfaat 3.'],
+['um','Pemilihan serif, sans-serif, atau script dan readability termasuk komponen...','Nama dan logotype','Logogram','Filosofi warna','Pitching','Logotype.'],
+['um','Bentuk ikonik atau stilisasi objek yang merepresentasikan identitas UMKM disebut...','Logogram / simbol','Logotype','Filosofi warna','Fasad','Komponen kedua logo.'],
+['um','Dalam contoh materi, warna merah diasosiasikan dengan...','Energi atau nafsu makan','Kesehatan atau alami','Ketenangan','Kemewahan','Hijau = kesehatan atau alami.'],
+['um','Hijau dalam contoh materi diasosiasikan dengan...','Kesehatan atau alami','Energi atau nafsu makan','Bahaya','Kemewahan','Filosofi warna.'],
+['um','Pitching rencana branding harus menjabarkan...','Kondisi awal UMKM, strategi rebranding, proposal pengabdian masyarakat','Harga produk, laba, pajak','Sketsa booth saja','Hanya logo final','Tiga poin pitching.'],
+['um','Identifikasi masalah visual, pemasaran, dan identitas merek sebelum rebranding disebut...','Kondisi awal UMKM','Strategi rebranding','Proposal pengabdian masyarakat','Desain booth','Poin pertama pitching.'],
+['um','Rencana pendampingan dari riset, perancangan, sampai implementasi media promosi adalah...','Proposal pengabdian masyarakat','Strategi rebranding','Kondisi awal','Logogram','Poin ketiga pitching.'],
+['um','Pada Bagian IV, jumlah sketsa alternatif yang dibuat adalah...','2 (booth bazaar dan toko / rombong keliling)','1','3','5','Dikerjakan di kertas A4.'],
+['um','Logo utama pada booth sebaiknya ditempatkan di...','Eye-level atau fasad atas','Lantai','Belakang stan','Di bawah meja','Agar mudah terlihat dari kejauhan.'],
+['um','X-banner ditempatkan...','Di samping stan','Di atap','Di dalam laci','Di belakang penjual','Atribut pendukung beserta menu / harga dan kemasan.'],
+['um','Bobot terbesar pada UTS UMKM Branding adalah...','Bagian IV: desain booth dan rombong (40 poin)','Bagian I (15 poin)','Bagian II (20 poin)','Bagian III (20 poin)','Sesuai file materi.']
 ];
 
 
