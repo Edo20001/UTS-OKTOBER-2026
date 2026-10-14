@@ -8,19 +8,19 @@
 :root{
   --bg:#F3F4F7; --surface:#FFFFFF; --surface2:#EAECF1; --line:#DFE2E8;
   --fg:#12141A; --muted:#5A6373; --accent:#D9430F; --accent-ink:#FFFFFF;
-  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-ak:#5B7F00; --c-pack:#2563EB; --c-sin:#B0302A;
+  --c-pkn:#6446E0; --c-pk:#0A7F80; --c-idn:#A4670C; --c-ai:#C2185B; --c-ak:#5B7F00; --c-pt:#0B6E99; --c-pack:#2563EB; --c-sin:#B0302A;
   --good:#15803D; --bad:#C62828;
   --f-display:'Poppins',system-ui,sans-serif; --f-body:'Poppins',system-ui,sans-serif; --f-mono:'Poppins',system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pack:#7FB0FF; --c-sin:#FF8F85;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pt:#6CCBFF; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0B0D12; --surface:#141821; --surface2:#1C212C; --line:#262C39;
   --fg:#EEF0F5; --muted:#9BA4B6; --accent:#FF6A32; --accent-ink:#1A0A02;
-  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pack:#7FB0FF; --c-sin:#FF8F85;
+  --c-pkn:#A593FF; --c-pk:#3FD0C9; --c-idn:#F2B84B; --c-ai:#FF7EB6; --c-ak:#B7E05A; --c-pt:#6CCBFF; --c-pack:#7FB0FF; --c-sin:#FF8F85;
   --good:#4ADE80; --bad:#FF7B7B; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -67,7 +67,7 @@ h3{font-size:19px}
 .btn.sm{padding:6px 12px;font-size:13px;min-height:36px}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .tag{display:inline-flex;align-items:center;font:500 12px var(--f-mono);color:var(--c);border-radius:999px;padding:3px 10px;background:color-mix(in srgb,var(--c) 14%,transparent)}
-.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-ak{--c:var(--c-ak)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
+.s-pkn{--c:var(--c-pkn)}.s-pk{--c:var(--c-pk)}.s-pt{--c:var(--c-pt)}.s-ak{--c:var(--c-ak)}.s-pack{--c:var(--c-pack)}.s-sin{--c:var(--c-sin)}
 .svrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .svp{display:flex;flex-direction:column;gap:2px;min-width:0}.svp svg{width:100%;height:auto;border-radius:12px;display:block}.svp b{font-size:13px}.svp span{font-size:12px;color:var(--muted)}
 .sv{width:100%;max-width:460px;height:auto;display:block;margin:0 auto}
@@ -245,13 +245,14 @@ const dayLabel=d=>{const w=wib(d);return HARI[w.getUTCDay()]+', '+w.getUTCDate()
 const parts=ms=>{const s=Math.max(0,Math.floor(ms/1000));return [Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
 
 /* ---------- data ---------- */
-const KEYS=['pkn','pk','idn','pack','sin','ak'];
+const KEYS=['pkn','pk','idn','pack','sin','ak','pt'];
 const SUBJ={
   pkn:{name:'Pendidikan Kewarganegaraan',short:'PKn',kode:'VC547',jam:'08:00 – 09:40',ruang:'E-301',hari:'Senin 12 Okt'},
   pk:{name:'Perilaku Konsumen',short:'Perilaku Konsumen',kode:'VC546',jam:'10:30 – 12:10',ruang:'E-301',hari:'Senin 12 Okt'},
   idn:{name:'Inovasi Design Nusantara',short:'Inovasi Design',kode:'VC545',jam:'13:00 – 15:30',ruang:'N-201',hari:'Senin 12 Okt'},
   pack:{name:'Packaging Design',short:'Packaging',kode:'VC544',jam:'08:00 – 10:30',ruang:'E-305',hari:'Selasa 13 Okt'},
   sin:{name:'Sinematografi',short:'Sinematografi',kode:'CP501',jam:'13:00 – 15:30',ruang:'N-110',hari:'Selasa 13 Okt'},
+  pt:{name:'Pemasaran Terpadu',short:'Pemasaran Terpadu',kode:'VC548',jam:'08:00 – 10:30',ruang:'E-305',hari:'Kamis 15 Okt'},
   ak:{name:'Agama Kristen',short:'Agama Kristen',kode:'VC024',jam:'08:00 – 09:40',ruang:'E-301',hari:'Rabu 14 Okt'},
   ai:{name:'Soal AI',short:'Soal AI'}
 };
@@ -262,7 +263,7 @@ const EXAMS=[
  ['VC544','Packaging Design','2026-10-13T08:00','2026-10-13T10:30','E-305','pack'],
  ['CP501','Sinematografi','2026-10-13T13:00','2026-10-13T15:30','N-110','sin'],
  ['VC024','Agama Kristen','2026-10-14T08:00','2026-10-14T09:40','E-301','ak'],
- ['VC548','Pemasaran Terpadu','2026-10-15T08:00','2026-10-15T10:30','E-305'],
+ ['VC548','Pemasaran Terpadu','2026-10-15T08:00','2026-10-15T10:30','E-305','pt'],
  ['VC549','UMKM Branding','2026-10-15T10:30','2026-10-15T13:00','E-301']
 ].map(([kode,nama,a,b,ruang,s])=>({kode,nama,start:new Date(a+':00+07:00'),end:new Date(b+':00+07:00'),ruang,s}));
 
@@ -827,8 +828,71 @@ ak:[
   `<b>Søren Kierkegaard:</b> Iman sebagai "lompatan" kepercayaan yang melampaui bukti rasional.`,
   `<b>Karl Barth:</b> Iman adalah karunia dan respons terhadap penyataan Allah, bukan hasil usaha manusia.`
  ],ingat:'Tips UTS: Tiap dosen biasanya mengikuti tradisi gereja tertentu (misalnya Reformed, Katolik, atau Pentakosta), jadi cocokkan jawaban dengan slide atau modul kuliah.'}
+],
+pt:[
+ {id:'pt1',t:'1. Fundasi IMC dan pergeseran paradigma',gist:'IMC (Komunikasi Pemasaran Terpadu) bukan sekadar beriklan di banyak media. Ia filosofi manajerial strategis: menyatukan semua elemen komunikasi promosi agar berbicara dengan "Satu Suara" (Single Voice), untuk membangun ekuitas merek jangka panjang dan memicu perubahan perilaku nyata.',pts:[
+  `<b>Pendekatan tradisional: Inside-Out (Silo).</b> Departemen bekerja terpisah, agensi berjalan sendiri-sendiri, menghasilkan pesan yang tumpang tindih dan membingungkan konsumen.`,
+  `<b>Pendekatan IMC modern: Outside-In (Holistik).</b> Dimulai dari kebutuhan pelanggan, mengelola seluruh titik kontak (touchpoints 360°) untuk menciptakan sinergisitas pesan yang kuat.`
+ ],ingat:'IMC = Satu Suara. Tradisional: inside-out (silo). Modern: outside-in (holistik, touchpoints 360°).',
+  vis:()=>[V.table('Tradisional vs IMC modern',['','Tradisional','IMC modern'],[['Arah','Inside-Out (Silo)','Outside-In (Holistik)'],['Cara kerja','Departemen dan agensi sendiri-sendiri','Mulai dari kebutuhan pelanggan, kelola semua touchpoints 360°'],['Hasil','Pesan tumpang tindih, membingungkan','Pesan sinergis, Satu Suara']])]},
+ {id:'pt2',t:'2. Kekuatan sinergi dan bukti empiris',gist:'Bauran komunikasi yang terkoordinasi menghasilkan efek pengganda (multiplier effect).',pts:[
+  `<b>Studi Levi\'s Dockers:</b> iklan TV dan media cetak yang dijalankan bersamaan menciptakan lonjakan penjualan eksponensial, jauh melampaui jumlah efek individu masing-masing media.`
+ ],ingat:'Sinergi = multiplier effect. Contoh: Levi\'s Dockers (TV + cetak bersamaan).'},
+ {id:'pt3',t:'3. Ekuitas merek berbasis konsumen (Keller)',gist:'Ekuitas merek adalah nilai tambah yang diberikan pada produk. Menurut Customer-Based Brand Equity, ekuitas dibangun di atas dua pilar di benak konsumen: Brand Awareness (Kesadaran) dan Brand Image (Citra Merek).',pts:[
+  `<b>Pilar 1: Kesadaran merek (Awareness Ladder):</b>
+   <br><b>Top of Mind:</b> merek pertama yang melintas di kepala.
+   <br><b>Brand Recall:</b> diingat tanpa bantuan petunjuk.
+   <br><b>Brand Recognition:</b> dikenali saat melihat logo atau kemasan.
+   <br><b>Unaware:</b> konsumen tidak tahu sama sekali.`,
+  `<b>Pilar 2: Citra merek (Asosiasi Memori):</b> terbentuk dari atribut produk (fisik/non-fisik) serta manfaat yang dirasakan konsumen: <b>Fungsional</b> (menyelesaikan masalah), <b>Simbolis</b> (status/identitas), dan <b>Eksperiensial</b> (sensasi/emosi).
+   ${e('"Aqua" disebut pertama saat ditanya air mineral = Top of Mind.')}`
+ ],ingat:'Tangga: Top of Mind > Recall > Recognition > Unaware. Citra: Fungsional, Simbolis, Eksperiensial.',
+  vis:()=>[V.pyr('Awareness ladder (atas = terkuat)',[['Top of Mind','Merek pertama yang teringat',46],['Brand Recall','Diingat tanpa petunjuk',64],['Brand Recognition','Dikenali saat melihat logo / kemasan',82],['Unaware','Tidak tahu sama sekali',100]]),V.cols('3 manfaat citra merek',[['Fungsional','Menyelesaikan masalah'],['Simbolis','Status atau identitas'],['Eksperiensial','Sensasi atau emosi']])]},
+ {id:'pt4',t:'4. Akuntabilitas Marcom dan Marketing Mix Modeling (MMM)',gist:'Manajemen tingkat atas (C-Suite) menuntut bukti finansial nyata atas setiap anggaran promosi. Pengukuran ROI dan kontribusi penjualan menghadapi tantangan isolasi data dan efek jangka panjang.',pts:[
+  `<b>Solusi ekonometrika: Marketing Mix Modeling (MMM).</b> Model statistik tingkat lanjut yang memasukkan variabel harga, data iklan, promosi pesaing, musim, dan kondisi ekonomi untuk memisahkan sinyal periklanan dari kebisingan eksternal guna memprediksi ROI tiap saluran media.`
+ ],ingat:'MMM = model statistik untuk memisahkan efek iklan dari faktor lain dan memprediksi ROI tiap saluran.'},
+ {id:'pt5',t:'5. STP dan revolusi impresi mikro (Real-Time Bidding)',gist:'Mass marketing (satu ukuran untuk semua) sudah usang. Pemasar modern beralih ke Narrowcasting melalui analisis data mendalam.',pts:[
+  `<b>4 pilar segmentasi:</b> Demografi, Psikografis (VALS), Geodemografi, dan Manfaat.`,
+  `<b>Real-Time Bidding (RTB) vs segmentasi tradisional:</b> fokus target, metode beli, dan pengukuran berbeda (lihat tabel).`
+ ],ingat:'4 segmentasi: Demografi, Psikografis (VALS), Geodemografi, Manfaat. RTB = lelang milidetik per impresi.',
+  vis:()=>[V.table('Tradisional vs RTB digital',['Dimensi','Strategi tradisional','Real-Time Bidding'],[['Fokus target','Kelompok makro / ribuan orang','Impresi mikro (individu spesifik)'],['Metode beli','Pembelian ruang iklan massal (bulk)','Lelang instan milidetik per impresi'],['Pengukuran','Tertunda, survei pasca-kampanye','Real-time tracking (klik dan konversi)']])]},
+ {id:'pt6',t:'6. Lima katalisator adopsi produk baru',gist:'Saat meluncurkan inovasi, kecepatan adopsi pasar ditentukan oleh lima faktor.',pts:[
+  `<b>Keunggulan relatif</b> dibanding pesaing.`,
+  `<b>Kompatibilitas</b> dengan gaya hidup.`,
+  `<b>Kompleksitas</b> yang rendah.`,
+  `<b>Trialabilitas:</b> mudah dicoba dengan risiko minimal.`,
+  `<b>Observabilitas:</b> hasil terlihat nyata.`
+ ],ingat:'5 faktor: Keunggulan relatif, Kompatibilitas, Kompleksitas rendah, Trialabilitas, Observabilitas.'},
+ {id:'pt7',t:'7. Psikologi persuasi: CPM, HEM, dan ELM',gist:'Keputusan konsumen dipengaruhi dua mesin pemrosesan: Otak Dingin (Rasional/CPM) dan Otak Panas (Emosional/HEM). Melalui Elaboration Likelihood Model (ELM), rute kognitif ditentukan oleh gerbang MOA (Motivation, Opportunity, Ability).',pts:[
+  `<b>Rute Sentral (CPM), MOA tinggi:</b> konsumen aktif menganalisis argumen dan spesifikasi produk. Alur: Kognitif → Afektif → Konatif. Menghasilkan perubahan sikap yang tahan lama.`,
+  `<b>Rute Periferal (HEM), MOA rendah:</b> konsumen malas berpikir kritis; terdistraksi oleh musik asik, visual estetik, atau selebritas. Alur: Minimal Kognitif → Konatif → Afektif.`
+ ],ingat:'MOA = Motivation, Opportunity, Ability. Tinggi = Sentral (CPM). Rendah = Periferal (HEM).',
+  vis:()=>[V.table('Dua rute ELM',['','Rute Sentral (CPM)','Rute Periferal (HEM)'],[['MOA','Tinggi','Rendah'],['Perilaku','Menganalisis argumen dan spesifikasi','Malas berpikir kritis, terdistraksi musik, visual, selebritas'],['Alur','Kognitif → Afektif → Konatif','Minimal Kognitif → Konatif → Afektif'],['Hasil','Sikap tahan lama','Sikap lebih mudah berubah']])]},
+ {id:'pt8',t:'8. Enam alat pengaruh sosial Cialdini (Click-Whirr)',gist:'Pemasar memakai pemicu pintas mental otomatis untuk mempercepat tindakan pembelian.',pts:[
+  `<b>Timbal balik (Reciprocation):</b> memberi sampel atau trial gratis agar konsumen merasa wajib membalas budi.`,
+  `<b>Komitmen dan konsistensi:</b> dorongan mempertahankan pilihan kecil sebelumnya (misal: mengumpulkan stempel poin).`,
+  `<b>Bukti sosial (Social Proof):</b> mengikuti kerumunan atau viralitas (FOMO) karena menganggap tindakan mayoritas itu benar.`,
+  `<b>Rasa suka (Liking):</b> memakai endorser yang disukai.`,
+  `<b>Otoritas:</b> figur ahli atau dokter (misal: rekomendasi 9 dari 10 ahli).`,
+  `<b>Kelangkaan (Scarcity):</b> "Sisa 2 kamar!" memicu reaktansi psikologis agar cepat membeli.`
+ ],ingat:'6 alat: Timbal balik, Komitmen-konsistensi, Bukti sosial, Liking, Otoritas, Kelangkaan.',
+  vis:()=>[V.table('6 alat Cialdini',['Alat','Contoh'],[['Timbal balik','Sampel gratis'],['Komitmen dan konsistensi','Kartu stempel poin'],['Bukti sosial','Viral, FOMO'],['Rasa suka','Endorser yang disukai'],['Otoritas','9 dari 10 dokter merekomendasikan'],['Kelangkaan','"Sisa 2 kamar!"']])]},
+ {id:'pt9',t:'9. Rantai Means-End dan kerangka MECCAS',gist:'Konsumen tidak membeli fitur fisik semata, melainkan pemenuhan nilai diri.',pts:[
+  `<b>Means-End:</b> lewat wawancara mendalam, pemasar memetakan hubungan [Atribut Produk] → [Konsekuensi/Manfaat] → {Nilai Personal/End}.`,
+  `<b>MECCAS (Means-End Conceptualization of Advertising Strategy):</b> menerjemahkan orientasi nilai ini ke dalam strategi eksekusi kreatif, titik ungkit (leverage point), konsekuensi merek, dan atribut pendukung.`
+ ],ingat:'Atribut → Konsekuensi → Nilai personal. MECCAS mengubahnya jadi strategi kreatif.',
+  vis:()=>[V.flow('Rantai Means-End',['Atribut produk','Konsekuensi / manfaat','Nilai personal (End)'])]},
+ {id:'pt10',t:'10. Manajemen daya tarik pesan (Message Appeals)',gist:'Dua daya tarik pesan: humor, serta takut dan rasa bersalah.',pts:[
+  `<b>Humor appeal:</b> sangat efektif menarik perhatian dan meningkatkan rasa suka. Namun rentan <b>Vampire Effect</b>: penonton ingat kelucuannya tapi lupa mereknya. Aturan main: dosis.`,
+  `<b>Fear dan guilt appeal:</b> memaparkan konsekuensi negatif atau rasa bersalah. Wajib memberikan solusi (self-efficacy). Jika ancaman terlalu berlebihan tanpa solusi, audiens akan memblokir pesan secara defensif.`
+ ],ingat:'Humor: awas Vampire Effect. Fear/guilt: harus ada solusi (self-efficacy).',
+  vis:()=>[V.table('Dua daya tarik pesan',['','Humor','Fear dan guilt'],[['Kekuatan','Menarik perhatian, meningkatkan rasa suka','Menggugah lewat ancaman atau rasa bersalah'],['Risiko','Vampire Effect: ingat lucunya, lupa merek','Audiens memblokir pesan bila ancaman berlebihan tanpa solusi'],['Aturan','Dosis','Wajib beri solusi (self-efficacy)']])]},
+ {id:'pt11',t:'11. Ringkasan eksekutif ujian',gist:'Keberhasilan IMC menuntut harmoni sempurna antara seni membangun ekuitas merek jangka panjang (Pilar Brand Image dan Awareness) dan sains akuntabilitas finansial yang membuktikan perubahan perilaku nyata konsumen.',pts:[
+  `<b>Seni:</b> ekuitas merek jangka panjang (Brand Image dan Awareness).`,
+  `<b>Sains:</b> akuntabilitas finansial (MMM, ROI) yang membuktikan perubahan perilaku nyata.`
+ ],ingat:'IMC = seni (ekuitas merek) + sains (akuntabilitas).'}
 ]};
-const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin,...MATERI.ak];
+const ALLTOPICS=[...MATERI.pkn,...MATERI.pk,...MATERI.idn,...MATERI.pack,...MATERI.sin,...MATERI.ak,...MATERI.pt];
 const strip=h=>h.replace(/<br>/g,' ').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
 function builtinCtx(keys){return keys.map(k=>'## '+SUBJ[k].name+'\n'+MATERI[k].map(t=>'### '+t.t+'\n'+t.gist+'\n'+t.pts.map(p=>'- '+strip(p)).join('\n')).join('\n')).join('\n\n')}
 
@@ -978,7 +1042,31 @@ const QB=[
 ['ak','Tiga unsur iman pada masa Reformasi adalah...','Notitia, assensus, fiducia','Fides, spes, caritas','Credo, ut, intelligam','Sola, gratia, fide','Pengetahuan, persetujuan, penyerahan diri.'],
 ['ak','Credo ut intelligam berarti...','Aku percaya supaya aku mengerti','Aku berpikir maka aku ada','Hanya oleh iman','Hanya oleh anugerah','Dikaitkan dengan Agustinus dan Anselmus.'],
 ['ak','Yang menyatakan iman sebagai respons bebas manusia terhadap anugerah adalah...','Arminian','Calvin','Luther','Barth','Berbeda dengan Reformed.'],
-['ak','Iman sebagai "lompatan" kepercayaan melampaui bukti rasional adalah pandangan...','Søren Kierkegaard','Karl Barth','Thomas Aquinas','Luther','Kierkegaard.']
+['ak','Iman sebagai "lompatan" kepercayaan melampaui bukti rasional adalah pandangan...','Søren Kierkegaard','Karl Barth','Thomas Aquinas','Luther','Kierkegaard.'],
+['pt','IMC berusaha menyatukan semua elemen komunikasi agar berbicara dengan...','Satu Suara (Single Voice)','Banyak suara','Suara agensi masing-masing','Suara kompetitor','Satu Suara untuk ekuitas merek jangka panjang.'],
+['pt','Pendekatan IMC modern bersifat...','Outside-In (holistik), dimulai dari kebutuhan pelanggan','Inside-Out, dimulai dari departemen','Berbasis silo','Berbasis agensi tunggal','Mengelola touchpoints 360°.'],
+['pt','Departemen terpisah dan pesan tumpang tindih adalah ciri pendekatan...','Tradisional inside-out (silo)','IMC modern','Outside-in','Holistik','Pesan membingungkan konsumen.'],
+['pt','Studi Levi\'s Dockers membuktikan bahwa...','TV dan media cetak bersamaan memberi efek pengganda','Iklan TV saja sudah cukup','Cetak lebih efektif dari TV','Media tidak berpengaruh','Multiplier effect.'],
+['pt','Dua pilar ekuitas merek berbasis konsumen (Keller) adalah...','Brand Awareness dan Brand Image','Harga dan distribusi','Produk dan promosi','Logo dan warna','Customer-Based Brand Equity.'],
+['pt','Merek yang pertama melintas di kepala disebut...','Top of Mind','Brand Recall','Brand Recognition','Unaware','Puncak tangga kesadaran.'],
+['pt','Diingat tanpa bantuan petunjuk disebut...','Brand Recall','Top of Mind','Brand Recognition','Unaware','Recall.'],
+['pt','Dikenali saat melihat logo atau kemasan disebut...','Brand Recognition','Brand Recall','Top of Mind','Unaware','Recognition.'],
+['pt','Manfaat citra merek yang terkait status atau identitas adalah...','Simbolis','Fungsional','Eksperiensial','Ekonomis','Fungsional = menyelesaikan masalah, eksperiensial = sensasi/emosi.'],
+['pt','Marketing Mix Modeling (MMM) digunakan untuk...','Memisahkan sinyal iklan dari kebisingan eksternal dan memprediksi ROI','Membuat logo','Menentukan nama merek','Merancang kemasan','Model statistik / ekonometrika.'],
+['pt','Empat pilar segmentasi adalah...','Demografi, psikografis (VALS), geodemografi, manfaat','Harga, produk, tempat, promosi','Awareness, recall, recognition, unaware','Kognitif, afektif, konatif, perilaku','Dasar STP.'],
+['pt','Real-Time Bidding membeli iklan dengan...','Lelang instan milidetik per impresi','Pembelian ruang iklan massal','Survei pasca-kampanye','Kontrak tahunan','Fokus impresi mikro.'],
+['pt','Lima katalisator adopsi produk baru adalah...','Keunggulan relatif, kompatibilitas, kompleksitas rendah, trialabilitas, observabilitas','Harga, kualitas, merek, desain, promosi','Awareness, interest, desire, action, loyalty','Fungsional, simbolis, eksperiensial, sosial, emosional','Faktor kecepatan adopsi.'],
+['pt','Trialabilitas berarti...','Mudah dicoba dengan risiko minimal','Hasil terlihat nyata','Cocok dengan gaya hidup','Tidak rumit','Salah satu katalisator adopsi.'],
+['pt','MOA dalam ELM adalah singkatan dari...','Motivation, Opportunity, Ability','Marketing, Objective, Analysis','Message, Offer, Audience','Media, Output, Awareness','Gerbang rute kognitif.'],
+['pt','Konsumen dengan MOA tinggi memakai rute...','Sentral (CPM)','Periferal (HEM)','Instan','Acak','Menganalisis argumen dan spesifikasi.'],
+['pt','Alur rute periferal (HEM) adalah...','Minimal Kognitif → Konatif → Afektif','Kognitif → Afektif → Konatif','Afektif → Kognitif → Konatif','Konatif → Kognitif → Afektif','Sentral: kognitif → afektif → konatif.'],
+['pt','Sampel gratis agar konsumen merasa wajib membalas budi adalah prinsip Cialdini...','Timbal balik (Reciprocation)','Kelangkaan','Bukti sosial','Otoritas','Reciprocation.'],
+['pt','"Sisa 2 kamar!" memanfaatkan prinsip...','Kelangkaan (Scarcity)','Bukti sosial','Komitmen','Otoritas','Memicu reaktansi psikologis.'],
+['pt','Rekomendasi 9 dari 10 dokter adalah contoh...','Otoritas','Liking','Reciprocation','Scarcity','Figur ahli.'],
+['pt','Mengumpulkan stempel poin adalah contoh...','Komitmen dan konsistensi','Kelangkaan','Timbal balik','Otoritas','Mempertahankan pilihan kecil sebelumnya.'],
+['pt','Rantai Means-End memetakan...','Atribut → Konsekuensi → Nilai personal','Produk → Harga → Promosi','Awareness → Image → Loyalty','Kognitif → Afektif → Konatif','Dengan wawancara mendalam.'],
+['pt','Vampire Effect terjadi pada daya tarik...','Humor','Fear','Guilt','Otoritas','Penonton ingat lucunya tapi lupa mereknya.'],
+['pt','Agar fear appeal tidak diblokir audiens, pesan harus menyertakan...','Solusi (self-efficacy)','Humor','Selebritas','Diskon','Ancaman berlebihan tanpa solusi membuat audiens defensif.']
 ];
 
 
